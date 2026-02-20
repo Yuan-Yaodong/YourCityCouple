@@ -240,6 +240,9 @@ function showResult() {
   document.getElementById('result-city').style.color = city.color;
   document.getElementById('city-desc').textContent = city.description;
 
+  // 渲染用户答案回顾
+  renderUserAnswers();
+
   // 标签
   const tagsContainer = document.getElementById('tags');
   tagsContainer.innerHTML = '';
@@ -294,6 +297,54 @@ function restartTest() {
   userAnswers = [];
   currentQuestion = 0;
   showPage('page-index');
+}
+
+// 渲染用户答案回顾
+function renderUserAnswers() {
+  const container = document.getElementById('user-answers-list');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  userAnswers.forEach((answerIndex, qIndex) => {
+    const question = questions[qIndex];
+    if (!question) return;
+
+    const selectedOption = question.options[answerIndex];
+    if (!selectedOption) return;
+
+    const item = document.createElement('div');
+    item.className = 'answer-item';
+
+    // 如果是MBTI题（第8题），显示不同样式
+    const isMBTI = question.isMBTI;
+
+    item.innerHTML = `
+      <div class="answer-q">${qIndex + 1}. ${question.question}</div>
+      <div class="answer-a ${isMBTI ? 'mbti' : ''}">${selectedOption.text}</div>
+    `;
+    container.appendChild(item);
+  });
+
+  // 默认收起
+  const toggleBtn = document.getElementById('toggle-answers');
+  const answersSection = document.getElementById('answers-section');
+  if (toggleBtn && answersSection) {
+    answersSection.style.display = 'none';
+  }
+}
+
+// 切换答案显示
+function toggleAnswers() {
+  const section = document.getElementById('answers-section');
+  const btn = document.getElementById('toggle-answers');
+  if (section.style.display === 'none') {
+    section.style.display = 'block';
+    btn.textContent = '收起我的答案';
+  } else {
+    section.style.display = 'none';
+    btn.textContent = '查看我的答案';
+  }
 }
 
 // 复制结果
