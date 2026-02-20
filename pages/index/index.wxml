@@ -1,0 +1,32 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 装饰元素 -->
+  <text class="decoration top-left">🧧</text>
+  <text class="decoration top-right">🎊</text>
+  <text class="decoration bottom-left">🏮</text>
+  <text class="decoration bottom-right">🎇</text>
+
+  <!-- 主标题 -->
+  <view class="title-wrap">
+    <text class="title">2026</text>
+    <text class="title-second">新年旺旺</text>
+  </view>
+
+  <!-- 副标题 -->
+  <text class="subtitle">测测你的开年旅游地</text>
+
+  <!-- 吉祥话 -->
+  <view class="lucky-words">
+    <text>🎉 新年行大运</text>
+    <text>🧧 财源滚滚来</text>
+    <text>🏮 步步高升</text>
+  </view>
+
+  <!-- 开始按钮 -->
+  <button class="btn-primary" bindtap="startTest">
+    开始测试
+  </button>
+
+  <!-- 底部说明 -->
+  <text class="tips">5道题 · 测出你的福气城市</text>
+</view>

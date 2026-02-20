@@ -1,0 +1,41 @@
+<!--pages/quiz/quiz.wxml-->
+<view class="container">
+  <!-- 进度条 -->
+  <view class="progress-wrap">
+    <view class="progress-bar">
+      <view class="progress-inner" style="width: {{progressPercent}}%"></view>
+    </view>
+    <text class="progress-text">{{currentQuestion + 1}}/{{totalQuestions}}</text>
+  </view>
+
+  <!-- 问题卡片 -->
+  <view class="question-card">
+    <!-- 问题序号 -->
+    <view class="question-num">
+      <text>第{{currentQuestion + 1}}题</text>
+    </view>
+
+    <!-- 问题内容 -->
+    <text class="question-text">{{question.question}}</text>
+
+    <!-- 选项列表 -->
+    <view class="options-list">
+      <view
+        wx:for="{{question.options}}"
+        wx:key="index"
+        class="option-item {{selectedIndex === index ? 'selected' : ''}}"
+        bindtap="selectOption"
+        data-index="{{index}}"
+      >
+        <text class="option-text">{{item.text}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部装饰 -->
+  <view class="footer-decor">
+    <text>🧧</text>
+    <text>🎊</text>
+    <text>🏮</text>
+  </view>
+</view>

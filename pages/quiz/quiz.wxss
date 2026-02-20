@@ -1,0 +1,112 @@
+/* pages/quiz/quiz.wxss */
+.container {
+  min-height: 100vh;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+
+/* 进度条 */
+.progress-wrap {
+  margin-bottom: 40rpx;
+}
+
+.progress-bar {
+  height: 12rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.progress-inner {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+  border-radius: 6rpx;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  display: block;
+  text-align: center;
+  color: #FFD700;
+  font-size: 24rpx;
+  margin-top: 10rpx;
+}
+
+/* 问题卡片 */
+.question-card {
+  background: #FFF;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.2);
+}
+
+.question-num {
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.question-num text {
+  background: linear-gradient(135deg, #E62E2E, #C41E3A);
+  color: #FFF;
+  padding: 8rpx 24rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+}
+
+.question-text {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 40rpx;
+  line-height: 1.5;
+}
+
+/* 选项列表 */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.option-item {
+  background: #FFF8E1;
+  border: 3rpx solid #FFD700;
+  border-radius: 16rpx;
+  padding: 28rpx 30rpx;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.option-item:active {
+  transform: scale(0.98);
+}
+
+.option-item.selected {
+  background: linear-gradient(135deg, #E62E2E, #C41E3A);
+  border-color: #E62E2E;
+}
+
+.option-item.selected .option-text {
+  color: #FFF;
+}
+
+.option-text {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 底部装饰 */
+.footer-decor {
+  display: flex;
+  justify-content: center;
+  gap: 40rpx;
+  margin-top: 60rpx;
+}
+
+.footer-decor text {
+  font-size: 40rpx;
+  opacity: 0.5;
+}

@@ -1,0 +1,361 @@
+/* 全局样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', sans-serif;
+  background: linear-gradient(180deg, #E62E2E 0%, #C41E3A 100%);
+  min-height: 100vh;
+  color: #333;
+}
+
+#app {
+  min-height: 100vh;
+  position: relative;
+}
+
+/* 页面切换 */
+.page {
+  display: none;
+  min-height: 100vh;
+  padding: 40rpx;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.page.active {
+  display: flex;
+}
+
+/* 装饰元素 */
+.decor {
+  position: absolute;
+  font-size: 60px;
+  opacity: 0.8;
+  animation: float 3s ease-in-out infinite;
+}
+
+.top-left { top: 40px; left: 30px; }
+.top-right { top: 60px; right: 30px; animation-delay: 0.5s; }
+.bottom-left { bottom: 100px; left: 30px; animation-delay: 1s; }
+.bottom-right { bottom: 120px; right: 30px; animation-delay: 1.5s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* 引导页 */
+.title-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 80px;
+  font-weight: 900;
+  color: #FFD700;
+  text-shadow: 4px 4px 12px rgba(0,0,0,0.4);
+  letter-spacing: 8px;
+}
+
+.title-second {
+  font-size: 64px;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+  margin-top: 10px;
+}
+
+.subtitle {
+  font-size: 36px;
+  color: #FFF8E1;
+  margin-bottom: 40px;
+  font-weight: 500;
+}
+
+.lucky-words {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+.lucky-words span {
+  font-size: 28px;
+  color: #FFD700;
+  margin: 10px 0;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #8B0000;
+  font-size: 40px;
+  font-weight: 900;
+  padding: 30px 100px;
+  border-radius: 60px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(255, 165, 0, 0.5);
+  transition: transform 0.2s;
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.tips {
+  position: absolute;
+  bottom: 40px;
+  font-size: 24px;
+  color: rgba(255, 248, 225, 0.6);
+}
+
+/* 问题页 */
+.progress-wrap {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.progress-bar {
+  height: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-inner {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+  width: 20%;
+}
+
+.progress-text {
+  text-align: center;
+  color: #FFD700;
+  font-size: 24px;
+  margin-top: 10px;
+}
+
+.question-card {
+  background: #FFF;
+  border-radius: 24px;
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.question-num {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.question-num span {
+  background: linear-gradient(135deg, #E62E2E, #C41E3A);
+  color: #FFF;
+  padding: 8px 24px;
+  border-radius: 20px;
+  font-size: 24px;
+}
+
+.question-text {
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 40px;
+  line-height: 1.5;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.option-item {
+  background: #FFF8E1;
+  border: 3px solid #FFD700;
+  border-radius: 16px;
+  padding: 28px 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.option-item:hover {
+  background: #FFECB3;
+}
+
+.option-item.selected {
+  background: linear-gradient(135deg, #E62E2E, #C41E3A);
+  border-color: #E62E2E;
+}
+
+.option-item.selected .option-text {
+  color: #FFF;
+}
+
+.option-text {
+  font-size: 32px;
+  color: #333;
+  font-weight: 500;
+}
+
+.footer-decor {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 60px;
+}
+
+.footer-decor span {
+  font-size: 40px;
+  opacity: 0.5;
+}
+
+/* 结果页 */
+.top-decor {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.top-decor span {
+  font-size: 40px;
+  animation: float 2s ease-in-out infinite;
+}
+
+.top-decor span:nth-child(2) { animation-delay: 0.5s; }
+.top-decor span:nth-child(3) { animation-delay: 1s; }
+
+.result-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.result-label {
+  font-size: 28px;
+  color: #FFD700;
+  margin-bottom: 10px;
+}
+
+.result-emoji {
+  font-size: 100px;
+  margin-bottom: 10px;
+}
+
+.result-city {
+  font-size: 56px;
+  font-weight: 900;
+  color: #FFD700;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.city-card {
+  background: #FFF;
+  border-radius: 24px;
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.city-desc {
+  font-size: 36px;
+  font-weight: bold;
+  color: #E62E2E;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.tags {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #8B0000;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.city-detail {
+  font-size: 28px;
+  color: #666;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.btn-area {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.btn-share {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #8B0000;
+  font-size: 32px;
+  font-weight: bold;
+  padding: 25px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-restart {
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFF;
+  font-size: 28px;
+  padding: 20px;
+  border-radius: 50px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.bottom-decor {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.bottom-decor span {
+  font-size: 40px;
+  opacity: 0.5;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .title { font-size: 48px; }
+  .title-second { font-size: 40px; }
+  .subtitle { font-size: 24px; }
+  .question-text { font-size: 28px; }
+  .option-text { font-size: 24px; }
+  .result-city { font-size: 40px; }
+  .city-desc { font-size: 28px; }
+  .city-detail { font-size: 22px; }
+}

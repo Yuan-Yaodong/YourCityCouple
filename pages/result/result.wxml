@@ -1,0 +1,56 @@
+<!--pages/result/result.wxml-->
+<view class="container">
+  <!-- 加载中 -->
+  <view wx:if="{{!showResult}}" class="loading">
+    <text>正在计算你的运势...</text>
+  </view>
+
+  <!-- 结果内容 -->
+  <view wx:else class="result-content">
+    <!-- 顶部装饰 -->
+    <view class="top-decor">
+      <text>🧧</text>
+      <text>🎊</text>
+      <text>🏮</text>
+    </view>
+
+    <!-- 结果标题 -->
+    <view class="result-header">
+      <text class="result-label">你的开年旺城是</text>
+      <text class="result-emoji">{{cityDetail.emoji}}</text>
+      <text class="result-city">{{result.city}}</text>
+    </view>
+
+    <!-- 城市描述 -->
+    <view class="city-card">
+      <text class="city-desc">{{cityDetail.description}}</text>
+
+      <!-- 标签 -->
+      <view class="tags">
+        <text wx:for="{{cityDetail.tags}}" wx:key="index" class="tag">
+          {{item}}
+        </text>
+      </view>
+
+      <!-- 详细介绍 -->
+      <text class="city-detail">{{cityDetail.detail}}</text>
+    </view>
+
+    <!-- 按钮区域 -->
+    <view class="btn-area">
+      <button class="btn-share" bindtap="copyResult" open-type="share">
+        📤 分享给朋友
+      </button>
+      <button class="btn-restart" bindtap="restartTest">
+        🔄 再测一次
+      </button>
+    </view>
+
+    <!-- 底部装饰 -->
+    <view class="bottom-decor">
+      <text>🎇</text>
+      <text>✨</text>
+      <text>🎆</text>
+    </view>
+  </view>
+</view>

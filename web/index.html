@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026新年旺旺 - 测测你的开年旅游地</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 引导页 -->
+    <div id="page-index" class="page active">
+      <div class="decor top-left">🧧</div>
+      <div class="decor top-right">🎊</div>
+      <div class="decor bottom-left">🏮</div>
+      <div class="decor bottom-right">🎇</div>
+
+      <div class="title-wrap">
+        <div class="title">2026</div>
+        <div class="title-second">新年旺旺</div>
+      </div>
+
+      <div class="subtitle">测测你的开年旅游地</div>
+
+      <div class="lucky-words">
+        <span>🎉 新年行大运</span>
+        <span>🧧 财源滚滚来</span>
+        <span>🏮 步步高升</span>
+      </div>
+
+      <button class="btn-primary" onclick="startTest()">开始测试</button>
+
+      <div class="tips">5道题 · 测出你的福气城市</div>
+    </div>
+
+    <!-- 问题页 -->
+    <div id="page-quiz" class="page">
+      <div class="progress-wrap">
+        <div class="progress-bar">
+          <div id="progress-inner" class="progress-inner"></div>
+        </div>
+        <div id="progress-text" class="progress-text">1/5</div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-num">
+          <span id="question-num">第1题</span>
+        </div>
+        <div id="question-text" class="question-text"></div>
+
+        <div id="options-list" class="options-list">
+          <!-- 选项动态生成 -->
+        </div>
+      </div>
+
+      <div class="footer-decor">
+        <span>🧧</span>
+        <span>🎊</span>
+        <span>🏮</span>
+      </div>
+    </div>
+
+    <!-- 结果页 -->
+    <div id="page-result" class="page">
+      <div class="top-decor">
+        <span>🧧</span>
+        <span>🎊</span>
+        <span>🏮</span>
+      </div>
+
+      <div class="result-header">
+        <div class="result-label">你的开年旺城是</div>
+        <div id="result-emoji" class="result-emoji"></div>
+        <div id="result-city" class="result-city"></div>
+      </div>
+
+      <div class="city-card">
+        <div id="city-desc" class="city-desc"></div>
+        <div id="tags" class="tags"></div>
+        <div id="city-detail" class="city-detail"></div>
+      </div>
+
+      <div class="btn-area">
+        <button class="btn-share" onclick="copyResult()">📤 复制结果</button>
+        <button class="btn-restart" onclick="restartTest()">🔄 再测一次</button>
+      </div>
+
+      <div class="bottom-decor">
+        <span>🎇</span>
+        <span>✨</span>
+        <span>🎆</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
