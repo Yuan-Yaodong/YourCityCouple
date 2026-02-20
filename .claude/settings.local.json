@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(where:*)",
+      "Bash(where微信开发者工具)",
+      "Bash(curl:*)",
+      "Bash(node:*)",
+      "Bash(npm run build)"
+    ]
+  }
+}
