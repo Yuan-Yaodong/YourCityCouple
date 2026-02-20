@@ -67,14 +67,23 @@ Page({
       return;
     }
 
-    // 进入下一题
-    const nextQ = currentQuestion + 1;
-    this.setData({
-      currentQuestion: nextQ,
-      question: questions[nextQ],
-      progressPercent: ((nextQ + 1) / totalQuestions) * 100,
-      selectedIndex: -1,
-      animating: false
-    });
+    // 进入下一题 - 先滑出当前题目
+    this.setData({ slideDirection: 'slide-out' });
+
+    setTimeout(() => {
+      const nextQ = currentQuestion + 1;
+      this.setData({
+        currentQuestion: nextQ,
+        question: questions[nextQ],
+        progressPercent: ((nextQ + 1) / totalQuestions) * 100,
+        selectedIndex: -1,
+        slideDirection: 'slide-in'
+      });
+
+      // 滑入完成后清除动画类
+      setTimeout(() => {
+        this.setData({ slideDirection: '', animating: false });
+      }, 300);
+    }, 300);
   }
 })

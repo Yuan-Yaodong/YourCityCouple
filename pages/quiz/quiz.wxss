@@ -40,6 +40,36 @@
   box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.2);
 }
 
+.question-card.slide-out {
+  animation: slideOut 0.3s ease forwards;
+}
+
+.question-card.slide-in {
+  animation: slideIn 0.3s ease forwards;
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .question-num {
   text-align: center;
   margin-bottom: 30rpx;
@@ -77,15 +107,31 @@
   padding: 28rpx 30rpx;
   text-align: center;
   transition: all 0.2s ease;
+  animation: fadeInUp 0.4s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .option-item:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
+  background: #FFE4B5;
 }
 
 .option-item.selected {
   background: linear-gradient(135deg, #E62E2E, #C41E3A);
   border-color: #E62E2E;
+  transform: scale(1.02);
+  transition: all 0.2s ease;
 }
 
 .option-item.selected .option-text {

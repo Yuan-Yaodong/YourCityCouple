@@ -9,7 +9,7 @@
   </view>
 
   <!-- 问题卡片 -->
-  <view class="question-card">
+  <view class="question-card {{slideDirection}}">
     <!-- 问题序号 -->
     <view class="question-num">
       <text>第{{currentQuestion + 1}}题</text>
@@ -26,6 +26,7 @@
         class="option-item {{selectedIndex === index ? 'selected' : ''}}"
         bindtap="selectOption"
         data-index="{{index}}"
+        style="animation-delay: {{index * 0.1}}s"
       >
         <text class="option-text">{{item.text}}</text>
       </view>

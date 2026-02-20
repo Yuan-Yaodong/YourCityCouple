@@ -97,6 +97,19 @@
   border-radius: 20rpx;
   font-size: 24rpx;
   font-weight: bold;
+  opacity: 0;
+  animation: tagPopIn 0.4s ease forwards;
+}
+
+@keyframes tagPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* 详细介绍 */
@@ -106,6 +119,55 @@
   color: #666;
   line-height: 1.8;
   text-align: center;
+}
+
+/* 分析文案 */
+.analysis-section {
+  margin-top: 30rpx;
+  padding-top: 30rpx;
+  border-top: 2rpx dashed #FFD700;
+}
+
+.analysis-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #E62E2E;
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.analysis-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+  padding: 12rpx;
+  background: #FFF9E6;
+  border-radius: 10rpx;
+}
+
+.analysis-point {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #E62E2E;
+  margin-bottom: 6rpx;
+}
+
+.analysis-desc {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+.analysis-summary {
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background: linear-gradient(135deg, #FFF8DC, #FFE4B5);
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  color: #E62E2E;
+  text-align: center;
+  font-weight: bold;
 }
 
 /* 按钮区域 */
@@ -159,4 +221,117 @@
   50% {
     transform: translateY(-10rpx);
   }
+}
+
+/* 动画类 */
+.fade-in {
+  animation: fadeIn 0.6s ease forwards;
+  opacity: 0;
+}
+
+.slide-up {
+  animation: slideUp 0.6s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 海报弹窗 */
+.poster-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.poster-content {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.poster-image {
+  width: 500rpx;
+  border-radius: 10rpx;
+}
+
+.btn-save {
+  margin-top: 30rpx;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #8B0000;
+  font-size: 32rpx;
+  font-weight: bold;
+  padding: 20rpx 60rpx;
+  border-radius: 50rpx;
+  border: none;
+}
+
+.close-hint {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 隐藏的 canvas */
+.hide-canvas {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  width: 600px;
+  height: 900px;
+}
+
+/* 按钮样式 */
+.btn-poster {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #8B0000;
+  font-size: 32rpx;
+  font-weight: bold;
+  padding: 25rpx;
+  border-radius: 50rpx;
+  border: none;
+}
+
+.btn-copy {
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFF;
+  font-size: 32rpx;
+  font-weight: bold;
+  padding: 25rpx;
+  border-radius: 50rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-poster::after,
+.btn-copy::after {
+  border: none;
 }

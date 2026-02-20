@@ -8,37 +8,50 @@
   <!-- 结果内容 -->
   <view wx:else class="result-content">
     <!-- 顶部装饰 -->
-    <view class="top-decor">
+    <view class="top-decor {{showAnimations ? 'fade-in' : ''}}">
       <text>🧧</text>
       <text>🎊</text>
       <text>🏮</text>
     </view>
 
     <!-- 结果标题 -->
-    <view class="result-header">
+    <view class="result-header {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: 0.2s">
       <text class="result-label">你的开年旺城是</text>
       <text class="result-emoji">{{cityDetail.emoji}}</text>
       <text class="result-city">{{result.city}}</text>
     </view>
 
     <!-- 城市描述 -->
-    <view class="city-card">
+    <view class="city-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: 0.4s">
       <text class="city-desc">{{cityDetail.description}}</text>
 
       <!-- 标签 -->
       <view class="tags">
-        <text wx:for="{{cityDetail.tags}}" wx:key="index" class="tag">
+        <text wx:for="{{cityDetail.tags}}" wx:key="index" class="tag {{showAnimations ? 'fade-in' : ''}}" style="animation-delay: {{0.6 + index * 0.15}}s">
           {{item}}
         </text>
       </view>
 
       <!-- 详细介绍 -->
-      <text class="city-detail">{{cityDetail.detail}}</text>
+      <text class="city-detail {{showAnimations ? 'fade-in' : ''}}" style="animation-delay: {{0.6 + cityDetail.tags.length * 0.15}}s">{{cityDetail.detail}}</text>
+
+      <!-- 分析文案 -->
+      <view wx:if="{{analysis}}" class="analysis-section {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.6 + (cityDetail.tags.length + 1) * 0.15}}s">
+        <view class="analysis-title">为什么适合你</view>
+        <view class="analysis-item" wx:for="{{analysis.whyFit}}" wx:key="index">
+          <text class="analysis-point">{{item.text}}</text>
+          <text class="analysis-desc">{{item.desc}}</text>
+        </view>
+        <view class="analysis-summary">{{analysis.summary}}</view>
+      </view>
     </view>
 
     <!-- 按钮区域 -->
-    <view class="btn-area">
-      <button class="btn-share" bindtap="copyResult" open-type="share">
+    <view class="btn-area {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: 0.8s">
+      <button class="btn-share" bindtap="generatePoster">
+        🖼️ 生成海报
+      </button>
+      <button class="btn-copy" bindtap="copyResult">
         📤 分享给朋友
       </button>
       <button class="btn-restart" bindtap="restartTest">
@@ -47,10 +60,22 @@
     </view>
 
     <!-- 底部装饰 -->
-    <view class="bottom-decor">
+    <view class="bottom-decor {{showAnimations ? 'fade-in' : ''}}" style="animation-delay: 1s">
       <text>🎇</text>
       <text>✨</text>
       <text>🎆</text>
     </view>
   </view>
+
+  <!-- 海报预览弹窗 -->
+  <view class="poster-modal" wx:if="{{showPosterModal}}" bindtap="closePosterModal">
+    <view class="poster-content" catchtap="preventClose">
+      <image class="poster-image" src="{{posterImage}}" mode="widthFix"></image>
+      <button class="btn-save" bindtap="savePosterToAlbum">保存到相册</button>
+      <view class="close-hint">点击空白处关闭</view>
+    </view>
+  </view>
+
+  <!-- 隐藏的canvas用于生成海报 -->
+  <canvas canvas-id="posterCanvas" class="hide-canvas"></canvas>
 </view>
