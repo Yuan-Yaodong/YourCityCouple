@@ -4,7 +4,7 @@ const { questions } = require('../../utils/data.js');
 Page({
   data: {
     currentQuestion: 0,
-    totalQuestions: 5,
+    totalQuestions: 6,
     question: {},
     answers: [],
     progressPercent: 0,

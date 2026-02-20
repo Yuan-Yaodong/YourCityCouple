@@ -1,12 +1,15 @@
 // pages/result/result.js
-const { calculateResult, getCityDetail } = require('../../utils/calculator.js');
+const { calculateResult, getCityDetail, calculateFiveElement } = require('../../utils/calculator.js');
 const { analyzeUserPreferences } = require('../../utils/analyzer.js');
+const { calculateMBTI } = require('../../utils/mbti.js');
 
 Page({
   data: {
     result: null,
     cityDetail: null,
     analysis: null,
+    mbti: null,
+    fiveElement: null,
     showResult: false,
     showAnimations: false,
     posterGenerated: false,
@@ -33,10 +36,18 @@ Page({
     // 分析用户偏好
     const analysis = analyzeUserPreferences(answers, result.city);
 
+    // 计算MBTI旅行人格
+    const mbti = calculateMBTI(answers);
+
+    // 计算五行属性
+    const fiveElement = calculateFiveElement(answers);
+
     this.setData({
       result: result,
       cityDetail: cityDetail,
       analysis: analysis,
+      mbti: mbti,
+      fiveElement: fiveElement,
       showResult: true
     });
 
@@ -241,14 +252,25 @@ Page({
 
   // 复制结果文案
   copyResult() {
-    const { result, cityDetail, analysis } = this.data;
+    const { result, cityDetail, analysis, mbti, fiveElement } = this.data;
 
     let whyFitText = '';
     if (analysis && analysis.whyFit) {
       whyFitText = '\n📝 为什么适合你：\n' + analysis.whyFit.map(r => '• ' + r.desc).join('\n');
     }
 
-    const text = `🎉 2026新年旺城测试 🎉\n\n我的开年旅游地是：【${result.city}】\n${cityDetail.description}\n\n${cityDetail.detail}\n${whyFitText}\n\n${analysis ? '💡 ' + analysis.summary + '\n' : ''}\n🧧 新年行大运，快来测测你的！`;
+    let mbtiText = '';
+    if (mbti) {
+      mbtiText = `\n\n🔮 我的MBTI旅行人格：${mbti.type} ${mbti.emoji} ${mbti.name}\n${mbti.description}\n旅行风格：${mbti.travelStyle}`;
+    }
+
+    let fiveElementText = '';
+    if (fiveElement && fiveElement.detail) {
+      const fe = fiveElement.detail;
+      fiveElementText = `\n\n🧭 我的五行属性：${fe.emoji} ${fe.name}\n幸运色：${fe.luckyColors.join('、')}\n幸运数字：${fe.luckyNumbers.join('、')}\n贵人方位：${fe.direction}\n${fe.fortune}`;
+    }
+
+    const text = `🎉 2026新年旺城测试 🎉\n\n我的开年旅游地是：【${result.city}】\n${cityDetail.description}\n\n${cityDetail.detail}\n${whyFitText}\n${mbtiText}\n${fiveElementText}\n\n${analysis ? '💡 ' + analysis.summary + '\n' : ''}\n🧧 新年行大运，快来测测你的！`;
 
     wx.setClipboardData({
       data: text,

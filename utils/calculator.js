@@ -58,7 +58,60 @@ function getCityDetail(cityName) {
   return cities[cityName] || null;
 }
 
+/**
+ * 根据用户答案计算五行属性
+ * @param {Array} userAnswers - 用户答案数组
+ * @returns {Object} 五行属性信息
+ */
+function calculateFiveElement(userAnswers) {
+  const { fiveElementData } = require('./data.js');
+
+  // 统计各五行得分
+  const elementScores = { "金": 0, "木": 0, "水": 0, "火": 0, "土": 0 };
+
+  userAnswers.forEach((answer, qIndex) => {
+    if (qIndex < questions.length) {
+      const question = questions[qIndex];
+      if (answer < question.options.length) {
+        const option = question.options[answer];
+        if (option.fiveElement && elementScores[option.fiveElement] !== undefined) {
+          elementScores[option.fiveElement] += 1;
+        }
+      }
+    }
+  });
+
+  // 找出得分最高的五行
+  let maxScore = -1;
+  let resultElement = "土"; // 默认
+
+  Object.keys(elementScores).forEach(element => {
+    if (elementScores[element] > maxScore) {
+      maxScore = elementScores[element];
+      resultElement = element;
+    }
+  });
+
+  return {
+    element: resultElement,
+    detail: fiveElementData[resultElement] || fiveElementData["土"],
+    allScores: elementScores
+  };
+}
+
+/**
+ * 获取五行详细信息
+ * @param {string} elementName - 五行名称
+ * @returns {Object} 五行详细信息
+ */
+function getFiveElementDetail(elementName) {
+  const { fiveElementData } = require('./data.js');
+  return fiveElementData[elementName] || null;
+}
+
 module.exports = {
   calculateResult,
-  getCityDetail
+  getCityDetail,
+  calculateFiveElement,
+  getFiveElementDetail
 };

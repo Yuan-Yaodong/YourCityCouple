@@ -4,95 +4,281 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2026新年旺旺 - 测测你的开年旅游地</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- 动态背景 -->
+  <div class="bg-layer">
+    <canvas id="particles-canvas"></canvas>
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    <div class="noise-overlay"></div>
+    <div class="light-rays"></div>
+  </div>
+
+  <!-- 飘落的花瓣/金币 -->
+  <div class="falling-elements" id="falling-elements"></div>
+
   <div id="app">
     <!-- 引导页 -->
     <div id="page-index" class="page active">
-      <div class="decor top-left">🧧</div>
-      <div class="decor top-right">🎊</div>
-      <div class="decor bottom-left">🏮</div>
-      <div class="decor bottom-right">🎇</div>
+      <div class="content-wrapper">
+        <!-- 主标题区域 -->
+        <div class="hero-section">
+          <div class="year-badge">2026</div>
+          <h1 class="main-title">
+            <span class="title-char" style="--i:0">新</span>
+            <span class="title-char" style="--i:1">年</span>
+            <span class="title-char" style="--i:2">旺</span>
+            <span class="title-char" style="--i:3">旺</span>
+          </h1>
+          <div class="title-glow"></div>
+        </div>
 
-      <div class="title-wrap">
-        <div class="title">2026</div>
-        <div class="title-second">新年旺旺</div>
+        <p class="subtitle">测测你的开年旅游地</p>
+
+        <!-- 吉祥话 -->
+        <div class="fortune-cards">
+          <div class="fortune-card" style="--i:0">
+            <span class="fortune-icon">💰</span>
+            <span class="fortune-text">财源滚滚</span>
+          </div>
+          <div class="fortune-card" style="--i:1">
+            <span class="fortune-icon">🎯</span>
+            <span class="fortune-text">步步高升</span>
+          </div>
+          <div class="fortune-card" style="--i:2">
+            <span class="fortune-icon">❤️</span>
+            <span class="fortune-text">万事如意</span>
+          </div>
+        </div>
+
+        <!-- 开始按钮 -->
+        <button class="btn-start" onclick="startTest()">
+          <span class="btn-text">开始测试</span>
+          <span class="btn-shine"></span>
+          <span class="btn-particles"></span>
+        </button>
+
+        <div class="tips">5道题 · 测出你的福气城市</div>
       </div>
-
-      <div class="subtitle">测测你的开年旅游地</div>
-
-      <div class="lucky-words">
-        <span>🎉 新年行大运</span>
-        <span>🧧 财源滚滚来</span>
-        <span>🏮 步步高升</span>
-      </div>
-
-      <button class="btn-primary" onclick="startTest()">开始测试</button>
-
-      <div class="tips">5道题 · 测出你的福气城市</div>
     </div>
 
     <!-- 问题页 -->
     <div id="page-quiz" class="page">
-      <div class="progress-wrap">
-        <div class="progress-bar">
-          <div id="progress-inner" class="progress-inner"></div>
+      <div class="quiz-container">
+        <!-- 进度条 -->
+        <div class="progress-section">
+          <div class="progress-track">
+            <div id="progress-inner" class="progress-fill"></div>
+            <div class="progress-glow"></div>
+          </div>
+          <div class="progress-info">
+            <span id="progress-text" class="progress-text">1 / 5</span>
+            <span class="progress-dots">
+              <!-- 进度点由JS动态生成 -->
+            </span>
+          </div>
         </div>
-        <div id="progress-text" class="progress-text">1/5</div>
-      </div>
 
-      <div class="question-card">
-        <div class="question-num">
-          <span id="question-num">第1题</span>
+        <!-- 问题卡片 -->
+        <div class="question-card" id="question-card">
+          <div class="card-inner">
+            <div class="question-badge">
+              <span class="badge-icon">✨</span>
+              <span id="question-num">第1题</span>
+            </div>
+            <h2 id="question-text" class="question-text"></h2>
+
+            <div id="options-list" class="options-grid">
+              <!-- 选项动态生成 -->
+            </div>
+          </div>
         </div>
-        <div id="question-text" class="question-text"></div>
 
-        <div id="options-list" class="options-list">
-          <!-- 选项动态生成 -->
+        <!-- 底部装饰 -->
+        <div class="quiz-footer">
+          <div class="footer-pattern"></div>
         </div>
-      </div>
-
-      <div class="footer-decor">
-        <span>🧧</span>
-        <span>🎊</span>
-        <span>🏮</span>
       </div>
     </div>
 
     <!-- 结果页 -->
     <div id="page-result" class="page">
-      <div class="top-decor">
-        <span>🧧</span>
-        <span>🎊</span>
-        <span>🏮</span>
-      </div>
+      <div class="result-container">
+        <!-- 庆祝动效 -->
+        <div class="celebration" id="celebration"></div>
 
-      <div class="result-header">
-        <div class="result-label">你的开年旺城是</div>
-        <div id="result-emoji" class="result-emoji"></div>
-        <div id="result-city" class="result-city"></div>
-      </div>
+        <!-- 结果头部 -->
+        <div class="result-header">
+          <div class="result-badge">你的开年旺城</div>
+          <div class="city-showcase">
+            <div class="city-emoji" id="result-emoji"></div>
+            <div class="city-name" id="result-city"></div>
+            <div class="city-glow"></div>
+          </div>
+        </div>
 
-      <div class="city-card">
-        <div id="city-desc" class="city-desc"></div>
-        <div id="tags" class="tags"></div>
-        <div id="city-detail" class="city-detail"></div>
-      </div>
+        <!-- 城市卡片 -->
+        <div class="city-show-card">
+          <div class="city-desc" id="city-desc"></div>
 
-      <div class="btn-area">
-        <button class="btn-share" onclick="copyResult()">📤 复制结果</button>
-        <button class="btn-restart" onclick="restartTest()">🔄 再测一次</button>
-      </div>
+          <div class="tags-row" id="tags"></div>
 
-      <div class="bottom-decor">
-        <span>🎇</span>
-        <span>✨</span>
-        <span>🎆</span>
+          <div class="city-detail" id="city-detail"></div>
+
+          <!-- 分析文案 -->
+          <div id="analysis-section" class="analysis-block" style="display: none;">
+            <div class="analysis-header">
+              <span class="analysis-icon">🔮</span>
+              <span>为什么适合你</span>
+            </div>
+            <div id="why-fit" class="analysis-list"></div>
+            <div id="analysis-summary" class="analysis-summary"></div>
+          </div>
+
+          <!-- 专属称号 -->
+          <div class="title-section" id="title-display"></div>
+
+          <!-- 五行属性 -->
+          <div class="five-element-section" id="five-element-display"></div>
+
+          <!-- 幸运元素 -->
+          <div class="lucky-section" id="lucky-display"></div>
+        </div>
+
+        <!-- 按钮区域 -->
+        <div class="result-actions">
+          <button class="btn-copy" onclick="copyResult()">
+            <span class="btn-icon">📋</span>
+            <span>复制结果</span>
+          </button>
+          <button class="btn-retry" onclick="restartTest()">
+            <span class="btn-icon">🔄</span>
+            <span>再测一次</span>
+          </button>
+        </div>
+
+        <!-- 底部祝福 -->
+        <div class="result-footer">
+          <div class="footer-text">🧧 新年行大运 🧧</div>
+        </div>
       </div>
     </div>
   </div>
 
   <script src="app.js"></script>
+  <script>
+    // 粒子系统
+    class ParticleSystem {
+      constructor() {
+        this.canvas = document.getElementById('particles-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        this.animate();
+      }
+
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+
+      createParticle() {
+        return {
+          x: Math.random() * this.canvas.width,
+          y: -10,
+          size: Math.random() * 4 + 1,
+          speedY: Math.random() * 1 + 0.5,
+          speedX: Math.random() * 2 - 1,
+          opacity: Math.random() * 0.8 + 0.2,
+          hue: Math.random() > 0.5 ? 45 : 30 // 金色或橙色
+        };
+      }
+
+      animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // 添加新粒子
+        if (this.particles.length < 100 && Math.random() > 0.9) {
+          this.particles.push(this.createParticle());
+        }
+
+        // 更新和绘制粒子
+        this.particles.forEach((p, i) => {
+          p.y += p.speedY;
+          p.x += p.speedX;
+
+          // 绘制发光粒子
+          const gradient = this.ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
+          gradient.addColorStop(0, `hsla(${p.hue}, 100%, 70%, ${p.opacity})`);
+          gradient.addColorStop(0.5, `hsla(${p.hue}, 100%, 50%, ${p.opacity * 0.5})`);
+          gradient.addColorStop(1, 'transparent');
+
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
+          this.ctx.fillStyle = gradient;
+          this.ctx.fill();
+
+          // 移除超出屏幕的粒子
+          if (p.y > this.canvas.height + 10) {
+            this.particles.splice(i, 1);
+          }
+        });
+
+        requestAnimationFrame(() => this.animate());
+      }
+    }
+
+    // 飘落元素
+    class FallingElements {
+      constructor() {
+        this.container = document.getElementById('falling-elements');
+        this.elements = ['🧧', '🎊', '🏮', '✨', '💫', '🪙', '🐲', '🪄'];
+        this.createElements();
+      }
+
+      createElements() {
+        for (let i = 0; i < 20; i++) {
+          const el = document.createElement('div');
+          el.className = 'falling-item';
+          el.textContent = this.elements[Math.floor(Math.random() * this.elements.length)];
+          el.style.left = Math.random() * 100 + '%';
+          el.style.animationDelay = Math.random() * 5 + 's';
+          el.style.animationDuration = (Math.random() * 3 + 5) + 's';
+          el.style.setProperty('--drift', (Math.random() * 100 - 50) + 'px');
+          this.container.appendChild(el);
+        }
+      }
+    }
+
+    // 庆祝烟花
+    function createCelebration() {
+      const container = document.getElementById('celebration');
+      container.innerHTML = '';
+
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'confetti';
+        particle.style.setProperty('--x', (Math.random() * 200 - 100) + 'px');
+        particle.style.setProperty('--y', (Math.random() * -200 - 50) + 'px');
+        particle.style.setProperty('--r', Math.random() * 360 + 'deg');
+        particle.style.setProperty('--delay', Math.random() * 0.5 + 's');
+        particle.style.setProperty('--hue', Math.random() > 0.5 ? '45' : '30');
+        container.appendChild(particle);
+      }
+    }
+
+    // 页面加载完成后初始化
+    window.addEventListener('load', () => {
+      new ParticleSystem();
+      new FallingElements();
+    });
+  </script>
 </body>
 </html>
