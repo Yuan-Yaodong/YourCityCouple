@@ -84,12 +84,12 @@ const mbtiTypes = {
     travelStyle: "喜欢充满活力和创意的旅行目的地",
     emoji: "💡"
   },
-  "ENFJ": {
-    name: "导师",
-    shortName: "导师",
-    description: "你富有同理心，旅行中善于帮助和启发他人",
-    travelStyle: "喜欢有文化底蕴、适合分享的目的地",
-    emoji: "🌟"
+  "ENTJ": {
+    name: "指挥官",
+    shortName: "指挥官",
+    description: "你目标清晰，行动果断，旅行中擅长做决策和统筹全局",
+    travelStyle: "偏爱节奏明确、效率高、目标导向的旅行路线",
+    emoji: "🧭"
   },
   "ENFP": {
     name: "自由者",

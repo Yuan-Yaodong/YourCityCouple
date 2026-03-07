@@ -26,7 +26,40 @@
   <button class="btn-primary" bindtap="startTest">
     开始测试
   </button>
+  <button class="btn-demo" bindtap="openInsights">
+    打开体验数据看板
+  </button>
+
+  <view wx:if="{{hasHistory}}" class="history-card">
+    <text class="history-title">你上次的好运城市：{{historyCity}}</text>
+    <button class="btn-secondary" bindtap="continueLastResult">继续查看上次结果</button>
+  </view>
+
+  <view class="quote-card">
+    <text class="quote-title">今日好运签</text>
+    <text class="quote-text">「{{dailyQuote}}」</text>
+  </view>
+
+  <view class="mission-card">
+    <text class="mission-title">今日好运任务</text>
+    <text class="mission-text">{{dailyMission}}</text>
+    <button class="btn-mission-copy" bindtap="copyDailyCard">复制好运卡</button>
+  </view>
+
+  <view class="streak-card">
+    <text class="streak-title">点亮连续天数</text>
+    <text class="streak-days">{{ritualStreakDays}} 天</text>
+    <text class="streak-desc">{{ritualLastCity ? ('最近点亮城市：' + ritualLastCity) : '今天点亮一下，开启你的连续记录'}}</text>
+  </view>
+
+  <view wx:if="{{recentHistory.length > 0}}" class="history-list-card">
+    <text class="history-list-title">最近测试记录</text>
+    <view class="history-item" wx:for="{{recentHistory}}" wx:key="index" bindtap="openHistoryResult" data-index="{{index}}">
+      <text class="history-item-city">{{item.city}}</text>
+      <text class="history-item-time">{{item.displayTime}}</text>
+    </view>
+  </view>
 
   <!-- 底部说明 -->
-  <text class="tips">5道题 · 测出你的福气城市</text>
+  <text class="tips">6道题 · 测出你的福气城市</text>
 </view>

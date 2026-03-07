@@ -40,6 +40,7 @@ function analyzeUserPreferences(userAnswers, resultCity) {
 
   // 生成为什么适合这个城市
   const whyFit = generateWhyFit(analysisPoints, resultCity);
+  const actionTips = generateActionTips(resultCity, analysisPoints);
 
   return {
     personality: foodAnalysis,       // 性格特点
@@ -50,6 +51,7 @@ function analyzeUserPreferences(userAnswers, resultCity) {
     wish: wishAnalysis,              // 新年愿望
     mbti: mbtiAnalysis,              // MBTI人格
     whyFit: whyFit,                 // 为什么适合
+    actionTips: actionTips,          // 今日行动建议
     summary: generateSummary(analysisPoints) // 简短总结
   };
 }
@@ -187,24 +189,13 @@ function analyzeMBTI(userAnswers) {
  * 生成为什么适合该城市
  */
 function generateWhyFit(analysisPoints, resultCity) {
-  const reasons = [];
-
-  // 性格匹配
-  reasons.push(analysisPoints[0].desc);
-
-  // 旅行方式匹配
-  reasons.push(analysisPoints[1].desc);
-
-  // 核心追求匹配
-  reasons.push(analysisPoints[3].desc);
-
-  // 新年氛围匹配
-  reasons.push(analysisPoints[4].desc);
-
-  // 新年愿望匹配
-  reasons.push(analysisPoints[5].desc);
-
-  return reasons;
+  return [
+    { text: "性格契合", desc: analysisPoints[0].desc },
+    { text: "旅行方式契合", desc: analysisPoints[1].desc },
+    { text: "核心追求契合", desc: analysisPoints[3].desc },
+    { text: "节日氛围契合", desc: analysisPoints[4].desc },
+    { text: `与${resultCity}气质契合`, desc: analysisPoints[5].desc }
+  ];
 }
 
 /**
@@ -218,6 +209,18 @@ function generateSummary(analysisPoints) {
   const wish = analysisPoints[5].text;
 
   return `${personality}的${travelStyle}，追求${priority}，想要${vibe}的新年，期待${wish}`;
+}
+
+/**
+ * 生成今日行动建议（用于情绪价值增强）
+ */
+function generateActionTips(resultCity, analysisPoints) {
+  const tips = [
+    `今天做一件和${resultCity}有关的小事：查一张机票或收藏一条攻略`,
+    `给自己安排30分钟轻旅行时刻，按照“${analysisPoints[1].text}”的方式放松`,
+    `把“${analysisPoints[5].text}”写成一句新年承诺，今晚睡前读一遍`
+  ];
+  return tips;
 }
 
 /**

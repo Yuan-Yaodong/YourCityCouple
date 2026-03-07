@@ -1,0 +1,175 @@
+.container {
+  min-height: 100vh;
+  background: #f7f8fc;
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 20rpx;
+}
+
+.stats-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16rpx 0;
+}
+
+.stat-card {
+  width: 48%;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 18rpx;
+  box-shadow: 0 6rpx 20rpx rgba(15, 23, 42, 0.06);
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: #64748b;
+  display: block;
+}
+
+.stat-value {
+  margin-top: 8rpx;
+  font-size: 34rpx;
+  color: #0f172a;
+  font-weight: bold;
+}
+
+.rate-card {
+  margin-top: 18rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 18rpx;
+}
+
+.ab-card {
+  margin-top: 14rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 16rpx 18rpx;
+}
+
+.ab-title {
+  font-size: 26rpx;
+  color: #0f172a;
+  font-weight: bold;
+}
+
+.ab-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24rpx;
+  color: #334155;
+  margin-top: 8rpx;
+}
+
+.ab-hint {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #64748b;
+}
+
+.rate-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 26rpx;
+  color: #334155;
+  margin: 8rpx 0;
+}
+
+.ops-row {
+  margin-top: 18rpx;
+  display: flex;
+  gap: 12rpx;
+}
+
+.btn {
+  flex: 1;
+  font-size: 24rpx;
+  border-radius: 40rpx;
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.btn::after {
+  border: none;
+}
+
+.btn.danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.btn.primary {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.filter-row {
+  margin-top: 14rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.filter-chip {
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 22rpx;
+}
+
+.filter-chip.active {
+  background: #1d4ed8;
+  color: #fff;
+}
+
+.section-title {
+  margin-top: 24rpx;
+  margin-bottom: 10rpx;
+  font-size: 28rpx;
+  color: #334155;
+  font-weight: bold;
+}
+
+.events {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.event-item {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 14rpx;
+  border: 1rpx solid #e2e8f0;
+}
+
+.event-head {
+  display: flex;
+  justify-content: space-between;
+}
+
+.event-name {
+  font-size: 24rpx;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.event-time {
+  font-size: 22rpx;
+  color: #64748b;
+}
+
+.event-props {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #475569;
+  line-height: 1.5;
+}

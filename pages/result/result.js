@@ -2,12 +2,23 @@
 const { calculateResult, getCityDetail, calculateFiveElement } = require('../../utils/calculator.js');
 const { analyzeUserPreferences } = require('../../utils/analyzer.js');
 const { calculateMBTI } = require('../../utils/mbti.js');
+const { healingQuotes } = require('../../utils/data.js');
+const { trackEvent, assignVariant } = require('../../utils/analytics.js');
 
 Page({
   data: {
     result: null,
     cityDetail: null,
     analysis: null,
+    displayWhyFit: [],
+    runnerUpCity: null,
+    compareText: '',
+    shareVariant: 'warm',
+    actionOrder: 'share_first',
+    dailyQuote: '',
+    dailyRitualDone: false,
+    dailyRitualText: '',
+    ritualStreakDays: 0,
     mbti: null,
     fiveElement: null,
     showResult: false,
@@ -22,10 +33,13 @@ Page({
     const answers = wx.getStorageSync('answers') || [];
 
     if (answers.length === 0) {
-      // 没有答案，跳转到首页
-      wx.redirectTo({
-        url: '/pages/index/index'
-      });
+      const loaded = this.loadFromCacheResult();
+      if (!loaded) {
+        // 没有答案且没有历史结果，跳转到首页
+        wx.redirectTo({
+          url: '/pages/index/index'
+        });
+      }
       return;
     }
 
@@ -41,14 +55,42 @@ Page({
 
     // 计算五行属性
     const fiveElement = calculateFiveElement(answers);
+    const displayWhyFit = this.getDisplayWhyFit(analysis.whyFit);
+    const runnerUpCity = result.runnerUp ? getCityDetail(result.runnerUp.city) : null;
+    const compareText = this.getCompareText(result.city);
+    const shareVariant = assignVariant('share_copy_v1', ['warm', 'direct']) || 'warm';
+    const actionOrder = assignVariant('result_button_order_v1', ['share_first', 'restart_first']) || 'share_first';
+    const dailyQuote = this.getDailyQuote(result.city);
+    const ritualKey = this.getTodayRitualKey();
+    const ritualRecord = wx.getStorageSync('dailyRitual') || {};
+    const dailyRitualDone = ritualRecord[ritualKey] === result.city;
+    const ritualStreakDays = this.getRitualStreakDays(ritualRecord);
 
     this.setData({
       result: result,
       cityDetail: cityDetail,
       analysis: analysis,
+      displayWhyFit: displayWhyFit,
+      runnerUpCity: runnerUpCity,
+      compareText: compareText,
+      shareVariant: shareVariant,
+      actionOrder,
+      dailyQuote: dailyQuote,
+      dailyRitualDone: dailyRitualDone,
+      dailyRitualText: dailyRitualDone
+        ? this.buildRitualEncouragement(ritualStreakDays)
+        : '点亮今日好运，给自己一个好开始',
+      ritualStreakDays,
       mbti: mbti,
       fiveElement: fiveElement,
       showResult: true
+    });
+
+    this.saveResultHistory(result.city, analysis ? analysis.summary : '');
+    trackEvent('result_view', {
+      city: result.city,
+      variant: shareVariant,
+      actionOrder
     });
 
     // 延迟触发动画
@@ -57,22 +99,81 @@ Page({
     }, 100);
   },
 
+  loadFromCacheResult() {
+    const latest = wx.getStorageSync('testResult');
+    if (!latest || !latest.city) return false;
+    const cityDetail = getCityDetail(latest.city);
+    if (!cityDetail) return false;
+
+    const shareVariant = assignVariant('share_copy_v1', ['warm', 'direct']) || 'warm';
+    const actionOrder = assignVariant('result_button_order_v1', ['share_first', 'restart_first']) || 'share_first';
+    this.setData({
+      result: { city: latest.city, score: 0, runnerUp: null },
+      cityDetail,
+      analysis: null,
+      displayWhyFit: [],
+      runnerUpCity: null,
+      compareText: '这是你上次保存的结果，重新测试可获得最新分析。',
+      shareVariant,
+      actionOrder,
+      dailyQuote: this.getDailyQuote(latest.city),
+      dailyRitualDone: false,
+      dailyRitualText: '重新测试后可点亮今日好运',
+      mbti: null,
+      fiveElement: null,
+      showResult: true
+    });
+    trackEvent('result_view_from_cache', { city: latest.city, actionOrder });
+    setTimeout(() => {
+      this.setData({ showAnimations: true });
+    }, 100);
+    return true;
+  },
+
   onReady() {
-    // 隐藏分享按钮
-    wx.hideShareMenu();
+    // 开启原生分享入口，提升自然传播
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ['shareAppMessage', 'shareTimeline']
+    });
   },
 
   onShareAppMessage() {
-    const { cityDetail } = this.data;
+    const { cityDetail, result, shareVariant } = this.data;
+    const title = shareVariant === 'direct'
+      ? `6题测出开年旺城，我是${result ? result.city : '杭州'}，你来试试？`
+      : `我测到的新年旺城是${cityDetail ? cityDetail.description : '杭州'}，快来测测你的！`;
+    trackEvent('share_app_message', {
+      variant: shareVariant,
+      city: result ? result.city : ''
+    });
     return {
-      title: `我的新年旺城是${cityDetail ? cityDetail.description : '杭州'}，快来测测你的！`,
+      title,
       path: '/pages/index/index',
       imageUrl: '/images/share-bg.png' // 可以配置分享图片
     };
   },
 
+  onShareTimeline() {
+    const { result, shareVariant } = this.data;
+    trackEvent('share_timeline', {
+      variant: shareVariant,
+      city: result ? result.city : ''
+    });
+    return {
+      title: shareVariant === 'direct'
+        ? `我的开年旺城是${result ? result.city : '杭州'}，你也来测一个`
+        : '新年运势小测试：6题测出你的开年旺城'
+    };
+  },
+
   // 重新测试
   restartTest() {
+    trackEvent('click_restart_test', {
+      city: this.data.result ? this.data.result.city : '',
+      actionOrder: this.data.actionOrder,
+      variant: this.data.shareVariant
+    });
     wx.removeStorageSync('answers');
     wx.removeStorageSync('testResult');
 
@@ -83,6 +184,11 @@ Page({
 
   // 生成海报
   generatePoster() {
+    trackEvent('click_generate_poster', {
+      city: this.data.result ? this.data.result.city : '',
+      actionOrder: this.data.actionOrder,
+      variant: this.data.shareVariant
+    });
     this.savePoster();
   },
 
@@ -105,10 +211,12 @@ Page({
     wx.saveImageToPhotosAlbum({
       filePath: posterImage,
       success: () => {
+        trackEvent('poster_save_success');
         wx.showToast({ title: '已保存到相册', icon: 'success' });
         this.setData({ showPosterModal: false });
       },
       fail: (err) => {
+        trackEvent('poster_save_fail', { errMsg: err.errMsg || '' });
         console.error('保存失败', err);
         if (err.errMsg.includes('auth deny')) {
           wx.showModal({
@@ -169,12 +277,12 @@ Page({
     ctx.stroke();
 
     // 分析文案
-    if (analysis && analysis.whyFit) {
+    const posterReasons = this.getDisplayWhyFit(analysis ? analysis.whyFit : []);
+    if (posterReasons.length > 0) {
       ctx.setFillStyle('#333');
       ctx.setFontSize(22);
-      const reasons = analysis.whyFit;
       let yPos = 310;
-      reasons.forEach((reason, index) => {
+      posterReasons.forEach((reason, index) => {
         if (index < 4) {
           // reason 是对象，需要取 desc 字段
           const text = reason.desc || reason.text || reason;
@@ -252,11 +360,20 @@ Page({
 
   // 复制结果文案
   copyResult() {
-    const { result, cityDetail, analysis, mbti, fiveElement } = this.data;
+    trackEvent('click_copy_result', {
+      city: this.data.result ? this.data.result.city : '',
+      actionOrder: this.data.actionOrder,
+      variant: this.data.shareVariant
+    });
+    const { result, cityDetail, analysis, mbti, fiveElement, shareVariant } = this.data;
 
     let whyFitText = '';
-    if (analysis && analysis.whyFit) {
-      whyFitText = '\n📝 为什么适合你：\n' + analysis.whyFit.map(r => '• ' + r.desc).join('\n');
+    const reasonList = this.getDisplayWhyFit(analysis ? analysis.whyFit : []);
+    if (reasonList.length > 0) {
+      whyFitText = '\n📝 为什么适合你：\n' + reasonList.map((r) => {
+        const title = r.text ? `【${r.text}】` : '';
+        return `• ${title}${r.desc || ''}`;
+      }).join('\n');
     }
 
     let mbtiText = '';
@@ -270,7 +387,15 @@ Page({
       fiveElementText = `\n\n🧭 我的五行属性：${fe.emoji} ${fe.name}\n幸运色：${fe.luckyColors.join('、')}\n幸运数字：${fe.luckyNumbers.join('、')}\n贵人方位：${fe.direction}\n${fe.fortune}`;
     }
 
-    const text = `🎉 2026新年旺城测试 🎉\n\n我的开年旅游地是：【${result.city}】\n${cityDetail.description}\n\n${cityDetail.detail}\n${whyFitText}\n${mbtiText}\n${fiveElementText}\n\n${analysis ? '💡 ' + analysis.summary + '\n' : ''}\n🧧 新年行大运，快来测测你的！`;
+    let actionTipsText = '';
+    if (analysis && Array.isArray(analysis.actionTips) && analysis.actionTips.length > 0) {
+      actionTipsText = '\n\n✅ 今日行动建议：\n' + analysis.actionTips.map((tip) => '• ' + tip).join('\n');
+    }
+
+    const opening = shareVariant === 'direct'
+      ? '6题测出我的开年旺城，你也来测测！'
+      : '🎉 2026新年旺城测试 🎉';
+    const text = `${opening}\n\n我的开年旅游地是：【${result.city}】\n${cityDetail.description}\n\n${cityDetail.detail}\n${whyFitText}\n${mbtiText}\n${fiveElementText}\n${actionTipsText}\n\n${analysis ? '💡 ' + analysis.summary + '\n' : ''}\n🧧 新年行大运，快来测测你的！`;
 
     wx.setClipboardData({
       data: text,
@@ -281,5 +406,101 @@ Page({
         });
       }
     });
+  },
+
+  getDisplayWhyFit(whyFit) {
+    const list = Array.isArray(whyFit) ? whyFit : [];
+    return list;
+  },
+
+  lightUpToday() {
+    if (this.data.dailyRitualDone) {
+      wx.showToast({ title: '今天已经点亮过啦', icon: 'none' });
+      return;
+    }
+    const ritualKey = this.getTodayRitualKey();
+    const ritualRecord = wx.getStorageSync('dailyRitual') || {};
+    ritualRecord[ritualKey] = this.data.result.city;
+    wx.setStorageSync('dailyRitual', ritualRecord);
+    const ritualStreakDays = this.getRitualStreakDays(ritualRecord);
+    this.setData({
+      dailyRitualDone: true,
+      dailyRitualText: this.buildRitualEncouragement(ritualStreakDays),
+      ritualStreakDays
+    });
+    trackEvent('daily_ritual_light_up', {
+      city: this.data.result.city,
+      streakDays: ritualStreakDays
+    });
+    wx.showToast({ title: '好运已点亮', icon: 'success' });
+  },
+
+  getTodayRitualKey() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  },
+
+  getRitualStreakDays(ritualRecord) {
+    const record = ritualRecord || {};
+    let days = 0;
+    let cursor = new Date();
+    while (true) {
+      const y = cursor.getFullYear();
+      const m = String(cursor.getMonth() + 1).padStart(2, '0');
+      const d = String(cursor.getDate()).padStart(2, '0');
+      const key = `${y}-${m}-${d}`;
+      if (!record[key]) break;
+      days += 1;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    return days;
+  },
+
+  buildRitualEncouragement(streakDays) {
+    if (streakDays >= 7) return `连续点亮 ${streakDays} 天，状态稳稳在线！`;
+    if (streakDays >= 3) return `连续点亮 ${streakDays} 天，好运习惯正在形成。`;
+    if (streakDays >= 1) return `连续点亮 ${streakDays} 天，继续保持好心情！`;
+    return '今日好运已点亮，继续保持好心情！';
+  },
+
+  saveResultHistory(city, summary) {
+    const previous = wx.getStorageSync('historyResults') || [];
+    const current = {
+      city,
+      summary: summary || '',
+      ts: Date.now()
+    };
+    const merged = [current, ...previous.filter((item) => !(item && item.city === city && item.ts === current.ts))];
+    wx.setStorageSync('historyResults', merged.slice(0, 10));
+    wx.setStorageSync('testResult', current);
+  },
+
+  getCompareText(currentCity) {
+    const history = wx.getStorageSync('historyResults') || [];
+    const previous = Array.isArray(history) && history.length > 0 ? history[0] : null;
+    if (!previous || !previous.city) {
+      return '这是你第一次测试，欢迎开启好运旅程！';
+    }
+    if (previous.city === currentCity) {
+      return `连续命中${currentCity}，你的旅行偏好非常稳定。`;
+    }
+    return `上一次是${previous.city}，这次切换到${currentCity}，你的状态正在变化。`;
+  },
+
+  getDailyQuote(seedCity) {
+    if (!Array.isArray(healingQuotes) || healingQuotes.length === 0) {
+      return '今天也会有小确幸。';
+    }
+    const now = new Date();
+    const dateSeed = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}-${seedCity || ''}`;
+    let hash = 0;
+    for (let i = 0; i < dateSeed.length; i++) {
+      hash = (hash << 5) - hash + dateSeed.charCodeAt(i);
+      hash |= 0;
+    }
+    return healingQuotes[Math.abs(hash) % healingQuotes.length];
   }
 })

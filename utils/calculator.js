@@ -30,21 +30,19 @@ function calculateResult(userAnswers) {
     }
   });
 
-  // 找出得分最高的城市
-  let maxScore = -1;
-  let resultCity = cityList[0];
-
-  cityList.forEach(city => {
-    if (scores[city] > maxScore) {
-      maxScore = scores[city];
-      resultCity = city;
-    }
-  });
+  // 城市按得分排序，便于展示“差一点就是”
+  const sortedCities = cityList
+    .map(city => ({ city, score: scores[city] }))
+    .sort((a, b) => b.score - a.score);
+  const top1 = sortedCities[0] || { city: cityList[0], score: 0 };
+  const top2 = sortedCities[1] || null;
 
   return {
-    city: resultCity,
-    score: maxScore,
-    allScores: scores
+    city: top1.city,
+    score: top1.score,
+    allScores: scores,
+    sortedCities,
+    runnerUp: top2
   };
 }
 

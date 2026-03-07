@@ -38,7 +38,7 @@
       <!-- 分析文案 -->
       <view wx:if="{{analysis}}" class="analysis-section {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.6 + (cityDetail.tags.length + 1) * 0.15}}s">
         <view class="analysis-title">为什么适合你</view>
-        <view class="analysis-item" wx:for="{{analysis.whyFit}}" wx:key="index">
+        <view class="analysis-item" wx:for="{{displayWhyFit}}" wx:key="index">
           <text class="analysis-point">{{item.text}}</text>
           <text class="analysis-desc">{{item.desc}}</text>
         </view>
@@ -85,6 +85,38 @@
         <text class="five-element-fortune">{{fiveElement.detail.fortune}}</text>
       </view>
 
+      <view wx:if="{{runnerUpCity}}" class="runnerup-card {{showAnimations ? 'slide-up' : ''}}">
+        <view class="runnerup-title">差一点就是</view>
+        <view class="runnerup-main">
+          <text class="runnerup-emoji">{{runnerUpCity.emoji}}</text>
+          <text class="runnerup-name">{{result.runnerUp.city}} · {{runnerUpCity.description}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{compareText}}" class="compare-card {{showAnimations ? 'fade-in' : ''}}">
+        <view class="compare-title">和上次相比</view>
+        <text class="compare-text">{{compareText}}</text>
+      </view>
+
+      <view wx:if="{{analysis && analysis.actionTips && analysis.actionTips.length}}" class="action-tips-card {{showAnimations ? 'fade-in' : ''}}">
+        <view class="action-tips-title">今日好运行动建议</view>
+        <view class="action-tip" wx:for="{{analysis.actionTips}}" wx:key="index">✅ {{item}}</view>
+      </view>
+
+      <view wx:if="{{dailyQuote}}" class="quote-card {{showAnimations ? 'fade-in' : ''}}">
+        <view class="quote-card-title">今日好运签</view>
+        <text class="quote-card-text">「{{dailyQuote}}」</text>
+      </view>
+
+      <view class="ritual-card {{showAnimations ? 'fade-in' : ''}}">
+        <view class="ritual-title">今日好运仪式</view>
+        <view class="ritual-streak">连续点亮：{{ritualStreakDays}} 天</view>
+        <view class="ritual-text">{{dailyRitualText}}</view>
+        <button class="btn-ritual {{dailyRitualDone ? 'btn-ritual-done' : ''}}" bindtap="lightUpToday">
+          {{dailyRitualDone ? '✨ 今日已点亮' : '✨ 点亮今日好运'}}
+        </button>
+      </view>
+
       <!-- 专属称号 -->
       <view wx:if="{{cityDetail.title}}" class="title-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.9 + (cityDetail.tags.length + 1) * 0.15}}s">
         <view class="title-label">你的专属称号</view>
@@ -119,15 +151,28 @@
 
     <!-- 按钮区域 -->
     <view class="btn-area {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: 0.8s">
-      <button class="btn-share" bindtap="generatePoster">
-        🖼️ 生成海报
-      </button>
-      <button class="btn-copy" bindtap="copyResult">
-        📤 分享给朋友
-      </button>
-      <button class="btn-restart" bindtap="restartTest">
-        🔄 再测一次
-      </button>
+      <block wx:if="{{actionOrder === 'share_first'}}">
+        <button class="btn-share" bindtap="generatePoster">
+          🖼️ 生成海报
+        </button>
+        <button class="btn-copy" bindtap="copyResult">
+          📤 分享给朋友
+        </button>
+        <button class="btn-restart" bindtap="restartTest">
+          🔄 再测一次
+        </button>
+      </block>
+      <block wx:else>
+        <button class="btn-restart" bindtap="restartTest">
+          🔄 再测一次
+        </button>
+        <button class="btn-share" bindtap="generatePoster">
+          🖼️ 生成海报
+        </button>
+        <button class="btn-copy" bindtap="copyResult">
+          📤 分享给朋友
+        </button>
+      </block>
     </view>
 
     <!-- 底部装饰 -->

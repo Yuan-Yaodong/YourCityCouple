@@ -63,6 +63,173 @@
   border: none;
 }
 
+.btn-demo {
+  margin-top: 16rpx;
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFF0B3;
+  border: 2rpx solid rgba(255, 233, 168, 0.45);
+  font-size: 28rpx;
+  border-radius: 44rpx;
+}
+
+.btn-demo::after {
+  border: none;
+}
+
+.history-card {
+  margin-top: 30rpx;
+  padding: 22rpx 24rpx;
+  border-radius: 20rpx;
+  background: rgba(255, 248, 225, 0.15);
+  border: 2rpx solid rgba(255, 215, 0, 0.4);
+}
+
+.history-title {
+  color: #fff3c4;
+  font-size: 26rpx;
+  text-align: center;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFE9A8;
+  border: 2rpx solid rgba(255, 233, 168, 0.45);
+  font-size: 28rpx;
+  border-radius: 44rpx;
+}
+
+.btn-secondary::after {
+  border: none;
+}
+
+.quote-card {
+  margin-top: 24rpx;
+  background: rgba(255, 248, 225, 0.14);
+  border: 2rpx solid rgba(255, 223, 128, 0.45);
+  border-radius: 20rpx;
+  padding: 18rpx 20rpx;
+}
+
+.quote-title {
+  display: block;
+  color: #FFD86B;
+  font-size: 24rpx;
+  text-align: center;
+}
+
+.quote-text {
+  margin-top: 8rpx;
+  display: block;
+  color: #FFF6D8;
+  font-size: 24rpx;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.mission-card {
+  margin-top: 16rpx;
+  background: rgba(255, 255, 255, 0.14);
+  border: 2rpx solid rgba(255, 214, 102, 0.42);
+  border-radius: 20rpx;
+  padding: 16rpx;
+  text-align: center;
+}
+
+.mission-title {
+  display: block;
+  color: #ffe29a;
+  font-size: 22rpx;
+}
+
+.mission-text {
+  display: block;
+  margin-top: 6rpx;
+  color: #fff8dd;
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
+.btn-mission-copy {
+  margin-top: 12rpx;
+  background: rgba(255, 233, 168, 0.2);
+  color: #fff3cc;
+  border: 2rpx solid rgba(255, 233, 168, 0.45);
+  border-radius: 40rpx;
+  font-size: 24rpx;
+}
+
+.btn-mission-copy::after {
+  border: none;
+}
+
+.streak-card {
+  margin-top: 18rpx;
+  background: rgba(255, 247, 204, 0.16);
+  border: 2rpx solid rgba(255, 217, 102, 0.42);
+  border-radius: 20rpx;
+  padding: 16rpx;
+  text-align: center;
+}
+
+.streak-title {
+  display: block;
+  font-size: 22rpx;
+  color: #FFE197;
+}
+
+.streak-days {
+  display: block;
+  margin-top: 4rpx;
+  font-size: 42rpx;
+  color: #FFD700;
+  font-weight: bold;
+}
+
+.streak-desc {
+  display: block;
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: rgba(255, 246, 216, 0.92);
+}
+
+.history-list-card {
+  margin-top: 18rpx;
+  background: rgba(255, 248, 225, 0.12);
+  border: 2rpx solid rgba(255, 215, 0, 0.35);
+  border-radius: 20rpx;
+  padding: 18rpx;
+}
+
+.history-list-title {
+  display: block;
+  text-align: center;
+  color: #FFE6A3;
+  font-size: 24rpx;
+  margin-bottom: 10rpx;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 12rpx;
+  padding: 10rpx 12rpx;
+  margin-bottom: 8rpx;
+}
+
+.history-item-city {
+  color: #FFF8DD;
+  font-size: 24rpx;
+}
+
+.history-item-time {
+  color: rgba(255, 248, 221, 0.72);
+  font-size: 22rpx;
+}
+
 .decoration {
   position: absolute;
   font-size: 60rpx;
@@ -84,7 +251,7 @@
 .bottom-left {
   bottom: 120rpx;
   left: 40rpx;
-  animation: float-in-out infinite  3s ease1s;
+  animation: float 3s ease-in-out infinite 1s;
 }
 
 .bottom-right {

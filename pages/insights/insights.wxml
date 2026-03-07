@@ -1,0 +1,100 @@
+<view class="container">
+  <view class="title">本地体验数据看板</view>
+
+  <view class="stats-grid">
+    <view class="stat-card">
+      <text class="stat-label">事件总数</text>
+      <text class="stat-value">{{stats.totalEvents}}</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-label">开始测试</text>
+      <text class="stat-value">{{stats.testStart}}</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-label">完成测试</text>
+      <text class="stat-value">{{stats.testComplete}}</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-label">结果曝光</text>
+      <text class="stat-value">{{stats.resultView}}</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-label">分享行为</text>
+      <text class="stat-value">{{stats.shareCount}}</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-label">点亮次数</text>
+      <text class="stat-value">{{stats.ritualCount}}</text>
+    </view>
+  </view>
+
+  <view class="rate-card">
+    <view class="rate-row">
+      <text>完成率</text>
+      <text>{{stats.completionRate}}</text>
+    </view>
+    <view class="rate-row">
+      <text>分享率</text>
+      <text>{{stats.shareRate}}</text>
+    </view>
+  </view>
+
+  <view class="ab-card">
+    <view class="ab-title">A/B 快照</view>
+    <view class="ab-row">
+      <text>分享文案 warm</text>
+      <text>{{experimentSummary.shareWarmViews}} / {{experimentSummary.shareWarmActions}}</text>
+    </view>
+    <view class="ab-row">
+      <text>分享文案 direct</text>
+      <text>{{experimentSummary.shareDirectViews}} / {{experimentSummary.shareDirectActions}}</text>
+    </view>
+    <view class="ab-row">
+      <text>按钮顺序 share_first</text>
+      <text>{{experimentSummary.orderShareFirstViews}} / {{experimentSummary.orderShareFirstRestart}}</text>
+    </view>
+    <view class="ab-row">
+      <text>按钮顺序 restart_first</text>
+      <text>{{experimentSummary.orderRestartFirstViews}} / {{experimentSummary.orderRestartFirstRestart}}</text>
+    </view>
+    <view class="ab-hint">格式：曝光 / 关键动作</view>
+  </view>
+
+  <view class="ab-card">
+    <view class="ab-title">行为概览</view>
+    <view class="ab-row">
+      <text>近7天活跃天数</text>
+      <text>{{behaviorSummary.activeDays7}}</text>
+    </view>
+    <view class="ab-row">
+      <text>热门城市 Top3</text>
+      <text>{{behaviorSummary.topCities.join(' / ') || '暂无'}}</text>
+    </view>
+  </view>
+
+  <view class="ops-row">
+    <button class="btn danger" bindtap="clearLogs">清空事件日志</button>
+    <button class="btn" bindtap="clearHistory">清空测试历史</button>
+  </view>
+  <view class="ops-row">
+    <button class="btn primary" bindtap="exportSummary">复制摘要</button>
+  </view>
+
+  <view class="filter-row">
+    <view class="filter-chip {{filterKey === 'all' ? 'active' : ''}}" bindtap="setFilter" data-key="all">全部</view>
+    <view class="filter-chip {{filterKey === 'core' ? 'active' : ''}}" bindtap="setFilter" data-key="core">核心漏斗</view>
+    <view class="filter-chip {{filterKey === 'share' ? 'active' : ''}}" bindtap="setFilter" data-key="share">分享链路</view>
+    <view class="filter-chip {{filterKey === 'ritual' ? 'active' : ''}}" bindtap="setFilter" data-key="ritual">仪式行为</view>
+  </view>
+
+  <view class="section-title">最近事件（筛选后）</view>
+  <view class="events">
+    <view class="event-item" wx:for="{{eventPreview}}" wx:key="index">
+      <view class="event-head">
+        <text class="event-name">{{item.name}}</text>
+        <text class="event-time">{{item.time}}</text>
+      </view>
+      <text class="event-props">{{item.props}}</text>
+    </view>
+  </view>
+</view>
