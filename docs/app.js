@@ -116,103 +116,96 @@ const healingQuotes = [
   "走出去，世界会向你走来。"
 ];
 
-// ==================== 交互逻辑 ====================
+// ==================== 交互逻辑（Web 对齐小程序） ====================
+const STORAGE_KEYS = {
+  HISTORY: 'yc_history_results',
+  RITUAL: 'yc_daily_ritual',
+  LAST_RESULT: 'yc_last_result'
+};
 
 let currentQuestion = 0;
 let userAnswers = [];
+let currentComputedResult = null;
 
-// 开始测试
 function startTest() {
   userAnswers = [];
   currentQuestion = 0;
+  currentComputedResult = null;
   showPage('page-quiz');
   renderQuiz();
 }
 
-// 渲染问题
 function renderQuiz() {
   const question = questions[currentQuestion];
   document.getElementById('question-num').textContent = `第${currentQuestion + 1}题`;
   document.getElementById('question-text').textContent = question.question;
 
-  // 更新进度
   const progress = ((currentQuestion + 1) / questions.length) * 100;
   document.getElementById('progress-inner').style.width = progress + '%';
   document.getElementById('progress-text').textContent = `${currentQuestion + 1} / ${questions.length}`;
 
-  // 渲染选项
   const optionsList = document.getElementById('options-list');
   optionsList.innerHTML = '';
   question.options.forEach((option, index) => {
     const btn = document.createElement('div');
     btn.className = 'option-item';
     btn.textContent = option.text;
-    btn.style.animationDelay = (index * 0.1) + 's';
+    btn.style.animationDelay = `${index * 0.1}s`;
     btn.onclick = () => selectOption(index);
     optionsList.appendChild(btn);
   });
 }
 
-// 选择选项
 function selectOption(optionIndex) {
-  // 防止重复点击
   if (userAnswers.length !== currentQuestion) return;
-
   userAnswers.push(optionIndex);
 
   if (currentQuestion < questions.length - 1) {
-    // 简单切换，不使用复杂动画避免闪烁
-    currentQuestion++;
+    currentQuestion += 1;
     renderQuiz();
   } else {
-    // 计算结果
     showResult();
   }
 }
 
-// 计算结果
 function calculateResult(answers) {
   const scores = {};
+  cityList.forEach(city => { scores[city] = 0; });
 
   answers.forEach((answer, qIndex) => {
     const question = questions[qIndex];
-    const option = question.options[answer];
-    if (option && option.weights) {
-      Object.keys(option.weights).forEach(city => {
-        scores[city] = (scores[city] || 0) + option.weights[city];
-      });
-    }
+    const option = question && question.options ? question.options[answer] : null;
+    if (!option || !option.weights) return;
+    Object.keys(option.weights).forEach(city => {
+      if (scores[city] !== undefined) scores[city] += option.weights[city];
+    });
   });
 
-  // 找出得分最高的城市
-  let maxScore = 0;
-  let resultCity = '成都';
-  Object.keys(scores).forEach(city => {
-    if (scores[city] > maxScore) {
-      maxScore = scores[city];
-      resultCity = city;
-    }
-  });
+  const sortedCities = Object.keys(scores)
+    .map(city => ({ city, score: scores[city] }))
+    .sort((a, b) => b.score - a.score);
 
-  return { city: resultCity, scores };
+  return {
+    city: sortedCities[0] ? sortedCities[0].city : cityList[0],
+    score: sortedCities[0] ? sortedCities[0].score : 0,
+    allScores: scores,
+    runnerUp: sortedCities[1] || null
+  };
 }
 
-// 计算五行
 function calculateFiveElement(answers) {
   const elementScores = { "金": 0, "木": 0, "水": 0, "火": 0, "土": 0 };
-
   answers.forEach((answer, qIndex) => {
     const question = questions[qIndex];
-    if (question && question.options[answer]) {
-      const option = question.options[answer];
-      if (option.fiveElement && elementScores[option.fiveElement] !== undefined) {
-        elementScores[option.fiveElement] += 1;
-      }
+    const option = question && question.options ? question.options[answer] : null;
+    if (!option || !option.fiveElement) return;
+    if (elementScores[option.fiveElement] !== undefined) {
+      elementScores[option.fiveElement] += 1;
     }
   });
 
+  let resultElement = '土';
   let maxScore = -1;
-  let resultElement = "土";
   Object.keys(elementScores).forEach(element => {
     if (elementScores[element] > maxScore) {
       maxScore = elementScores[element];
@@ -220,44 +213,226 @@ function calculateFiveElement(answers) {
     }
   });
 
-  return { element: resultElement, detail: fiveElementData[resultElement] };
+  return {
+    element: resultElement,
+    detail: fiveElementData[resultElement] || fiveElementData['土'],
+    allScores: elementScores
+  };
 }
 
-// 显示结果页
+function calculateMBTI(answers) {
+  let eScore = 0; let iScore = 0;
+  if (answers[1] === 0) eScore += 2;
+  else if (answers[1] === 1) iScore += 1;
+  else if (answers[1] === 2) eScore += 2;
+  else if (answers[1] === 3) iScore += 2;
+  if (answers[5] === 0) eScore += 1;
+  else if (answers[5] === 1) iScore += 1;
+  else if (answers[5] === 2) iScore += 1;
+  else if (answers[5] === 3) eScore += 1;
+  const EI = eScore >= iScore ? 'E' : 'I';
+
+  let sScore = 0; let nScore = 0;
+  if (answers[0] === 0 || answers[0] === 1 || answers[0] === 3) sScore += 1;
+  else if (answers[0] === 2) nScore += 1;
+  if (answers[2] === 0 || answers[2] === 1) sScore += 1;
+  else if (answers[2] === 2 || answers[2] === 3) nScore += 1;
+  const SN = sScore >= nScore ? 'S' : 'N';
+
+  let tScore = 0; let fScore = 0;
+  if (answers[3] === 0) tScore += 1;
+  else if (answers[3] === 1) tScore += 2;
+  else if (answers[3] === 2) fScore += 2;
+  else if (answers[3] === 3) fScore += 1;
+  if (answers[5] === 0) fScore += 2;
+  else if (answers[5] === 1) tScore += 2;
+  else if (answers[5] === 2) fScore += 2;
+  else if (answers[5] === 3) tScore += 1;
+  const TF = tScore >= fScore ? 'T' : 'F';
+
+  let jScore = 0; let pScore = 0;
+  if (answers[2] === 0 || answers[2] === 1) jScore += 1;
+  else if (answers[2] === 2 || answers[2] === 3) pScore += 1;
+  if (answers[4] === 0) jScore += 2;
+  else if (answers[4] === 1) jScore += 1;
+  else if (answers[4] === 2) pScore += 2;
+  else if (answers[4] === 3) pScore += 2;
+  const JP = jScore >= pScore ? 'J' : 'P';
+
+  const type = EI + SN + TF + JP;
+  const map = {
+    "INTJ": { name: "战略家", description: "你善于规划，旅行前会做详尽攻略，追求深度体验", travelStyle: "喜欢探索小众目的地，注重旅行的意义和成长", emoji: "🎯" },
+    "INTP": { name: "探险家", description: "你好奇心强，喜欢研究和发现旅行中的新奇事物", travelStyle: "热衷于解构当地文化，寻找独特的旅行体验", emoji: "🔍" },
+    "INFJ": { name: "梦想家", description: "你内心温暖，旅行是为了寻找灵感和精神共鸣", travelStyle: "喜欢有故事、有深度的旅行目的地", emoji: "💫" },
+    "INFP": { name: "治愈者", description: "你追求内心的平静与和谐，旅行是自我疗愈的过程", travelStyle: "偏爱宁静、有艺术氛围的旅行地", emoji: "🌙" },
+    "ISTJ": { name: "执行者", description: "你务实可靠，旅行计划周密，喜欢经典的旅游路线", travelStyle: "追求安全感和确定性，注重旅行的实用性", emoji: "📋" },
+    "ISFJ": { name: "守护者", description: "你体贴细心，旅行中善于照顾同行伙伴的感受", travelStyle: "喜欢舒适温暖的旅行体验，重视回忆的珍藏", emoji: "🛡️" },
+    "ISTP": { name: "冒险家", description: "你冷静务实，喜欢动手体验，旅行中追求刺激与挑战", travelStyle: "偏爱户外运动和探险类旅行目的地", emoji: "🧗" },
+    "ISFP": { name: "艺术家", description: "你审美独特，旅行中善于发现美、感受美", travelStyle: "喜欢有艺术氛围和自然美景的目的地", emoji: "🎨" },
+    "ENFJ": { name: "领袖", description: "你天生具有领导力，旅行中善于组织同行伙伴", travelStyle: "喜欢能让自己发光发热的有趣目的地", emoji: "⭐" },
+    "ENTP": { name: "创新者", description: "你思维活跃，旅行中总是能发现新的可能性", travelStyle: "喜欢充满活力和创意的旅行目的地", emoji: "💡" },
+    "ENTJ": { name: "指挥官", description: "你目标清晰，行动果断，旅行中擅长做决策和统筹全局", travelStyle: "偏爱节奏明确、效率高、目标导向的旅行路线", emoji: "🧭" },
+    "ENFP": { name: "自由者", description: "你热情洋溢，旅行中永远充满活力和创意", travelStyle: "喜欢新鲜有趣的体验，拒绝一成不变的旅行", emoji: "🦋" },
+    "ESTJ": { name: "管理者", description: "你高效务实，旅行中善于安排行程和时间", travelStyle: "喜欢井井有条的旅行体验，追求高效完成景点打卡", emoji: "🏆" },
+    "ESFJ": { name: "美食家", description: "你热情好客，旅行中最大的乐趣就是品尝美食", travelStyle: "为了美食可以跨越千里，注重当地的烟火气", emoji: "🍜" },
+    "ESTP": { name: "挑战者", description: "你大胆冲动，喜欢即时行乐，旅行充满刺激", travelStyle: "偏爱极限运动和冒险类旅行体验", emoji: "⚡" },
+    "ESFP": { name: "表演者", description: "你活泼开朗，旅行中永远是气氛组的担当", travelStyle: "喜欢热闹有趣的地方，享受旅途中的欢乐时光", emoji: "🎉" }
+  };
+  const info = map[type] || map.ENFP;
+  return { type, ...info };
+}
+
+function analyzeUserPreferences(answers, resultCity) {
+  const food = [
+    { text: "热情似火", desc: "喜欢火锅的你，性格热烈直接，爱憎分明" },
+    { text: "追求品质", desc: "热爱海鲜的你，注重生活品质，懂得享受" },
+    { text: "精致生活", desc: "偏爱粤菜的你，追求精致与格调" },
+    { text: "豪爽大气", desc: "喜欢东北菜的你，为人豪爽，不拘小节" }
+  ][answers[0] || 0];
+  const travel = [
+    { text: "打卡达人", desc: "你热爱探索网红地点，喜欢分享精彩瞬间" },
+    { text: "度假玩家", desc: "你懂得放松自己，追求舒适的旅行体验" },
+    { text: "冒险勇者", desc: "你喜欢挑战未知，追求刺激与新鲜感" },
+    { text: "漫步诗人", desc: "你喜欢随性自由，享受旅途中的慢时光" }
+  ][answers[1] || 0];
+  const priority = [
+    { text: "影像记录", desc: "你热爱用镜头捕捉旅途中的美好" },
+    { text: "美食探索", desc: "你把品尝美食作为旅行的重中之重" },
+    { text: "心灵疗愈", desc: "你追求身心的放松与平静" },
+    { text: "文化探寻", desc: "你热爱历史与文化的深度探索" }
+  ][answers[3] || 0];
+  const vibe = [
+    { text: "热闹欢腾", desc: "你喜欢热闹非凡的新年氛围" },
+    { text: "浪漫温馨", desc: "你向往浪漫的新年时光" },
+    { text: "悠闲自在", desc: "你喜欢轻松悠闲的节日节奏" },
+    { text: "刺激精彩", desc: "你追求精彩刺激的新年体验" }
+  ][answers[4] || 0];
+  const wish = [
+    { text: "收获爱情", desc: "你渴望在新的一年里收获甜蜜的爱情" },
+    { text: "暴富搞钱", desc: "你期待财源滚滚在新的一年里实现财务自由" },
+    { text: "身体健康", desc: "你希望新的一年里身体棒棒，健康平安" },
+    { text: "转运开挂", desc: "你渴望在新的一年里转运逆袭，走上人生巅峰" }
+  ][answers[5] || 0];
+
+  const whyFit = [
+    { text: "性格契合", desc: food.desc },
+    { text: "旅行方式契合", desc: travel.desc },
+    { text: "核心追求契合", desc: priority.desc },
+    { text: "节日氛围契合", desc: vibe.desc },
+    { text: `与${resultCity}气质契合`, desc: wish.desc }
+  ];
+
+  const actionTips = [
+    `今天做一件和${resultCity}有关的小事：查一张机票或收藏一条攻略`,
+    `给自己安排30分钟轻旅行时刻，按照“${travel.text}”的方式放松`,
+    `把“${wish.text}”写成一句新年承诺，今晚睡前读一遍`
+  ];
+
+  return {
+    whyFit,
+    actionTips,
+    summary: `${food.text}的${travel.text}，追求${priority.text}，想要${vibe.text}的新年，期待${wish.text}`
+  };
+}
+
 function showResult() {
   showPage('page-result');
+  createCelebration();
 
   const result = calculateResult(userAnswers);
   const city = cities[result.city];
   const fiveElement = calculateFiveElement(userAnswers);
+  const mbti = calculateMBTI(userAnswers);
+  const analysis = analyzeUserPreferences(userAnswers, result.city);
+  const compareText = getCompareText(result.city);
+  const ritual = getRitualState();
+  const dailyQuote = getDailyQuote(result.city);
 
-  // 创建庆祝动效
-  createCelebration();
+  currentComputedResult = {
+    result,
+    city,
+    fiveElement,
+    mbti,
+    analysis,
+    compareText,
+    dailyQuote,
+    ritual
+  };
 
-  // 城市信息
+  saveHistory(result.city, analysis.summary);
+
+  renderResult(currentComputedResult);
+  renderUserAnswers();
+}
+
+function renderResult(payload) {
+  const { result, city, fiveElement, mbti, analysis, compareText, dailyQuote, ritual } = payload;
+
   document.getElementById('result-emoji').textContent = city.emoji;
   document.getElementById('result-city').textContent = result.city;
   document.getElementById('result-city').style.color = city.color;
   document.getElementById('city-desc').textContent = city.description;
+  document.getElementById('city-detail').textContent = city.detail;
 
-  // 渲染用户答案回顾
-  renderUserAnswers();
-
-  // 标签
   const tagsContainer = document.getElementById('tags');
   tagsContainer.innerHTML = '';
   city.tags.forEach((tag, i) => {
     const span = document.createElement('span');
     span.className = 'tag';
     span.textContent = tag;
-    span.style.animationDelay = (0.5 + i * 0.1) + 's';
+    span.style.animationDelay = `${0.5 + i * 0.1}s`;
     tagsContainer.appendChild(span);
   });
 
-  // 详情
-  document.getElementById('city-detail').textContent = city.detail;
+  const analysisSection = document.getElementById('analysis-section');
+  analysisSection.style.display = 'block';
+  document.getElementById('why-fit').innerHTML = analysis.whyFit
+    .map(item => `<div class="analysis-item"><strong>${item.text}</strong>：${item.desc}</div>`)
+    .join('');
+  document.getElementById('analysis-summary').textContent = analysis.summary;
 
-  // 五行信息
+  document.getElementById('mbti-display').style.display = 'block';
+  document.getElementById('mbti-display').innerHTML = `
+    <div class="mbti-card-mini">
+      <div class="mbti-line-1">${mbti.emoji} ${mbti.type} · ${mbti.name}</div>
+      <div class="mbti-line-2">${mbti.description}</div>
+      <div class="mbti-line-3">旅行风格：${mbti.travelStyle}</div>
+    </div>
+  `;
+
+  const runner = document.getElementById('runnerup-display');
+  if (result.runnerUp && cities[result.runnerUp.city]) {
+    const runnerCity = cities[result.runnerUp.city];
+    runner.style.display = 'block';
+    runner.innerHTML = `<div class="runnerup-inner">差一点就是：${runnerCity.emoji} ${result.runnerUp.city} · ${runnerCity.description}</div>`;
+  } else {
+    runner.style.display = 'none';
+  }
+
+  const compare = document.getElementById('compare-display');
+  compare.style.display = 'block';
+  compare.innerHTML = `<div class="compare-inner">和上次相比：${compareText}</div>`;
+
+  const actionTipsBlock = document.getElementById('action-tips-display');
+  actionTipsBlock.style.display = 'block';
+  actionTipsBlock.innerHTML = `
+    <div class="action-title">今日好运行动建议</div>
+    ${analysis.actionTips.map(t => `<div class="action-item">✅ ${t}</div>`).join('')}
+  `;
+
+  const quoteBlock = document.getElementById('daily-quote-display');
+  quoteBlock.style.display = 'block';
+  quoteBlock.innerHTML = `<div class="quote-inner">今日好运签：${dailyQuote}</div>`;
+
+  const ritualBlock = document.getElementById('ritual-display');
+  ritualBlock.style.display = 'block';
+  ritualBlock.innerHTML = `
+    <div class="ritual-title-mini">今日好运仪式</div>
+    <div class="ritual-text-mini" id="ritual-text-mini">连续点亮：${ritual.streakDays} 天</div>
+    <button class="btn-toggle" id="ritual-btn">${ritual.todayDone ? '✨ 今日已点亮' : '✨ 点亮今日好运'}</button>
+  `;
+  document.getElementById('ritual-btn').onclick = lightUpToday;
+
   const fe = fiveElement.detail;
   document.getElementById('five-element-display').innerHTML = `
     <div class="five-element-result">
@@ -272,13 +447,11 @@ function showResult() {
     <div class="fe-fortune">${fe.fortune}</div>
   `;
 
-  // 专属称号
   document.getElementById('title-display').innerHTML = `
     <div class="user-title">${city.title}</div>
     <div class="healing-quote">${city.healing}</div>
   `;
 
-  // 幸运元素
   document.getElementById('lucky-display').innerHTML = `
     <div class="lucky-item"><span>幸运色</span><span>${city.luckyColor}</span></div>
     <div class="lucky-item"><span>幸运数字</span><span>${city.luckyNumber}</span></div>
@@ -286,55 +459,44 @@ function showResult() {
   `;
 }
 
-// 页面切换
 function showPage(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(pageId).classList.add('active');
 }
 
-// 重新测试
 function restartTest() {
   userAnswers = [];
   currentQuestion = 0;
+  currentComputedResult = null;
   showPage('page-index');
 }
 
-// 渲染用户答案回顾
 function renderUserAnswers() {
   const container = document.getElementById('user-answers-list');
   if (!container) return;
-
   container.innerHTML = '';
 
   userAnswers.forEach((answerIndex, qIndex) => {
     const question = questions[qIndex];
-    if (!question) return;
-
-    const selectedOption = question.options[answerIndex];
-    if (!selectedOption) return;
-
+    const selectedOption = question && question.options ? question.options[answerIndex] : null;
+    if (!question || !selectedOption) return;
     const item = document.createElement('div');
     item.className = 'answer-item';
-
-    // 如果是MBTI题（第8题），显示不同样式
-    const isMBTI = question.isMBTI;
-
     item.innerHTML = `
       <div class="answer-q">${qIndex + 1}. ${question.question}</div>
-      <div class="answer-a ${isMBTI ? 'mbti' : ''}">${selectedOption.text}</div>
+      <div class="answer-a">${selectedOption.text}</div>
     `;
     container.appendChild(item);
   });
 
-  // 默认收起
   const toggleBtn = document.getElementById('toggle-answers');
   const answersSection = document.getElementById('answers-section');
   if (toggleBtn && answersSection) {
     answersSection.style.display = 'none';
+    toggleBtn.textContent = '查看我的答案';
   }
 }
 
-// 切换答案显示
 function toggleAnswers() {
   const section = document.getElementById('answers-section');
   const btn = document.getElementById('toggle-answers');
@@ -347,31 +509,107 @@ function toggleAnswers() {
   }
 }
 
-// 复制结果
 function copyResult() {
-  const result = calculateResult(userAnswers);
-  const city = cities[result.city];
-  const fiveElement = calculateFiveElement(userAnswers);
+  if (!currentComputedResult) return;
+  const { result, city, fiveElement, mbti, analysis } = currentComputedResult;
   const fe = fiveElement.detail;
 
   const text = `🎉 2026新年旺城测试 🎉
 
-我的开年旅游地是：【${city.city}】${city.emoji}
+我的开年旅游地是：【${result.city}】${city.emoji}
 ${city.description}
 
 ${city.detail}
 
-🏷️ 专属称号：${city.title}
-💫 治愈语录：${city.healing}
+📝 为什么适合你：
+${analysis.whyFit.map(item => `• ${item.text}：${item.desc}`).join('\n')}
+
+🔮 我的MBTI旅行人格：${mbti.type} ${mbti.emoji} ${mbti.name}
+${mbti.description}
+旅行风格：${mbti.travelStyle}
 
 🧭 五行属性：${fe.emoji} ${fe.name}
 幸运色：${fe.luckyColors.join('、')}
 幸运数字：${fe.luckyNumbers.join('、')}
-${fe.fortune}
+贵人方位：${fe.direction}
+
+💡 ${analysis.summary}
 
 🧧 新年行大运，快来测测你的！`;
 
   navigator.clipboard.writeText(text).then(() => {
     alert('已复制到剪贴板！');
   });
+}
+
+function getTodayKey() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function getRitualState() {
+  const record = JSON.parse(localStorage.getItem(STORAGE_KEYS.RITUAL) || '{}');
+  const todayKey = getTodayKey();
+  const todayDone = !!record[todayKey];
+
+  let streakDays = 0;
+  const cursor = new Date();
+  while (true) {
+    const y = cursor.getFullYear();
+    const m = String(cursor.getMonth() + 1).padStart(2, '0');
+    const d = String(cursor.getDate()).padStart(2, '0');
+    const key = `${y}-${m}-${d}`;
+    if (!record[key]) break;
+    streakDays += 1;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return { todayDone, streakDays, record };
+}
+
+function lightUpToday() {
+  if (!currentComputedResult) return;
+  const state = getRitualState();
+  if (state.todayDone) {
+    alert('今天已经点亮过啦');
+    return;
+  }
+  const key = getTodayKey();
+  state.record[key] = currentComputedResult.result.city;
+  localStorage.setItem(STORAGE_KEYS.RITUAL, JSON.stringify(state.record));
+  const next = getRitualState();
+  const text = document.getElementById('ritual-text-mini');
+  const btn = document.getElementById('ritual-btn');
+  if (text) text.textContent = `连续点亮：${next.streakDays} 天`;
+  if (btn) btn.textContent = '✨ 今日已点亮';
+}
+
+function saveHistory(city, summary) {
+  const list = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]');
+  const current = { city, summary: summary || '', ts: Date.now() };
+  const merged = [current, ...list].slice(0, 10);
+  localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(merged));
+  localStorage.setItem(STORAGE_KEYS.LAST_RESULT, JSON.stringify(current));
+}
+
+function getCompareText(currentCity) {
+  const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]');
+  const previous = history[1];
+  if (!previous || !previous.city) return '这是你第一次测试，欢迎开启好运旅程！';
+  if (previous.city === currentCity) return `连续命中${currentCity}，你的旅行偏好非常稳定。`;
+  return `上一次是${previous.city}，这次切换到${currentCity}，你的状态正在变化。`;
+}
+
+function getDailyQuote(seedCity) {
+  if (!Array.isArray(healingQuotes) || healingQuotes.length === 0) return '今天也会有小确幸。';
+  const now = new Date();
+  const seed = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}-${seedCity || ''}`;
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash << 5) - hash + seed.charCodeAt(i);
+    hash |= 0;
+  }
+  return healingQuotes[Math.abs(hash) % healingQuotes.length];
 }
