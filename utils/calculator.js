@@ -1,7 +1,7 @@
 // utils/calculator.js - 计算测试结果
 
 const { questions, cityList, cities } = require('./data.js');
-const { calculateMBTI } = require('./mbti.js');
+const { calculateMBTI, getSelfReportedTypeOrder } = require('./mbti.js');
 
 function buildCityBalanceContext() {
   const exposure = {};
@@ -81,9 +81,10 @@ function calculateResult(userAnswers) {
 
   // 额外关联加分：MBTI性格匹配 + 生肖运势匹配（分值较小，用于修正“违和结果”）
   const mbti = calculateMBTI(userAnswers || []);
+  const mbtiProfile = calculateMBTIProfile(userAnswers || [], mbti);
   const zodiacProfile = calculateZodiacProfile(userAnswers || []);
   cityList.forEach((city) => {
-    const affinity = calculateCityAffinityBonus(city, mbti, zodiacProfile, userAnswers || []);
+    const affinity = calculateCityAffinityBonus(city, mbti, mbtiProfile, zodiacProfile, userAnswers || []);
     affinityBonusScores[city] = affinity;
     scores[city] += affinity.total;
   });
@@ -117,6 +118,7 @@ function calculateResult(userAnswers) {
     tieFineScores,
     hitCounts,
     affinityBonusScores,
+    mbtiProfile,
     zodiacProfile,
     mbtiType: mbti && mbti.type ? mbti.type : '',
     sortedCities,
@@ -124,18 +126,63 @@ function calculateResult(userAnswers) {
   };
 }
 
+function calculateMBTIProfile(userAnswers, mbti) {
+  const selfAnswer = Number(userAnswers[10]);
+  const selfMap = {
+    INTJ: { type: 'INTJ', favoredCategories: ['历史文化', '江南诗意'], favoredElements: ['金', '土'] },
+    INTP: { type: 'INTP', favoredCategories: ['江南诗意', '历史文化'], favoredElements: ['金', '水'] },
+    ENTJ: { type: 'ENTJ', favoredCategories: ['历史文化', '火热美食'], favoredElements: ['土', '火'] },
+    ENTP: { type: 'ENTP', favoredCategories: ['火热美食', '江南诗意'], favoredElements: ['金', '火'] },
+    INFJ: { type: 'INFJ', favoredCategories: ['西南秘境', '江南诗意'], favoredElements: ['木', '水'] },
+    INFP: { type: 'INFP', favoredCategories: ['西南秘境', '江南诗意'], favoredElements: ['木', '水'] },
+    ENFJ: { type: 'ENFJ', favoredCategories: ['火热美食', '海岛度假'], favoredElements: ['火', '木'] },
+    ENFP: { type: 'ENFP', favoredCategories: ['西南秘境', '海岛度假'], favoredElements: ['木', '火'] },
+    ISTJ: { type: 'ISTJ', favoredCategories: ['历史文化', '江南诗意'], favoredElements: ['土', '金'] },
+    ISFJ: { type: 'ISFJ', favoredCategories: ['江南诗意', '历史文化'], favoredElements: ['土', '水'] },
+    ESTJ: { type: 'ESTJ', favoredCategories: ['历史文化', '火热美食'], favoredElements: ['土', '火'] },
+    ESFJ: { type: 'ESFJ', favoredCategories: ['火热美食', '海岛度假'], favoredElements: ['火', '土'] },
+    ISTP: { type: 'ISTP', favoredCategories: ['冰雪奇缘', '西南秘境'], favoredElements: ['金', '水'] },
+    ISFP: { type: 'ISFP', favoredCategories: ['西南秘境', '海岛度假'], favoredElements: ['木', '水'] },
+    ESTP: { type: 'ESTP', favoredCategories: ['火热美食', '冰雪奇缘'], favoredElements: ['火', '金'] },
+    ESFP: { type: 'ESFP', favoredCategories: ['海岛度假', '火热美食'], favoredElements: ['火', '水'] }
+  };
+  const selfTypeOrder = getSelfReportedTypeOrder();
+  const selfType = !Number.isNaN(selfAnswer) ? selfTypeOrder[selfAnswer] : '';
+  if (selfType && selfMap[selfType]) {
+    return {
+      ...selfMap[selfType],
+      source: 'self_reported'
+    };
+  }
+  const type = mbti && mbti.type ? mbti.type : 'ENFP';
+  const hit = selfMap[type] || selfMap.ENFP;
+  return {
+    ...hit,
+    source: 'inferred'
+  };
+}
+
 function calculateZodiacProfile(userAnswers) {
-  const q10 = Number(userAnswers[9] || 0);
-  const q7 = Number(userAnswers[6] || 0);
+  // 第12题：生肖自选（索引11）；第13题：缘分信号（索引12）；第14题：开运动作（索引13）
+  const zodiacIndex = Number(userAnswers[11] || 0);
+  const signalIndex = Number(userAnswers[12] || 0);
+  const ritualIndex = Number(userAnswers[13] || 0);
   const zodiacConfigs = [
-    { animal: '龙', label: '龙系开运', focusAxis: 'rise', favoredElements: ['土', '火'], favoredCategories: ['历史文化', '火热美食'], compatibleSignAxes: ['culture', 'lifestyle'] },
-    { animal: '虎', label: '木火生发', focusAxis: 'action', favoredElements: ['木', '火'], favoredCategories: ['火热美食', '西南秘境'], compatibleSignAxes: ['adventure', 'lifestyle'] },
-    { animal: '蛇', label: '金水守财', focusAxis: 'wealth', favoredElements: ['金', '水'], favoredCategories: ['江南诗意', '历史文化', '海岛度假'], compatibleSignAxes: ['wealth', 'culture'] },
-    { animal: '兔', label: '桃花和合', focusAxis: 'relation', favoredElements: ['木', '水', '火'], favoredCategories: ['江南诗意', '西南秘境', '海岛度假'], compatibleSignAxes: ['relation', 'healing'] },
-    { animal: '鱼', label: '水气养心', focusAxis: 'healing', favoredElements: ['水', '木'], favoredCategories: ['海岛度假', '西南秘境', '江南诗意'], compatibleSignAxes: ['healing', 'relation'] },
-    { animal: '牛', label: '土气安家', focusAxis: 'stability', favoredElements: ['土', '金'], favoredCategories: ['历史文化', '江南诗意'], compatibleSignAxes: ['culture', 'lifestyle'] }
+    { animal: '鼠', label: '机巧引财', focusAxis: 'wealth', favoredElements: ['水', '金'], favoredCategories: ['江南诗意', '历史文化', '火热美食'], compatibleSignAxes: ['wealth', 'lifestyle'] },
+    { animal: '牛', label: '稳运筑基', focusAxis: 'stability', favoredElements: ['土', '金'], favoredCategories: ['历史文化', '江南诗意'], compatibleSignAxes: ['culture', 'lifestyle'] },
+    { animal: '虎', label: '木火开势', focusAxis: 'action', favoredElements: ['木', '火'], favoredCategories: ['火热美食', '冰雪奇缘', '西南秘境'], compatibleSignAxes: ['adventure', 'action'] },
+    { animal: '兔', label: '桃花和合', focusAxis: 'relation', favoredElements: ['木', '水'], favoredCategories: ['江南诗意', '西南秘境', '海岛度假'], compatibleSignAxes: ['relation', 'healing'] },
+    { animal: '龙', label: '贵气上扬', focusAxis: 'rise', favoredElements: ['土', '火'], favoredCategories: ['历史文化', '火热美食'], compatibleSignAxes: ['culture', 'action'] },
+    { animal: '蛇', label: '筹谋守成', focusAxis: 'wealth', favoredElements: ['金', '水'], favoredCategories: ['江南诗意', '历史文化'], compatibleSignAxes: ['wealth', 'culture'] },
+    { animal: '马', label: '奔赴跃迁', focusAxis: 'action', favoredElements: ['火', '木'], favoredCategories: ['火热美食', '西南秘境', '海岛度假'], compatibleSignAxes: ['adventure', 'lifestyle'] },
+    { animal: '羊', label: '柔运疗愈', focusAxis: 'healing', favoredElements: ['木', '土'], favoredCategories: ['西南秘境', '江南诗意'], compatibleSignAxes: ['healing', 'relation'] },
+    { animal: '猴', label: '灵动破局', focusAxis: 'lifestyle', favoredElements: ['金', '火'], favoredCategories: ['火热美食', '海岛度假'], compatibleSignAxes: ['lifestyle', 'action'] },
+    { animal: '鸡', label: '鸣势成章', focusAxis: 'culture', favoredElements: ['金', '土'], favoredCategories: ['历史文化', '江南诗意'], compatibleSignAxes: ['culture', 'wealth'] },
+    { animal: '狗', label: '守护转运', focusAxis: 'stability', favoredElements: ['土', '水'], favoredCategories: ['冰雪奇缘', '历史文化'], compatibleSignAxes: ['stability', 'culture'] },
+    { animal: '猪', label: '福泽养心', focusAxis: 'healing', favoredElements: ['水', '木'], favoredCategories: ['海岛度假', '西南秘境'], compatibleSignAxes: ['healing', 'relation'] }
   ];
   const signAxes = ['wealth', 'relation', 'adventure', 'healing', 'culture', 'lifestyle'];
+  const ritualAxes = ['action', 'relation', 'adventure', 'healing', 'culture', 'lifestyle'];
   const axisLabels = {
     rise: '开运上扬',
     action: '行动突破',
@@ -147,18 +194,21 @@ function calculateZodiacProfile(userAnswers) {
     lifestyle: '生活充电',
     adventure: '探索冒险'
   };
-  const focusAxis = (zodiacConfigs[q10] || zodiacConfigs[0]).focusAxis;
-  const signAxis = signAxes[q7] || signAxes[0];
+  const profile = zodiacConfigs[zodiacIndex] || zodiacConfigs[0];
+  const signAxis = signAxes[signalIndex] || signAxes[0];
+  const ritualAxis = ritualAxes[ritualIndex] || ritualAxes[0];
   return {
-    ...(zodiacConfigs[q10] || zodiacConfigs[0]),
-    q10Index: q10,
+    ...profile,
+    zodiacIndex,
     signAxis,
-    focusAxisLabel: axisLabels[focusAxis] || focusAxis,
-    signAxisLabel: axisLabels[signAxis] || signAxis
+    ritualAxis,
+    focusAxisLabel: axisLabels[profile.focusAxis] || profile.focusAxis,
+    signAxisLabel: axisLabels[signAxis] || signAxis,
+    ritualAxisLabel: axisLabels[ritualAxis] || ritualAxis
   };
 }
 
-function calculateCityAffinityBonus(cityName, mbti, zodiacProfile) {
+function calculateCityAffinityBonus(cityName, mbti, mbtiProfile, zodiacProfile) {
   const detail = cities[cityName] || {};
   const category = detail.category || '';
   const wuxing = detail.wuxing || '';
@@ -175,9 +225,11 @@ function calculateCityAffinityBonus(cityName, mbti, zodiacProfile) {
   if (mbtiType[2] === 'F' && (['木', '水'].includes(wuxing) || category === '西南秘境')) mbtiBonus += 0.3;
   if (mbtiType[3] === 'J' && (category === '历史文化' || ['北京', '南京', '洛阳', '西安'].includes(cityName))) mbtiBonus += 0.3;
   if (mbtiType[3] === 'P' && ['海岛度假', '西南秘境', '江南诗意'].includes(category)) mbtiBonus += 0.3;
+  if (mbtiProfile && Array.isArray(mbtiProfile.favoredCategories) && mbtiProfile.favoredCategories.includes(category)) mbtiBonus += 0.45;
+  if (mbtiProfile && Array.isArray(mbtiProfile.favoredElements) && mbtiProfile.favoredElements.includes(wuxing)) mbtiBonus += 0.35;
 
-  if (zodiacProfile && Array.isArray(zodiacProfile.favoredElements) && zodiacProfile.favoredElements.includes(wuxing)) zodiacBonus += 0.8;
-  if (zodiacProfile && Array.isArray(zodiacProfile.favoredCategories) && zodiacProfile.favoredCategories.includes(category)) zodiacBonus += 0.6;
+  if (zodiacProfile && Array.isArray(zodiacProfile.favoredElements) && zodiacProfile.favoredElements.includes(wuxing)) zodiacBonus += 1.0;
+  if (zodiacProfile && Array.isArray(zodiacProfile.favoredCategories) && zodiacProfile.favoredCategories.includes(category)) zodiacBonus += 0.75;
 
   const cityAxesByCategory = {
     '火热美食': ['lifestyle', 'action'],
@@ -188,8 +240,9 @@ function calculateCityAffinityBonus(cityName, mbti, zodiacProfile) {
     '江南诗意': ['relation', 'healing']
   };
   const cityAxes = cityAxesByCategory[category] || [];
-  if (zodiacProfile && zodiacProfile.focusAxis && cityAxes.includes(zodiacProfile.focusAxis)) zodiacBonus += 0.25;
-  if (zodiacProfile && Array.isArray(zodiacProfile.compatibleSignAxes) && zodiacProfile.compatibleSignAxes.includes(zodiacProfile.signAxis)) zodiacBonus += 0.25;
+  if (zodiacProfile && zodiacProfile.focusAxis && cityAxes.includes(zodiacProfile.focusAxis)) zodiacBonus += 0.3;
+  if (zodiacProfile && zodiacProfile.ritualAxis && cityAxes.includes(zodiacProfile.ritualAxis)) zodiacBonus += 0.3;
+  if (zodiacProfile && Array.isArray(zodiacProfile.compatibleSignAxes) && zodiacProfile.compatibleSignAxes.includes(zodiacProfile.signAxis)) zodiacBonus += 0.3;
 
   return {
     mbtiBonus: Number(mbtiBonus.toFixed(2)),

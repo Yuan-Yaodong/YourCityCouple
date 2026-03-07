@@ -1,4 +1,4 @@
-// 问题数据 - 24个城市10道题版本
+// 问题数据 - 23个城市14道题版本
 const questions = [
   {
     id: 1,
@@ -118,6 +118,70 @@ const questions = [
       { text: "🐰 桃花和合（缘分优先）", weights: { "丽江": 3, "厦门": 3, "大理": 3, "乌镇": 3, "周庄": 2 }, fiveElement: "木" },
       { text: "🐟 水气养心（疗愈充电）", weights: { "三亚": 5, "北海": 5, "普吉岛": 5, "阳朔": 4, "厦门": 2, "大理": 2, "桂林": 3 }, fiveElement: "水" },
       { text: "🧱 土气安家（稳定长线）", weights: { "洛阳": 5, "南京": 5, "苏州": 4, "周庄": 4, "乌镇": 3, "哈尔滨": 3, "北京": 2 }, fiveElement: "土" }
+    ]
+  },
+  {
+    id: 11,
+    question: "如果你知道自己的MBTI，请选择你的类型（不知道可选最接近）",
+    options: [
+      { text: "INTJ（建筑师）", weights: { "北京": 4, "南京": 4, "杭州": 3, "西安": 3 }, fiveElement: "金" },
+      { text: "INTP（逻辑学家）", weights: { "杭州": 4, "苏州": 3, "北京": 3, "洛阳": 2 }, fiveElement: "金" },
+      { text: "ENTJ（指挥官）", weights: { "北京": 4, "广州": 4, "南京": 3, "西安": 2 }, fiveElement: "土" },
+      { text: "ENTP（辩论家）", weights: { "杭州": 4, "厦门": 3, "广州": 3, "重庆": 2 }, fiveElement: "金" },
+      { text: "INFJ（提倡者）", weights: { "大理": 4, "丽江": 4, "乌镇": 3, "苏州": 2 }, fiveElement: "木" },
+      { text: "INFP（调停者）", weights: { "大理": 4, "阳朔": 4, "桂林": 4, "周庄": 2 }, fiveElement: "木" },
+      { text: "ENFJ（主人公）", weights: { "广州": 4, "厦门": 3, "成都": 3, "三亚": 2 }, fiveElement: "火" },
+      { text: "ENFP（竞选者）", weights: { "丽江": 4, "厦门": 4, "成都": 3, "重庆": 2 }, fiveElement: "木" },
+      { text: "ISTJ（物流师）", weights: { "南京": 4, "洛阳": 4, "北京": 3, "苏州": 3 }, fiveElement: "土" },
+      { text: "ISFJ（守卫者）", weights: { "苏州": 4, "周庄": 4, "乌镇": 4, "洛阳": 2 }, fiveElement: "土" },
+      { text: "ESTJ（总经理）", weights: { "广州": 4, "北京": 4, "南京": 3, "长沙": 2 }, fiveElement: "土" },
+      { text: "ESFJ（执政官）", weights: { "广州": 4, "成都": 3, "长沙": 3, "厦门": 2 }, fiveElement: "火" },
+      { text: "ISTP（鉴赏家）", weights: { "长白山": 4, "哈尔滨": 4, "雪乡": 4, "阳朔": 2, "重庆": 3, "桂林": 3 }, fiveElement: "金" },
+      { text: "ISFP（探险家）", weights: { "大理": 4, "阳朔": 4, "桂林": 3, "北海": 2 }, fiveElement: "水" },
+      { text: "ESTP（企业家）", weights: { "重庆": 4, "长沙": 4, "长白山": 3, "厦门": 2 }, fiveElement: "火" },
+      { text: "ESFP（表演者）", weights: { "三亚": 4, "厦门": 4, "普吉岛": 3, "长沙": 2 }, fiveElement: "火" }
+    ]
+  },
+  {
+    id: 12,
+    question: "你的生肖是？",
+    options: [
+      { text: "鼠", weights: { "杭州": 4, "广州": 4, "北京": 3, "南京": 2 }, fiveElement: "水" },
+      { text: "牛", weights: { "洛阳": 4, "南京": 4, "苏州": 3, "周庄": 2 }, fiveElement: "土" },
+      { text: "虎", weights: { "重庆": 4, "长沙": 4, "长白山": 4, "哈尔滨": 2 }, fiveElement: "火" },
+      { text: "兔", weights: { "厦门": 4, "丽江": 4, "乌镇": 3, "周庄": 2 }, fiveElement: "木" },
+      { text: "龙", weights: { "北京": 4, "西安": 4, "洛阳": 4, "南京": 2 }, fiveElement: "土" },
+      { text: "蛇", weights: { "杭州": 4, "苏州": 4, "南京": 3, "广州": 2 }, fiveElement: "金" },
+      { text: "马", weights: { "成都": 4, "重庆": 4, "大理": 3, "阳朔": 2 }, fiveElement: "火" },
+      { text: "羊", weights: { "大理": 4, "阳朔": 4, "桂林": 4, "周庄": 2 }, fiveElement: "木" },
+      { text: "猴", weights: { "长沙": 4, "广州": 4, "重庆": 3, "厦门": 2 }, fiveElement: "金" },
+      { text: "鸡", weights: { "西安": 4, "洛阳": 4, "北京": 3, "南京": 3 }, fiveElement: "土" },
+      { text: "狗", weights: { "哈尔滨": 4, "长白山": 4, "雪乡": 4, "洛阳": 2, "北京": 3, "西安": 3 }, fiveElement: "土" },
+      { text: "猪", weights: { "三亚": 4, "北海": 4, "普吉岛": 4, "厦门": 2, "大理": 3, "阳朔": 2 }, fiveElement: "水" }
+    ]
+  },
+  {
+    id: 13,
+    question: "你更相信哪种“缘分信号”？",
+    options: [
+      { text: "🔢 连续数字（111/888）", weights: { "杭州": 4, "广州": 3, "南京": 3, "洛阳": 3 }, fiveElement: "金" },
+      { text: "🕯️ 重复梦境提示", weights: { "丽江": 4, "大理": 4, "阳朔": 3, "桂林": 3 }, fiveElement: "木" },
+      { text: "🧭 突然的直觉方向感", weights: { "重庆": 4, "长沙": 3, "成都": 3, "厦门": 2 }, fiveElement: "火" },
+      { text: "🌊 情绪同步与共振", weights: { "厦门": 4, "三亚": 3, "北海": 3, "普吉岛": 3 }, fiveElement: "水" },
+      { text: "🏮 古寺祈福后的巧合", weights: { "西安": 4, "洛阳": 4, "南京": 3, "北京": 3 }, fiveElement: "土" },
+      { text: "📿 随机抽签刚好命中", weights: { "乌镇": 4, "周庄": 4, "苏州": 3, "杭州": 2 }, fiveElement: "水" }
+    ]
+  },
+  {
+    id: 14,
+    question: "拿到好运签后，你最常做的开运动作是？",
+    options: [
+      { text: "📅 立刻规划并执行", weights: { "北京": 4, "南京": 4, "杭州": 3, "西安": 2 }, fiveElement: "土" },
+      { text: "💬 先分享给最在乎的人", weights: { "厦门": 4, "广州": 3, "周庄": 3, "乌镇": 3 }, fiveElement: "木" },
+      { text: "🧳 说走就走短途出发", weights: { "重庆": 4, "长沙": 3, "成都": 3, "丽江": 2 }, fiveElement: "火" },
+      { text: "🧘 冥想/散步沉淀情绪", weights: { "大理": 4, "阳朔": 4, "桂林": 3, "北海": 2 }, fiveElement: "水" },
+      { text: "🧧 去祈福地打卡还愿", weights: { "西安": 4, "洛阳": 4, "南京": 3, "苏州": 2 }, fiveElement: "土" },
+      { text: "📝 记在手账持续跟进", weights: { "杭州": 4, "苏州": 3, "乌镇": 3, "周庄": 3 }, fiveElement: "木" }
     ]
   }
 ];
@@ -331,8 +395,7 @@ function selectOption(optionIndex) {
 
 function showEncouragement(questionIndex, optionIndex) {
   const row = ENCOURAGEMENT_MAP[questionIndex] || [];
-  const text = row[optionIndex];
-  if (!text) return;
+  const text = row[optionIndex] || '已记录你的选择，继续探索你的缘分城市';
   const toast = document.getElementById('quiz-toast');
   if (!toast) return;
   toast.textContent = text;
@@ -399,9 +462,10 @@ function calculateResult(answers) {
   });
 
   const mbti = calculateMBTI(answers || []);
+  const mbtiProfile = calculateMBTIProfile(answers || [], mbti);
   const zodiacProfile = calculateZodiacProfile(answers || []);
   cityList.forEach((city) => {
-    const affinity = calculateCityAffinityBonus(city, mbti, zodiacProfile);
+    const affinity = calculateCityAffinityBonus(city, mbti, mbtiProfile, zodiacProfile);
     affinityBonusScores[city] = affinity;
     scores[city] += affinity.total;
   });
@@ -432,24 +496,85 @@ function calculateResult(answers) {
     tieFineScores,
     hitCounts,
     affinityBonusScores,
+    mbtiProfile,
     zodiacProfile,
     mbtiType: mbti && mbti.type ? mbti.type : '',
     runnerUp: sortedCities[1] || null
   };
 }
 
+function extractMBTITypeFromOptionText(text) {
+  if (typeof text !== 'string') return '';
+  const match = text.match(/^([A-Z]{4})（/);
+  return match ? match[1] : '';
+}
+
+function getMBTITypeOrderFromQuestions() {
+  const mbtiQuestion = questions.find((item) => item && item.id === 11);
+  const defaultOrder = [
+    'INTJ', 'INTP', 'ENTJ', 'ENTP',
+    'INFJ', 'INFP', 'ENFJ', 'ENFP',
+    'ISTJ', 'ISFJ', 'ESTJ', 'ESFJ',
+    'ISTP', 'ISFP', 'ESTP', 'ESFP'
+  ];
+  if (!mbtiQuestion || !Array.isArray(mbtiQuestion.options)) return defaultOrder;
+  const fromQuestion = mbtiQuestion.options
+    .map((opt) => extractMBTITypeFromOptionText(opt && opt.text))
+    .filter(Boolean);
+  const unique = Array.from(new Set(fromQuestion));
+  return unique.length === 16 ? unique : defaultOrder;
+}
+
+function calculateMBTIProfile(answers, mbti) {
+  const selfAnswer = Number(answers[10]);
+  const selfMap = {
+    INTJ: { type: 'INTJ', favoredCategories: ['历史文化', '江南诗意'], favoredElements: ['金', '土'] },
+    INTP: { type: 'INTP', favoredCategories: ['江南诗意', '历史文化'], favoredElements: ['金', '水'] },
+    ENTJ: { type: 'ENTJ', favoredCategories: ['历史文化', '火热美食'], favoredElements: ['土', '火'] },
+    ENTP: { type: 'ENTP', favoredCategories: ['火热美食', '江南诗意'], favoredElements: ['金', '火'] },
+    INFJ: { type: 'INFJ', favoredCategories: ['西南秘境', '江南诗意'], favoredElements: ['木', '水'] },
+    INFP: { type: 'INFP', favoredCategories: ['西南秘境', '江南诗意'], favoredElements: ['木', '水'] },
+    ENFJ: { type: 'ENFJ', favoredCategories: ['火热美食', '海岛度假'], favoredElements: ['火', '木'] },
+    ENFP: { type: 'ENFP', favoredCategories: ['西南秘境', '海岛度假'], favoredElements: ['木', '火'] },
+    ISTJ: { type: 'ISTJ', favoredCategories: ['历史文化', '江南诗意'], favoredElements: ['土', '金'] },
+    ISFJ: { type: 'ISFJ', favoredCategories: ['江南诗意', '历史文化'], favoredElements: ['土', '水'] },
+    ESTJ: { type: 'ESTJ', favoredCategories: ['历史文化', '火热美食'], favoredElements: ['土', '火'] },
+    ESFJ: { type: 'ESFJ', favoredCategories: ['火热美食', '海岛度假'], favoredElements: ['火', '土'] },
+    ISTP: { type: 'ISTP', favoredCategories: ['冰雪奇缘', '西南秘境'], favoredElements: ['金', '水'] },
+    ISFP: { type: 'ISFP', favoredCategories: ['西南秘境', '海岛度假'], favoredElements: ['木', '水'] },
+    ESTP: { type: 'ESTP', favoredCategories: ['火热美食', '冰雪奇缘'], favoredElements: ['火', '金'] },
+    ESFP: { type: 'ESFP', favoredCategories: ['海岛度假', '火热美食'], favoredElements: ['火', '水'] }
+  };
+  const typeOrder = getMBTITypeOrderFromQuestions();
+  const selfType = !Number.isNaN(selfAnswer) ? typeOrder[selfAnswer] : '';
+  if (selfType && selfMap[selfType]) {
+    return { ...selfMap[selfType], source: 'self_reported' };
+  }
+  const type = mbti && mbti.type ? mbti.type : 'ENFP';
+  const hit = selfMap[type] || selfMap.ENFP;
+  return { ...hit, source: 'inferred' };
+}
+
 function calculateZodiacProfile(answers) {
-  const q10 = Number(answers[9] || 0);
-  const q7 = Number(answers[6] || 0);
+  const zodiacIndex = Number(answers[11] || 0);
+  const signalIndex = Number(answers[12] || 0);
+  const ritualIndex = Number(answers[13] || 0);
   const zodiacConfigs = [
-    { animal: '龙', label: '龙系开运', focusAxis: 'rise', favoredElements: ['土', '火'], favoredCategories: ['历史文化', '火热美食'], compatibleSignAxes: ['culture', 'lifestyle'] },
-    { animal: '虎', label: '木火生发', focusAxis: 'action', favoredElements: ['木', '火'], favoredCategories: ['火热美食', '西南秘境'], compatibleSignAxes: ['adventure', 'lifestyle'] },
-    { animal: '蛇', label: '金水守财', focusAxis: 'wealth', favoredElements: ['金', '水'], favoredCategories: ['江南诗意', '历史文化', '海岛度假'], compatibleSignAxes: ['wealth', 'culture'] },
-    { animal: '兔', label: '桃花和合', focusAxis: 'relation', favoredElements: ['木', '水', '火'], favoredCategories: ['江南诗意', '西南秘境', '海岛度假'], compatibleSignAxes: ['relation', 'healing'] },
-    { animal: '鱼', label: '水气养心', focusAxis: 'healing', favoredElements: ['水', '木'], favoredCategories: ['海岛度假', '西南秘境', '江南诗意'], compatibleSignAxes: ['healing', 'relation'] },
-    { animal: '牛', label: '土气安家', focusAxis: 'stability', favoredElements: ['土', '金'], favoredCategories: ['历史文化', '江南诗意'], compatibleSignAxes: ['culture', 'lifestyle'] }
+    { animal: '鼠', label: '机巧引财', focusAxis: 'wealth', favoredElements: ['水', '金'], favoredCategories: ['江南诗意', '历史文化', '火热美食'], compatibleSignAxes: ['wealth', 'lifestyle'] },
+    { animal: '牛', label: '稳运筑基', focusAxis: 'stability', favoredElements: ['土', '金'], favoredCategories: ['历史文化', '江南诗意'], compatibleSignAxes: ['culture', 'lifestyle'] },
+    { animal: '虎', label: '木火开势', focusAxis: 'action', favoredElements: ['木', '火'], favoredCategories: ['火热美食', '冰雪奇缘', '西南秘境'], compatibleSignAxes: ['adventure', 'action'] },
+    { animal: '兔', label: '桃花和合', focusAxis: 'relation', favoredElements: ['木', '水'], favoredCategories: ['江南诗意', '西南秘境', '海岛度假'], compatibleSignAxes: ['relation', 'healing'] },
+    { animal: '龙', label: '贵气上扬', focusAxis: 'rise', favoredElements: ['土', '火'], favoredCategories: ['历史文化', '火热美食'], compatibleSignAxes: ['culture', 'action'] },
+    { animal: '蛇', label: '筹谋守成', focusAxis: 'wealth', favoredElements: ['金', '水'], favoredCategories: ['江南诗意', '历史文化'], compatibleSignAxes: ['wealth', 'culture'] },
+    { animal: '马', label: '奔赴跃迁', focusAxis: 'action', favoredElements: ['火', '木'], favoredCategories: ['火热美食', '西南秘境', '海岛度假'], compatibleSignAxes: ['adventure', 'lifestyle'] },
+    { animal: '羊', label: '柔运疗愈', focusAxis: 'healing', favoredElements: ['木', '土'], favoredCategories: ['西南秘境', '江南诗意'], compatibleSignAxes: ['healing', 'relation'] },
+    { animal: '猴', label: '灵动破局', focusAxis: 'lifestyle', favoredElements: ['金', '火'], favoredCategories: ['火热美食', '海岛度假'], compatibleSignAxes: ['lifestyle', 'action'] },
+    { animal: '鸡', label: '鸣势成章', focusAxis: 'culture', favoredElements: ['金', '土'], favoredCategories: ['历史文化', '江南诗意'], compatibleSignAxes: ['culture', 'wealth'] },
+    { animal: '狗', label: '守护转运', focusAxis: 'stability', favoredElements: ['土', '水'], favoredCategories: ['冰雪奇缘', '历史文化'], compatibleSignAxes: ['stability', 'culture'] },
+    { animal: '猪', label: '福泽养心', focusAxis: 'healing', favoredElements: ['水', '木'], favoredCategories: ['海岛度假', '西南秘境'], compatibleSignAxes: ['healing', 'relation'] }
   ];
   const signAxes = ['wealth', 'relation', 'adventure', 'healing', 'culture', 'lifestyle'];
+  const ritualAxes = ['action', 'relation', 'adventure', 'healing', 'culture', 'lifestyle'];
   const axisLabels = {
     rise: '开运上扬',
     action: '行动突破',
@@ -461,18 +586,21 @@ function calculateZodiacProfile(answers) {
     lifestyle: '生活充电',
     adventure: '探索冒险'
   };
-  const base = zodiacConfigs[q10] || zodiacConfigs[0];
-  const signAxis = signAxes[q7] || signAxes[0];
+  const base = zodiacConfigs[zodiacIndex] || zodiacConfigs[0];
+  const signAxis = signAxes[signalIndex] || signAxes[0];
+  const ritualAxis = ritualAxes[ritualIndex] || ritualAxes[0];
   return {
     ...base,
-    q10Index: q10,
+    zodiacIndex,
     signAxis,
+    ritualAxis,
     focusAxisLabel: axisLabels[base.focusAxis] || base.focusAxis,
-    signAxisLabel: axisLabels[signAxis] || signAxis
+    signAxisLabel: axisLabels[signAxis] || signAxis,
+    ritualAxisLabel: axisLabels[ritualAxis] || ritualAxis
   };
 }
 
-function calculateCityAffinityBonus(cityName, mbti, zodiacProfile) {
+function calculateCityAffinityBonus(cityName, mbti, mbtiProfile, zodiacProfile) {
   const detail = cities[cityName] || {};
   const category = detail.category || '';
   const wuxing = detail.wuxing || '';
@@ -489,9 +617,11 @@ function calculateCityAffinityBonus(cityName, mbti, zodiacProfile) {
   if (mbtiType[2] === 'F' && (['木', '水'].includes(wuxing) || category === '西南秘境')) mbtiBonus += 0.3;
   if (mbtiType[3] === 'J' && (category === '历史文化' || ['北京', '南京', '洛阳', '西安'].includes(cityName))) mbtiBonus += 0.3;
   if (mbtiType[3] === 'P' && ['海岛度假', '西南秘境', '江南诗意'].includes(category)) mbtiBonus += 0.3;
+  if (mbtiProfile && Array.isArray(mbtiProfile.favoredCategories) && mbtiProfile.favoredCategories.includes(category)) mbtiBonus += 0.45;
+  if (mbtiProfile && Array.isArray(mbtiProfile.favoredElements) && mbtiProfile.favoredElements.includes(wuxing)) mbtiBonus += 0.35;
 
-  if (zodiacProfile && Array.isArray(zodiacProfile.favoredElements) && zodiacProfile.favoredElements.includes(wuxing)) zodiacBonus += 0.8;
-  if (zodiacProfile && Array.isArray(zodiacProfile.favoredCategories) && zodiacProfile.favoredCategories.includes(category)) zodiacBonus += 0.6;
+  if (zodiacProfile && Array.isArray(zodiacProfile.favoredElements) && zodiacProfile.favoredElements.includes(wuxing)) zodiacBonus += 1.0;
+  if (zodiacProfile && Array.isArray(zodiacProfile.favoredCategories) && zodiacProfile.favoredCategories.includes(category)) zodiacBonus += 0.75;
 
   const cityAxesByCategory = {
     '火热美食': ['lifestyle', 'action'],
@@ -502,8 +632,9 @@ function calculateCityAffinityBonus(cityName, mbti, zodiacProfile) {
     '江南诗意': ['relation', 'healing']
   };
   const cityAxes = cityAxesByCategory[category] || [];
-  if (zodiacProfile && zodiacProfile.focusAxis && cityAxes.includes(zodiacProfile.focusAxis)) zodiacBonus += 0.25;
-  if (zodiacProfile && Array.isArray(zodiacProfile.compatibleSignAxes) && zodiacProfile.compatibleSignAxes.includes(zodiacProfile.signAxis)) zodiacBonus += 0.25;
+  if (zodiacProfile && zodiacProfile.focusAxis && cityAxes.includes(zodiacProfile.focusAxis)) zodiacBonus += 0.3;
+  if (zodiacProfile && zodiacProfile.ritualAxis && cityAxes.includes(zodiacProfile.ritualAxis)) zodiacBonus += 0.3;
+  if (zodiacProfile && Array.isArray(zodiacProfile.compatibleSignAxes) && zodiacProfile.compatibleSignAxes.includes(zodiacProfile.signAxis)) zodiacBonus += 0.3;
 
   return {
     mbtiBonus: Number(mbtiBonus.toFixed(2)),
@@ -540,6 +671,31 @@ function calculateFiveElement(answers) {
 }
 
 function calculateMBTI(answers) {
+  const selfReportedMap = getMBTITypeOrderFromQuestions();
+  const selfAnswer = Number(answers && answers[10]);
+  if (!Number.isNaN(selfAnswer) && selfReportedMap[selfAnswer]) {
+    const selfType = selfReportedMap[selfAnswer];
+    const map = {
+      "INTJ": { name: "战略家", description: "你善于规划，旅行前会做详尽攻略，追求深度体验", travelStyle: "喜欢探索小众目的地，注重旅行的意义和成长", emoji: "🎯" },
+      "INTP": { name: "探险家", description: "你好奇心强，喜欢研究和发现旅行中的新奇事物", travelStyle: "热衷于解构当地文化，寻找独特的旅行体验", emoji: "🔍" },
+      "INFJ": { name: "提倡者", description: "你内心温暖，旅行是为了寻找灵感和精神共鸣", travelStyle: "喜欢有故事、有深度的旅行目的地", emoji: "💫" },
+      "INFP": { name: "治愈者", description: "你追求内心的平静与和谐，旅行是自我疗愈的过程", travelStyle: "偏爱宁静、有艺术氛围的旅行地", emoji: "🌙" },
+      "ISTJ": { name: "执行者", description: "你务实可靠，旅行计划周密，喜欢经典的旅游路线", travelStyle: "追求安全感和确定性，注重旅行的实用性", emoji: "📋" },
+      "ISFJ": { name: "守护者", description: "你体贴细心，旅行中善于照顾同行伙伴的感受", travelStyle: "喜欢舒适温暖的旅行体验，重视回忆的珍藏", emoji: "🛡️" },
+      "ISTP": { name: "冒险家", description: "你冷静务实，喜欢动手体验，旅行中追求刺激与挑战", travelStyle: "偏爱户外运动和探险类旅行目的地", emoji: "🧗" },
+      "ISFP": { name: "艺术家", description: "你审美独特，旅行中善于发现美、感受美", travelStyle: "喜欢有艺术氛围和自然美景的目的地", emoji: "🎨" },
+      "ENFJ": { name: "领袖", description: "你天生具有领导力，旅行中善于组织同行伙伴", travelStyle: "喜欢能让自己发光发热的有趣目的地", emoji: "⭐" },
+      "ENTP": { name: "创新者", description: "你思维活跃，旅行中总是能发现新的可能性", travelStyle: "喜欢充满活力和创意的旅行目的地", emoji: "💡" },
+      "ENTJ": { name: "指挥官", description: "你目标清晰，行动果断，旅行中擅长做决策和统筹全局", travelStyle: "偏爱节奏明确、效率高、目标导向的旅行路线", emoji: "🧭" },
+      "ENFP": { name: "自由者", description: "你热情洋溢，旅行中永远充满活力和创意", travelStyle: "喜欢新鲜有趣的体验，拒绝一成不变的旅行", emoji: "🦋" },
+      "ESTJ": { name: "管理者", description: "你高效务实，旅行中善于安排行程和时间", travelStyle: "喜欢井井有条的旅行体验，追求高效完成景点打卡", emoji: "🏆" },
+      "ESFJ": { name: "美食家", description: "你热情好客，旅行中最大的乐趣就是品尝美食", travelStyle: "为了美食可以跨越千里，注重当地的烟火气", emoji: "🍜" },
+      "ESTP": { name: "挑战者", description: "你大胆冲动，喜欢即时行乐，旅行充满刺激", travelStyle: "偏爱极限运动和冒险类旅行体验", emoji: "⚡" },
+      "ESFP": { name: "表演者", description: "你活泼开朗，旅行中永远是气氛组的担当", travelStyle: "喜欢热闹有趣的地方，享受旅途中的欢乐时光", emoji: "🎉" }
+    };
+    return { type: selfType, ...map[selfType], source: 'self_reported' };
+  }
+
   let eScore = 0; let iScore = 0;
   if (answers[1] === 0) eScore += 2;
   else if (answers[1] === 1) iScore += 1;
@@ -596,7 +752,7 @@ function calculateMBTI(answers) {
   const map = {
     "INTJ": { name: "战略家", description: "你善于规划，旅行前会做详尽攻略，追求深度体验", travelStyle: "喜欢探索小众目的地，注重旅行的意义和成长", emoji: "🎯" },
     "INTP": { name: "探险家", description: "你好奇心强，喜欢研究和发现旅行中的新奇事物", travelStyle: "热衷于解构当地文化，寻找独特的旅行体验", emoji: "🔍" },
-    "INFJ": { name: "梦想家", description: "你内心温暖，旅行是为了寻找灵感和精神共鸣", travelStyle: "喜欢有故事、有深度的旅行目的地", emoji: "💫" },
+    "INFJ": { name: "提倡者", description: "你内心温暖，旅行是为了寻找灵感和精神共鸣", travelStyle: "喜欢有故事、有深度的旅行目的地", emoji: "💫" },
     "INFP": { name: "治愈者", description: "你追求内心的平静与和谐，旅行是自我疗愈的过程", travelStyle: "偏爱宁静、有艺术氛围的旅行地", emoji: "🌙" },
     "ISTJ": { name: "执行者", description: "你务实可靠，旅行计划周密，喜欢经典的旅游路线", travelStyle: "追求安全感和确定性，注重旅行的实用性", emoji: "📋" },
     "ISFJ": { name: "守护者", description: "你体贴细心，旅行中善于照顾同行伙伴的感受", travelStyle: "喜欢舒适温暖的旅行体验，重视回忆的珍藏", emoji: "🛡️" },
@@ -612,7 +768,7 @@ function calculateMBTI(answers) {
     "ESFP": { name: "表演者", description: "你活泼开朗，旅行中永远是气氛组的担当", travelStyle: "喜欢热闹有趣的地方，享受旅途中的欢乐时光", emoji: "🎉" }
   };
   const info = map[type] || map.ENFP;
-  return { type, ...info };
+  return { type, ...info, source: 'inferred' };
 }
 
 function analyzeUserPreferences(answers, resultCity) {
@@ -667,7 +823,11 @@ function analyzeUserPreferences(answers, resultCity) {
     "赛博签文命中",
     "同路人偏好命中",
     "人格镜像命中",
-    "生肖八字偏好命中"
+    "生肖八字偏好命中",
+    "MBTI自选命中",
+    "生肖自选命中",
+    "缘分信号命中",
+    "开运动作命中"
   ];
   const whyFit = [];
   answers.forEach((answerIndex, qIndex) => {
@@ -772,6 +932,7 @@ function renderResult(payload) {
   document.getElementById('mbti-display').innerHTML = `
     <div class="mbti-card-mini">
       <div class="mbti-line-1">${mbti.emoji} ${mbti.type} · ${mbti.name}</div>
+      <div class="mbti-line-2">来源：${mbti.source === 'self_reported' ? '你的自选MBTI' : '系统推断MBTI'}</div>
       <div class="mbti-line-2">${mbti.description}</div>
       <div class="mbti-line-3">旅行风格：${mbti.travelStyle}</div>
     </div>
@@ -811,6 +972,11 @@ function renderResult(payload) {
   document.getElementById('ritual-btn').onclick = lightUpToday;
 
   const fe = fiveElement.detail;
+  const luckyPlan = buildLuckyPlan(city, fe);
+  const mainLuckyNumber = luckyPlan && luckyPlan.number ? luckyPlan.number : (Array.isArray(fe.luckyNumbers) && fe.luckyNumbers.length ? String(fe.luckyNumbers[0]) : '');
+  const luckyRangeNumbers = Array.isArray(fe.luckyNumbers)
+    ? [mainLuckyNumber].concat(fe.luckyNumbers.map((n) => String(n)).filter((n) => n && n !== mainLuckyNumber))
+    : [];
   document.getElementById('five-element-display').innerHTML = `
     <div class="five-element-result">
       <span class="fe-emoji">${fe.emoji}</span>
@@ -818,11 +984,11 @@ function renderResult(payload) {
     </div>
     <div class="fe-lucky">
       <span>幸运色：${fe.luckyColors.join('、')}</span>
-      <span>幸运数字：${fe.luckyNumbers.join('、')}</span>
+      <span>幸运数字范围：${luckyRangeNumbers.join('、')}${mainLuckyNumber ? `（主号 ${mainLuckyNumber}）` : ''}</span>
       <span>贵人方位：${fe.direction}</span>
     </div>
     <div class="fe-fortune">${fe.fortune}</div>
-    ${zodiac ? `<div class="fe-fortune">🧿 生肖运势：${zodiac.animal}系·${zodiac.label}｜主运势轴：${zodiac.focusAxisLabel}｜签文共振：${zodiac.signAxisLabel}</div>` : ''}
+    ${zodiac ? `<div class="fe-fortune">🧿 生肖运势：${zodiac.animal}系·${zodiac.label}｜主运势轴：${zodiac.focusAxisLabel}｜签文共振：${zodiac.signAxisLabel}｜开运动作轴：${zodiac.ritualAxisLabel}</div>` : ''}
   `;
 
   document.getElementById('title-display').innerHTML = `
@@ -830,10 +996,9 @@ function renderResult(payload) {
     <div class="healing-quote">${city.healing}</div>
   `;
 
-  const luckyPlan = buildLuckyPlan(city, fe);
   document.getElementById('lucky-display').innerHTML = `
     <div class="lucky-item"><span>综合幸运色</span><span>${luckyPlan.color}</span></div>
-    <div class="lucky-item"><span>综合幸运数字</span><span>${luckyPlan.number}</span></div>
+    <div class="lucky-item"><span>主幸运数字</span><span>${luckyPlan.number}</span></div>
     <div class="lucky-item"><span>幸运物</span><span>${luckyPlan.thing}</span></div>
     <div class="lucky-note">${luckyPlan.note}</div>
   `;
@@ -968,12 +1133,12 @@ ${mbti.description}
 
 🧭 五行属性：${fe.emoji} ${fe.name}
 幸运色：${fe.luckyColors.join('、')}
-幸运数字：${fe.luckyNumbers.join('、')}
+幸运数字范围：${fe.luckyNumbers.join('、')}${currentComputedResult && currentComputedResult.result && currentComputedResult.result.city ? `（主号 ${buildLuckyPlan(city, fe).number}）` : ''}
 贵人方位：${fe.direction}
 
 💡 ${analysis.summary}
 
-${zodiac ? `🧿 生肖运势：${zodiac.animal}系·${zodiac.label}（主运势轴：${zodiac.focusAxisLabel}，签文共振：${zodiac.signAxisLabel}）\n` : ''}
+${zodiac ? `🧿 生肖运势：${zodiac.animal}系·${zodiac.label}（主运势轴：${zodiac.focusAxisLabel}，签文共振：${zodiac.signAxisLabel}，开运动作轴：${zodiac.ritualAxisLabel}）\n` : ''}
 
 🧧 新年行大运，快来测测你的！`;
 

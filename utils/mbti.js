@@ -5,6 +5,8 @@
  * 根据6道题答案生成16种旅行人格
  */
 
+const { questions } = require('./data.js');
+
 /**
  * MBTI人格定义
  */
@@ -25,8 +27,8 @@ const mbtiTypes = {
     emoji: "🔍"
   },
   "INFJ": {
-    name: "梦想家",
-    shortName: "梦想家",
+    name: "提倡者",
+    shortName: "提倡者",
     description: "你内心温暖，旅行是为了寻找灵感和精神共鸣",
     travelStyle: "喜欢有故事、有深度的旅行目的地",
     emoji: "💫"
@@ -130,12 +132,54 @@ const mbtiTypes = {
   }
 };
 
+const DEFAULT_MBTI_TYPE_ORDER = [
+  'INTJ', 'INTP', 'ENTJ', 'ENTP',
+  'INFJ', 'INFP', 'ENFJ', 'ENFP',
+  'ISTJ', 'ISFJ', 'ESTJ', 'ESFJ',
+  'ISTP', 'ISFP', 'ESTP', 'ESFP'
+];
+
+function extractTypeFromOptionText(text) {
+  if (typeof text !== 'string') return '';
+  const match = text.match(/^([A-Z]{4})（/);
+  return match ? match[1] : '';
+}
+
+function getSelfReportedTypeOrder() {
+  const mbtiQuestion = Array.isArray(questions) ? questions.find((item) => item && item.id === 11) : null;
+  const typesFromQuestion = mbtiQuestion && Array.isArray(mbtiQuestion.options)
+    ? mbtiQuestion.options.map((opt) => extractTypeFromOptionText(opt && opt.text)).filter(Boolean)
+    : [];
+  const unique = Array.from(new Set(typesFromQuestion));
+  const isValid = unique.length === 16 && unique.every((type) => mbtiTypes[type]);
+  return isValid ? unique : DEFAULT_MBTI_TYPE_ORDER;
+}
+
 /**
  * 根据用户答案计算MBTI类型
  * @param {Array} userAnswers - 用户答案数组 [0, 1, 2, 3, 4, 5]
  * @returns {Object} MBTI分析结果
  */
 function calculateMBTI(userAnswers) {
+  // 优先使用用户自报MBTI（第11题，索引10）
+  const selfReportedMap = getSelfReportedTypeOrder();
+  const selfAnswer = Number(userAnswers && userAnswers[10]);
+  if (!Number.isNaN(selfAnswer) && selfReportedMap[selfAnswer]) {
+    const selfType = selfReportedMap[selfAnswer];
+    const selfInfo = mbtiTypes[selfType] || mbtiTypes.ENFP;
+    return {
+      type: selfType,
+      name: selfInfo.name,
+      shortName: selfInfo.shortName,
+      description: selfInfo.description,
+      travelStyle: selfInfo.travelStyle,
+      emoji: selfInfo.emoji,
+      dimensions: null,
+      source: 'self_reported',
+      allTypes: mbtiTypes
+    };
+  }
+
   // E/I: 问题2(旅行方式) + 问题6(愿望)
   // 打卡/冒险 → E，度假/漫步 → I
   // 爱情 → E，暴富/健康 → I，转运 → E
@@ -252,6 +296,7 @@ function calculateMBTI(userAnswers) {
     travelStyle: mbtiInfo.travelStyle,
     emoji: mbtiInfo.emoji,
     dimensions: dimensions,
+    source: 'inferred',
     allTypes: mbtiTypes
   };
 }
@@ -266,5 +311,6 @@ function getAllMBTITypes() {
 module.exports = {
   calculateMBTI,
   getAllMBTITypes,
-  mbtiTypes
+  mbtiTypes,
+  getSelfReportedTypeOrder
 };
