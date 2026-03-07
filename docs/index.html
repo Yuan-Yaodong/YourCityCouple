@@ -131,6 +131,14 @@
 
           <div class="city-detail" id="city-detail"></div>
 
+          <div id="core-summary" class="core-summary" style="display: none;"></div>
+
+          <div class="details-toggle-wrap">
+            <button id="toggle-details" class="btn-toggle" onclick="toggleExtendedDetails()">展开详细解析</button>
+          </div>
+
+          <div id="extended-details" class="extended-details" style="display: none;">
+
           <!-- 分析文案 -->
           <div id="analysis-section" class="analysis-block" style="display: none;">
             <div class="analysis-header">
@@ -169,13 +177,18 @@
 
           <!-- 幸运元素 -->
           <div class="lucky-section" id="lucky-display"></div>
+          </div>
         </div>
 
         <!-- 按钮区域 -->
         <div class="result-actions">
+          <button class="btn-share-action" onclick="shareResult()">
+            <span class="btn-icon">📲</span>
+            <span>微信分享</span>
+          </button>
           <button class="btn-copy" onclick="copyResult()">
-            <span class="btn-icon">📋</span>
-            <span>复制结果</span>
+            <span class="btn-icon">📝</span>
+            <span>复制长文案</span>
           </button>
           <button class="btn-retry" onclick="restartTest()">
             <span class="btn-icon">🔄</span>
@@ -188,6 +201,18 @@
           <div class="footer-text">🧧 新年行大运 🧧</div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- 答题即时反馈 -->
+  <div id="quiz-toast" class="quiz-toast"></div>
+
+  <!-- 好运签彩蛋弹窗 -->
+  <div id="lucky-modal" class="lucky-modal" style="display: none;">
+    <div class="lucky-modal-card">
+      <div class="lucky-modal-title">🎴 好运签</div>
+      <div id="lucky-modal-content" class="lucky-modal-content"></div>
+      <button class="btn-toggle" onclick="closeLuckyModal()">收下好运</button>
     </div>
   </div>
 

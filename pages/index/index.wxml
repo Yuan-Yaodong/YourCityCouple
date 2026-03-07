@@ -24,10 +24,7 @@
 
   <!-- 开始按钮 -->
   <button class="btn-primary" bindtap="startTest">
-    开始测试
-  </button>
-  <button class="btn-demo" bindtap="openInsights">
-    打开体验数据看板
+    {{hasUnfinishedQuiz ? ('继续测试（' + unfinishedProgressText + '）') : '开始测试'}}
   </button>
 
   <view wx:if="{{hasHistory}}" class="history-card">
@@ -62,4 +59,5 @@
 
   <!-- 底部说明 -->
   <text class="tips">6道题 · 测出你的福气城市</text>
+  <text class="insights-link" bindtap="openInsights">体验数据看板（内测）</text>
 </view>

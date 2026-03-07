@@ -1,12 +1,14 @@
 // pages/index/index.js
 const { trackEvent } = require('../../utils/analytics.js');
-const { healingQuotes } = require('../../utils/data.js');
+const { healingQuotes, questions } = require('../../utils/data.js');
 
 Page({
   data: {
     hasUserInfo: false,
     hasHistory: false,
     historyCity: '',
+    hasUnfinishedQuiz: false,
+    unfinishedProgressText: '',
     dailyQuote: '',
     dailyMission: '',
     recentHistory: [],
@@ -24,14 +26,41 @@ Page({
   },
 
   startTest() {
-    trackEvent('test_start');
+    const hasUnfinished = this.data.hasUnfinishedQuiz;
+    if (hasUnfinished) {
+      wx.showModal({
+        title: '继续上次测试？',
+        content: `你上次做到${this.data.unfinishedProgressText}，可继续也可重来。`,
+        cancelText: '重做',
+        confirmText: '继续',
+        success: (res) => {
+          if (res.confirm) {
+            this.continueUnfinishedQuiz();
+            return;
+          }
+          this.restartQuizFromBeginning();
+        }
+      });
+      return;
+    }
+    this.restartQuizFromBeginning();
+  },
 
-    // 清除旧数据，重新开始
+  restartQuizFromBeginning() {
+    trackEvent('test_start', { mode: 'restart' });
     wx.removeStorageSync('answers');
     wx.removeStorageSync('testResult');
-
     wx.navigateTo({
-      url: '/pages/quiz/quiz'
+      url: '/pages/quiz/quiz?mode=restart'
+    });
+  },
+
+  continueUnfinishedQuiz() {
+    trackEvent('quiz_resume_entry', {
+      progress: this.data.unfinishedProgressText
+    });
+    wx.navigateTo({
+      url: '/pages/quiz/quiz?mode=resume'
     });
   },
 
@@ -69,6 +98,10 @@ Page({
     const dailyQuote = this.getDailyQuote();
     const result = wx.getStorageSync('testResult');
     const history = wx.getStorageSync('historyResults') || [];
+    const answers = wx.getStorageSync('answers') || [];
+    const totalQuestions = Array.isArray(questions) ? questions.length : 0;
+    const hasUnfinishedQuiz = Array.isArray(answers) && answers.length > 0 && answers.length < totalQuestions;
+    const unfinishedProgressText = hasUnfinishedQuiz ? `${answers.length}/${totalQuestions} 题` : '';
     const anchorCity = (result && result.city) || (Array.isArray(history) && history[0] ? history[0].city : '');
     const dailyMission = this.getDailyMission(anchorCity);
     const ritualRecord = wx.getStorageSync('dailyRitual') || {};
@@ -85,6 +118,8 @@ Page({
     this.setData({
       hasHistory: !!(result && result.city),
       historyCity: result && result.city ? result.city : '',
+      hasUnfinishedQuiz,
+      unfinishedProgressText,
       dailyQuote,
       dailyMission,
       recentHistory,

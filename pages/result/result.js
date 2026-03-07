@@ -13,12 +13,16 @@ Page({
     displayWhyFit: [],
     runnerUpCity: null,
     compareText: '',
+    coreSummaryText: '',
     shareVariant: 'warm',
     actionOrder: 'share_first',
     dailyQuote: '',
     dailyRitualDone: false,
     dailyRitualText: '',
     ritualStreakDays: 0,
+    showExtendedDetails: false,
+    fiveElementLuckyColorsText: '',
+    fiveElementLuckyNumbersText: '',
     mbti: null,
     fiveElement: null,
     showResult: false,
@@ -58,7 +62,7 @@ Page({
     const displayWhyFit = this.getDisplayWhyFit(analysis.whyFit);
     const runnerUpCity = result.runnerUp ? getCityDetail(result.runnerUp.city) : null;
     const compareText = this.getCompareText(result.city);
-    const shareVariant = assignVariant('share_copy_v1', ['warm', 'direct']) || 'warm';
+    const shareVariant = assignVariant('share_copy_v2', ['warm', 'direct', 'relation']) || 'warm';
     const actionOrder = assignVariant('result_button_order_v1', ['share_first', 'restart_first']) || 'share_first';
     const dailyQuote = this.getDailyQuote(result.city);
     const ritualKey = this.getTodayRitualKey();
@@ -73,6 +77,9 @@ Page({
       displayWhyFit: displayWhyFit,
       runnerUpCity: runnerUpCity,
       compareText: compareText,
+      coreSummaryText: analysis && analysis.summary
+        ? analysis.summary
+        : `${result.city}很适合你当前的节奏，先分享给朋友看看吧。`,
       shareVariant: shareVariant,
       actionOrder,
       dailyQuote: dailyQuote,
@@ -81,6 +88,13 @@ Page({
         ? this.buildRitualEncouragement(ritualStreakDays)
         : '点亮今日好运，给自己一个好开始',
       ritualStreakDays,
+      showExtendedDetails: false,
+      fiveElementLuckyColorsText: fiveElement && fiveElement.detail && Array.isArray(fiveElement.detail.luckyColors)
+        ? fiveElement.detail.luckyColors.join('、')
+        : '',
+      fiveElementLuckyNumbersText: fiveElement && fiveElement.detail && Array.isArray(fiveElement.detail.luckyNumbers)
+        ? fiveElement.detail.luckyNumbers.join('、')
+        : '',
       mbti: mbti,
       fiveElement: fiveElement,
       showResult: true
@@ -105,7 +119,7 @@ Page({
     const cityDetail = getCityDetail(latest.city);
     if (!cityDetail) return false;
 
-    const shareVariant = assignVariant('share_copy_v1', ['warm', 'direct']) || 'warm';
+    const shareVariant = assignVariant('share_copy_v2', ['warm', 'direct', 'relation']) || 'warm';
     const actionOrder = assignVariant('result_button_order_v1', ['share_first', 'restart_first']) || 'share_first';
     this.setData({
       result: { city: latest.city, score: 0, runnerUp: null },
@@ -114,11 +128,15 @@ Page({
       displayWhyFit: [],
       runnerUpCity: null,
       compareText: '这是你上次保存的结果，重新测试可获得最新分析。',
+      coreSummaryText: latest.summary || `${latest.city}很适合你当前的状态，重新测试可获得完整解析。`,
       shareVariant,
       actionOrder,
       dailyQuote: this.getDailyQuote(latest.city),
       dailyRitualDone: false,
       dailyRitualText: '重新测试后可点亮今日好运',
+      showExtendedDetails: false,
+      fiveElementLuckyColorsText: '',
+      fiveElementLuckyNumbersText: '',
       mbti: null,
       fiveElement: null,
       showResult: true
@@ -140,9 +158,12 @@ Page({
 
   onShareAppMessage() {
     const { cityDetail, result, shareVariant } = this.data;
-    const title = shareVariant === 'direct'
-      ? `6题测出开年旺城，我是${result ? result.city : '杭州'}，你来试试？`
-      : `我测到的新年旺城是${cityDetail ? cityDetail.description : '杭州'}，快来测测你的！`;
+    let title = `我测到的新年旺城是${cityDetail ? cityDetail.description : '杭州'}，快来测测你的！`;
+    if (shareVariant === 'direct') {
+      title = `6题测出开年旺城，我是${result ? result.city : '杭州'}，你来试试？`;
+    } else if (shareVariant === 'relation') {
+      title = `我测到了${result ? result.city : '杭州'}，你也测测看我们是不是同路人？`;
+    }
     trackEvent('share_app_message', {
       variant: shareVariant,
       city: result ? result.city : ''
@@ -163,7 +184,9 @@ Page({
     return {
       title: shareVariant === 'direct'
         ? `我的开年旺城是${result ? result.city : '杭州'}，你也来测一个`
-        : '新年运势小测试：6题测出你的开年旺城'
+        : shareVariant === 'relation'
+          ? `我测到${result ? result.city : '杭州'}，你看看我们是不是同一挂`
+          : '新年运势小测试：6题测出你的开年旺城'
     };
   },
 
@@ -179,6 +202,23 @@ Page({
 
     wx.redirectTo({
       url: '/pages/index/index'
+    });
+  },
+
+  onTapShareButton() {
+    trackEvent('click_wechat_share_button', {
+      city: this.data.result ? this.data.result.city : '',
+      actionOrder: this.data.actionOrder,
+      variant: this.data.shareVariant
+    });
+  },
+
+  toggleExtendedDetails() {
+    const next = !this.data.showExtendedDetails;
+    this.setData({ showExtendedDetails: next });
+    trackEvent('toggle_result_details', {
+      open: next,
+      city: this.data.result ? this.data.result.city : ''
     });
   },
 
@@ -392,9 +432,12 @@ Page({
       actionTipsText = '\n\n✅ 今日行动建议：\n' + analysis.actionTips.map((tip) => '• ' + tip).join('\n');
     }
 
-    const opening = shareVariant === 'direct'
-      ? '6题测出我的开年旺城，你也来测测！'
-      : '🎉 2026新年旺城测试 🎉';
+    let opening = '🎉 2026新年旺城测试 🎉';
+    if (shareVariant === 'direct') {
+      opening = '6题测出我的开年旺城，你也来测测！';
+    } else if (shareVariant === 'relation') {
+      opening = '我先测到了我的开年旺城，你也测一下我们是不是同路人！';
+    }
     const text = `${opening}\n\n我的开年旅游地是：【${result.city}】\n${cityDetail.description}\n\n${cityDetail.detail}\n${whyFitText}\n${mbtiText}\n${fiveElementText}\n${actionTipsText}\n\n${analysis ? '💡 ' + analysis.summary + '\n' : ''}\n🧧 新年行大运，快来测测你的！`;
 
     wx.setClipboardData({

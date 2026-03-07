@@ -120,19 +120,60 @@ const healingQuotes = [
 const STORAGE_KEYS = {
   HISTORY: 'yc_history_results',
   RITUAL: 'yc_daily_ritual',
-  LAST_RESULT: 'yc_last_result'
+  LAST_RESULT: 'yc_last_result',
+  AB_VARIANTS: 'yc_ab_variants'
 };
 
 let currentQuestion = 0;
 let userAnswers = [];
 let currentComputedResult = null;
+let luckySignShown = false;
+let showExtendedDetails = false;
+let shareVariant = 'warm';
+
+const ENCOURAGEMENT_MAP = [
+  ['火力全开，状态拉满！', '品味在线，生活感知力很强！', '精致感拉满，审美很稳！', '爽快直接，气场很足！'],
+  ['会玩会逛，镜头感超强！', '很会享受，松弛感拿捏了！', '冒险值爆表，勇气满分！', '节奏舒服，你很会生活！'],
+  ['你有自己的舒适区，很棒！', '阳光心态，能量很正！', '平衡能力很强，稳稳的！', '诗意感知力上线，超会感受！'],
+  ['你很会捕捉美好瞬间！', '人间烟火鉴赏家就是你！', '你很懂得照顾自己！', '你的精神世界很丰富！'],
+  ['你自带节日氛围感！', '浪漫雷达已开启！', '松弛感天花板！', '挑战精神满分！'],
+  ['幸福感优先，很会爱自己！', '目标感很强，执行力在线！', '健康意识拉满，超赞！', '逆风翻盘气质，冲就对了！']
+];
+
+const LUCKY_SIGNS = [
+  '好运签：今天适合做一个小决定，往往会有意外惊喜。',
+  '好运签：你最近的选择会把你带到更轻松的状态。',
+  '好运签：一个主动的问候，会带来不错的缘分。',
+  '好运签：今天的你，适合开始一件想了很久的小事。'
+];
 
 function startTest() {
   userAnswers = [];
   currentQuestion = 0;
   currentComputedResult = null;
+  luckySignShown = false;
+  showExtendedDetails = false;
   showPage('page-quiz');
   renderQuiz();
+}
+
+function assignVariant(experimentName, variants) {
+  const list = Array.isArray(variants) ? variants : [];
+  if (!experimentName || list.length === 0) return null;
+  const stored = JSON.parse(localStorage.getItem(STORAGE_KEYS.AB_VARIANTS) || '{}');
+  if (stored[experimentName] && list.includes(stored[experimentName])) {
+    return stored[experimentName];
+  }
+  const seed = `${experimentName}_${Date.now()}_${Math.random()}`;
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash << 5) - hash + seed.charCodeAt(i);
+    hash |= 0;
+  }
+  const selected = list[Math.abs(hash) % list.length];
+  stored[experimentName] = selected;
+  localStorage.setItem(STORAGE_KEYS.AB_VARIANTS, JSON.stringify(stored));
+  return selected;
 }
 
 function renderQuiz() {
@@ -158,6 +199,8 @@ function renderQuiz() {
 
 function selectOption(optionIndex) {
   if (userAnswers.length !== currentQuestion) return;
+  showEncouragement(currentQuestion, optionIndex);
+  maybeShowLuckySign(currentQuestion, optionIndex);
   userAnswers.push(optionIndex);
 
   if (currentQuestion < questions.length - 1) {
@@ -166,6 +209,42 @@ function selectOption(optionIndex) {
   } else {
     showResult();
   }
+}
+
+function showEncouragement(questionIndex, optionIndex) {
+  const row = ENCOURAGEMENT_MAP[questionIndex] || [];
+  const text = row[optionIndex];
+  if (!text) return;
+  const toast = document.getElementById('quiz-toast');
+  if (!toast) return;
+  toast.textContent = text;
+  toast.classList.add('show');
+  clearTimeout(showEncouragement.timer);
+  showEncouragement.timer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 900);
+}
+
+function maybeShowLuckySign(questionIndex, optionIndex) {
+  if (luckySignShown) return;
+  if (questionIndex !== 2) return; // 第3题
+  const daySeed = new Date().getDate();
+  const sign = LUCKY_SIGNS[(questionIndex + optionIndex + daySeed) % LUCKY_SIGNS.length];
+  luckySignShown = true;
+  setTimeout(() => openLuckyModal(sign), 120);
+}
+
+function openLuckyModal(text) {
+  const modal = document.getElementById('lucky-modal');
+  const content = document.getElementById('lucky-modal-content');
+  if (!modal || !content) return;
+  content.textContent = text;
+  modal.style.display = 'flex';
+}
+
+function closeLuckyModal() {
+  const modal = document.getElementById('lucky-modal');
+  if (modal) modal.style.display = 'none';
 }
 
 function calculateResult(answers) {
@@ -347,6 +426,7 @@ function showResult() {
   const compareText = getCompareText(result.city);
   const ritual = getRitualState();
   const dailyQuote = getDailyQuote(result.city);
+  shareVariant = assignVariant('web_share_copy_v1', ['warm', 'direct', 'relation']) || 'warm';
 
   currentComputedResult = {
     result,
@@ -373,6 +453,19 @@ function renderResult(payload) {
   document.getElementById('result-city').style.color = city.color;
   document.getElementById('city-desc').textContent = city.description;
   document.getElementById('city-detail').textContent = city.detail;
+  const coreSummary = document.getElementById('core-summary');
+  if (coreSummary) {
+    const runnerText = result.runnerUp && cities[result.runnerUp.city]
+      ? `差一点就是：${cities[result.runnerUp.city].emoji} ${result.runnerUp.city}`
+      : '';
+    coreSummary.style.display = 'block';
+    coreSummary.innerHTML = `
+      <div class="core-summary-title">一句话结论</div>
+      <div class="core-summary-text">${analysis.summary}</div>
+      ${runnerText ? `<div class="core-summary-sub">${runnerText}</div>` : ''}
+      <div class="core-summary-sub">和上次相比：${compareText}</div>
+    `;
+  }
 
   const tagsContainer = document.getElementById('tags');
   tagsContainer.innerHTML = '';
@@ -452,11 +545,32 @@ function renderResult(payload) {
     <div class="healing-quote">${city.healing}</div>
   `;
 
+  const luckyPlan = buildLuckyPlan(city, fe);
   document.getElementById('lucky-display').innerHTML = `
-    <div class="lucky-item"><span>幸运色</span><span>${city.luckyColor}</span></div>
-    <div class="lucky-item"><span>幸运数字</span><span>${city.luckyNumber}</span></div>
-    <div class="lucky-item"><span>幸运物</span><span>${city.luckyThing}</span></div>
+    <div class="lucky-item"><span>综合幸运色</span><span>${luckyPlan.color}</span></div>
+    <div class="lucky-item"><span>综合幸运数字</span><span>${luckyPlan.number}</span></div>
+    <div class="lucky-item"><span>幸运物</span><span>${luckyPlan.thing}</span></div>
+    <div class="lucky-note">${luckyPlan.note}</div>
   `;
+
+  showExtendedDetails = false;
+  const details = document.getElementById('extended-details');
+  const detailsBtn = document.getElementById('toggle-details');
+  if (details) details.style.display = 'none';
+  if (detailsBtn) detailsBtn.textContent = '展开详细解析';
+}
+
+function buildLuckyPlan(city, fiveElementDetail) {
+  const feColor = (fiveElementDetail.luckyColors && fiveElementDetail.luckyColors[0]) || city.luckyColor;
+  const feNumber = (fiveElementDetail.luckyNumbers && fiveElementDetail.luckyNumbers[0]) || city.luckyNumber;
+  const color = `${feColor}（五行主色） / ${city.luckyColor}（城市场景）`;
+  const number = `${feNumber}（五行） / ${city.luckyNumber}（城市）`;
+  return {
+    color,
+    number,
+    thing: `${city.luckyThing}（城市幸运物）`,
+    note: '说明：五行属性反映你的个人状态，城市幸运元素反映本次目的地场景，两个维度可以同时使用。'
+  };
 }
 
 function showPage(pageId) {
@@ -468,7 +582,38 @@ function restartTest() {
   userAnswers = [];
   currentQuestion = 0;
   currentComputedResult = null;
+  showExtendedDetails = false;
   showPage('page-index');
+}
+
+function toggleExtendedDetails() {
+  showExtendedDetails = !showExtendedDetails;
+  const details = document.getElementById('extended-details');
+  const btn = document.getElementById('toggle-details');
+  if (!details || !btn) return;
+  details.style.display = showExtendedDetails ? 'block' : 'none';
+  btn.textContent = showExtendedDetails ? '收起详细解析' : '展开详细解析';
+}
+
+function shareResult() {
+  if (!currentComputedResult) return;
+  const { result, city } = currentComputedResult;
+  let shareText = `我测到的开年旺城是${result.city}${city.emoji}，你也来测测看！`;
+  if (shareVariant === 'direct') {
+    shareText = `6题测出开年旺城，我是${result.city}${city.emoji}，你也来测一个！`;
+  } else if (shareVariant === 'relation') {
+    shareText = `我测到${result.city}${city.emoji}，你也测测看我们是不是同路人？`;
+  }
+  if (navigator.share) {
+    navigator.share({
+      title: '2026新年旺旺',
+      text: shareText
+    }).catch(() => {});
+    return;
+  }
+  navigator.clipboard.writeText(shareText).then(() => {
+    alert('已复制分享文案，快发给朋友吧！');
+  });
 }
 
 function renderUserAnswers() {
@@ -514,7 +659,12 @@ function copyResult() {
   const { result, city, fiveElement, mbti, analysis } = currentComputedResult;
   const fe = fiveElement.detail;
 
-  const text = `🎉 2026新年旺城测试 🎉
+  const opening = shareVariant === 'direct'
+    ? '6题测出我的开年旺城，你也来测测！'
+    : shareVariant === 'relation'
+      ? '我先测到了我的开年旺城，你也测一下我们是不是同路人！'
+      : '🎉 2026新年旺城测试 🎉';
+  const text = `${opening}
 
 我的开年旅游地是：【${result.city}】${city.emoji}
 ${city.description}

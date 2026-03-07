@@ -6,6 +6,7 @@
       <view class="progress-inner" style="width: {{progressPercent}}%"></view>
     </view>
     <text class="progress-text">{{currentQuestion + 1}}/{{totalQuestions}}</text>
+    <text wx:if="{{currentQuestion >= 2}}" class="progress-hint">你已经完成一半啦，马上揭晓结果</text>
   </view>
 
   <!-- 问题卡片 -->
@@ -32,6 +33,15 @@
       </view>
     </view>
   </view>
+
+  <button
+    wx:if="{{currentQuestion > 0}}"
+    class="btn-prev"
+    bindtap="prevQuestion"
+    disabled="{{animating}}"
+  >
+    返回上一题修改
+  </button>
 
   <!-- 底部装饰 -->
   <view class="footer-decor">

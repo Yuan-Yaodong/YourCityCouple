@@ -21,6 +21,13 @@
       <text class="result-city">{{result.city}}</text>
     </view>
 
+    <view class="core-summary-card {{showAnimations ? 'fade-in' : ''}}">
+      <view class="core-summary-title">一句话结论</view>
+      <text class="core-summary-text">{{coreSummaryText}}</text>
+      <text wx:if="{{runnerUpCity}}" class="core-summary-sub">差一点就是：{{result.runnerUp.city}} {{runnerUpCity.emoji}}</text>
+      <text wx:if="{{compareText}}" class="core-summary-sub">和上次相比：{{compareText}}</text>
+    </view>
+
     <!-- 城市描述 -->
     <view class="city-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: 0.4s">
       <text class="city-desc">{{cityDetail.description}}</text>
@@ -35,115 +42,108 @@
       <!-- 详细介绍 -->
       <text class="city-detail {{showAnimations ? 'fade-in' : ''}}" style="animation-delay: {{0.6 + cityDetail.tags.length * 0.15}}s">{{cityDetail.detail}}</text>
 
-      <!-- 分析文案 -->
-      <view wx:if="{{analysis}}" class="analysis-section {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.6 + (cityDetail.tags.length + 1) * 0.15}}s">
-        <view class="analysis-title">为什么适合你</view>
-        <view class="analysis-item" wx:for="{{displayWhyFit}}" wx:key="index">
-          <text class="analysis-point">{{item.text}}</text>
-          <text class="analysis-desc">{{item.desc}}</text>
-        </view>
-        <view class="analysis-summary">{{analysis.summary}}</view>
-      </view>
+      <button class="btn-toggle-details" bindtap="toggleExtendedDetails">
+        {{showExtendedDetails ? '收起详细解析' : '展开详细解析'}}
+      </button>
 
-      <!-- MBTI人格卡片 -->
-      <view wx:if="{{mbti}}" class="mbti-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.7 + (cityDetail.tags.length + 1) * 0.15}}s">
-        <view class="mbti-header">
-          <text class="mbti-emoji">{{mbti.emoji}}</text>
-          <view class="mbti-title-wrap">
-            <text class="mbti-type">{{mbti.type}}</text>
-            <text class="mbti-name">{{mbti.name}}</text>
+      <view wx:if="{{showExtendedDetails}}" class="extended-details">
+        <!-- 分析文案 -->
+        <view wx:if="{{analysis}}" class="analysis-section {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.6 + (cityDetail.tags.length + 1) * 0.15}}s">
+          <view class="analysis-title">为什么适合你</view>
+          <view class="analysis-item" wx:for="{{displayWhyFit}}" wx:key="index">
+            <text class="analysis-point">{{item.text}}</text>
+            <text class="analysis-desc">{{item.desc}}</text>
+          </view>
+          <view class="analysis-summary">{{analysis.summary}}</view>
+        </view>
+
+        <!-- MBTI人格卡片 -->
+        <view wx:if="{{mbti}}" class="mbti-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.7 + (cityDetail.tags.length + 1) * 0.15}}s">
+          <view class="mbti-header">
+            <text class="mbti-emoji">{{mbti.emoji}}</text>
+            <view class="mbti-title-wrap">
+              <text class="mbti-type">{{mbti.type}}</text>
+              <text class="mbti-name">{{mbti.name}}</text>
+            </view>
+          </view>
+          <text class="mbti-desc">{{mbti.description}}</text>
+          <view class="mbti-travel">
+            <text class="mbti-travel-label">旅行风格</text>
+            <text class="mbti-travel-text">{{mbti.travelStyle}}</text>
           </view>
         </view>
-        <text class="mbti-desc">{{mbti.description}}</text>
-        <view class="mbti-travel">
-          <text class="mbti-travel-label">旅行风格</text>
-          <text class="mbti-travel-text">{{mbti.travelStyle}}</text>
+
+        <!-- 五行属性卡片 -->
+        <view wx:if="{{fiveElement}}" class="five-element-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.8 + (cityDetail.tags.length + 1) * 0.15}}s">
+          <view class="five-element-header">
+            <text class="five-element-emoji">{{fiveElement.detail.emoji}}</text>
+            <text class="five-element-title">你的五行属性</text>
+          </view>
+          <view class="five-element-name">{{fiveElement.detail.name}}属</view>
+          <view class="five-element-info">
+            <view class="five-element-item">
+              <text class="five-element-label">幸运色</text>
+              <text class="five-element-value">{{fiveElementLuckyColorsText}}</text>
+            </view>
+            <view class="five-element-item">
+              <text class="five-element-label">幸运数字</text>
+              <text class="five-element-value">{{fiveElementLuckyNumbersText}}</text>
+            </view>
+            <view class="five-element-item">
+              <text class="five-element-label">贵人方位</text>
+              <text class="five-element-value">{{fiveElement.detail.direction}}</text>
+            </view>
+          </view>
+          <text class="five-element-fortune">{{fiveElement.detail.fortune}}</text>
         </view>
-      </view>
 
-      <!-- 五行属性卡片 -->
-      <view wx:if="{{fiveElement}}" class="five-element-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.8 + (cityDetail.tags.length + 1) * 0.15}}s">
-        <view class="five-element-header">
-          <text class="five-element-emoji">{{fiveElement.detail.emoji}}</text>
-          <text class="five-element-title">你的五行属性</text>
+        <view wx:if="{{analysis && analysis.actionTips && analysis.actionTips.length}}" class="action-tips-card {{showAnimations ? 'fade-in' : ''}}">
+          <view class="action-tips-title">今日好运行动建议</view>
+          <view class="action-tip" wx:for="{{analysis.actionTips}}" wx:key="index">✅ {{item}}</view>
         </view>
-        <view class="five-element-name">{{fiveElement.detail.name}}属</view>
-        <view class="five-element-info">
-          <view class="five-element-item">
-            <text class="five-element-label">幸运色</text>
-            <text class="five-element-value">{{fiveElement.detail.luckyColors.join('、')}}</text>
-          </view>
-          <view class="five-element-item">
-            <text class="five-element-label">幸运数字</text>
-            <text class="five-element-value">{{fiveElement.detail.luckyNumbers.join('、')}}</text>
-          </view>
-          <view class="five-element-item">
-            <text class="five-element-label">贵人方位</text>
-            <text class="five-element-value">{{fiveElement.detail.direction}}</text>
-          </view>
+
+        <view wx:if="{{dailyQuote}}" class="quote-card {{showAnimations ? 'fade-in' : ''}}">
+          <view class="quote-card-title">今日好运签</view>
+          <text class="quote-card-text">「{{dailyQuote}}」</text>
         </view>
-        <text class="five-element-fortune">{{fiveElement.detail.fortune}}</text>
-      </view>
 
-      <view wx:if="{{runnerUpCity}}" class="runnerup-card {{showAnimations ? 'slide-up' : ''}}">
-        <view class="runnerup-title">差一点就是</view>
-        <view class="runnerup-main">
-          <text class="runnerup-emoji">{{runnerUpCity.emoji}}</text>
-          <text class="runnerup-name">{{result.runnerUp.city}} · {{runnerUpCity.description}}</text>
+        <view class="ritual-card {{showAnimations ? 'fade-in' : ''}}">
+          <view class="ritual-title">今日好运仪式</view>
+          <view class="ritual-streak">连续点亮：{{ritualStreakDays}} 天</view>
+          <view class="ritual-text">{{dailyRitualText}}</view>
+          <button class="btn-ritual {{dailyRitualDone ? 'btn-ritual-done' : ''}}" bindtap="lightUpToday">
+            {{dailyRitualDone ? '✨ 今日已点亮' : '✨ 点亮今日好运'}}
+          </button>
         </view>
-      </view>
 
-      <view wx:if="{{compareText}}" class="compare-card {{showAnimations ? 'fade-in' : ''}}">
-        <view class="compare-title">和上次相比</view>
-        <text class="compare-text">{{compareText}}</text>
-      </view>
+        <!-- 专属称号 -->
+        <view wx:if="{{cityDetail.title}}" class="title-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.9 + (cityDetail.tags.length + 1) * 0.15}}s">
+          <view class="title-label">你的专属称号</view>
+          <view class="title-name">{{cityDetail.title}}</view>
+        </view>
 
-      <view wx:if="{{analysis && analysis.actionTips && analysis.actionTips.length}}" class="action-tips-card {{showAnimations ? 'fade-in' : ''}}">
-        <view class="action-tips-title">今日好运行动建议</view>
-        <view class="action-tip" wx:for="{{analysis.actionTips}}" wx:key="index">✅ {{item}}</view>
-      </view>
+        <!-- 治愈语录 -->
+        <view wx:if="{{cityDetail.healing}}" class="healing-card {{showAnimations ? 'fade-in' : ''}}" style="animation-delay: 1s">
+          <view class="healing-icon">💝</view>
+          <text class="healing-text">{{cityDetail.healing}}</text>
+        </view>
 
-      <view wx:if="{{dailyQuote}}" class="quote-card {{showAnimations ? 'fade-in' : ''}}">
-        <view class="quote-card-title">今日好运签</view>
-        <text class="quote-card-text">「{{dailyQuote}}」</text>
-      </view>
-
-      <view class="ritual-card {{showAnimations ? 'fade-in' : ''}}">
-        <view class="ritual-title">今日好运仪式</view>
-        <view class="ritual-streak">连续点亮：{{ritualStreakDays}} 天</view>
-        <view class="ritual-text">{{dailyRitualText}}</view>
-        <button class="btn-ritual {{dailyRitualDone ? 'btn-ritual-done' : ''}}" bindtap="lightUpToday">
-          {{dailyRitualDone ? '✨ 今日已点亮' : '✨ 点亮今日好运'}}
-        </button>
-      </view>
-
-      <!-- 专属称号 -->
-      <view wx:if="{{cityDetail.title}}" class="title-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.9 + (cityDetail.tags.length + 1) * 0.15}}s">
-        <view class="title-label">你的专属称号</view>
-        <view class="title-name">{{cityDetail.title}}</view>
-      </view>
-
-      <!-- 治愈语录 -->
-      <view wx:if="{{cityDetail.healing}}" class="healing-card {{showAnimations ? 'fade-in' : ''}}" style="animation-delay: 1s">
-        <view class="healing-icon">💝</view>
-        <text class="healing-text">{{cityDetail.healing}}</text>
-      </view>
-
-      <!-- 幸运元素 -->
-      <view wx:if="{{cityDetail.luckyColor || cityDetail.luckyNumber || cityDetail.luckyThing}}" class="lucky-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{1.1 + (cityDetail.tags.length + 1) * 0.15}}s">
-        <view class="lucky-title">新年幸运元素</view>
-        <view class="lucky-items">
-          <view wx:if="{{cityDetail.luckyColor}}" class="lucky-item">
-            <text class="lucky-label">幸运色</text>
-            <text class="lucky-value">{{cityDetail.luckyColor}}</text>
-          </view>
-          <view wx:if="{{cityDetail.luckyNumber}}" class="lucky-item">
-            <text class="lucky-label">幸运数字</text>
-            <text class="lucky-value">{{cityDetail.luckyNumber}}</text>
-          </view>
-          <view wx:if="{{cityDetail.luckyThing}}" class="lucky-item">
-            <text class="lucky-label">幸运物</text>
-            <text class="lucky-value">{{cityDetail.luckyThing}}</text>
+        <!-- 幸运元素 -->
+        <view wx:if="{{cityDetail.luckyColor || cityDetail.luckyNumber || cityDetail.luckyThing}}" class="lucky-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{1.1 + (cityDetail.tags.length + 1) * 0.15}}s">
+          <view class="lucky-title">新年幸运元素</view>
+          <view class="lucky-items">
+            <view wx:if="{{cityDetail.luckyColor}}" class="lucky-item">
+              <text class="lucky-label">幸运色</text>
+              <text class="lucky-value">{{cityDetail.luckyColor}}</text>
+            </view>
+            <view wx:if="{{cityDetail.luckyNumber}}" class="lucky-item">
+              <text class="lucky-label">幸运数字</text>
+              <text class="lucky-value">{{cityDetail.luckyNumber}}</text>
+            </view>
+            <view wx:if="{{cityDetail.luckyThing}}" class="lucky-item">
+              <text class="lucky-label">幸运物</text>
+              <text class="lucky-value">{{cityDetail.luckyThing}}</text>
+            </view>
           </view>
         </view>
       </view>
@@ -152,11 +152,14 @@
     <!-- 按钮区域 -->
     <view class="btn-area {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: 0.8s">
       <block wx:if="{{actionOrder === 'share_first'}}">
-        <button class="btn-share" bindtap="generatePoster">
+        <button class="btn-share" open-type="share" bindtap="onTapShareButton">
+          📲 微信分享
+        </button>
+        <button class="btn-poster" bindtap="generatePoster">
           🖼️ 生成海报
         </button>
         <button class="btn-copy" bindtap="copyResult">
-          📤 分享给朋友
+          📝 复制长文案
         </button>
         <button class="btn-restart" bindtap="restartTest">
           🔄 再测一次
@@ -166,11 +169,14 @@
         <button class="btn-restart" bindtap="restartTest">
           🔄 再测一次
         </button>
-        <button class="btn-share" bindtap="generatePoster">
+        <button class="btn-share" open-type="share" bindtap="onTapShareButton">
+          📲 微信分享
+        </button>
+        <button class="btn-poster" bindtap="generatePoster">
           🖼️ 生成海报
         </button>
         <button class="btn-copy" bindtap="copyResult">
-          📤 分享给朋友
+          📝 复制长文案
         </button>
       </block>
     </view>

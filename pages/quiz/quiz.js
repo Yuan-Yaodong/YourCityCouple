@@ -27,7 +27,8 @@ Page({
     selectedIndex: -1,
     animating: false,
     questionStartAt: 0,
-    showedLuckySign: false
+    showedLuckySign: false,
+    hasCompleted: false
   },
 
   onLoad() {
@@ -35,16 +36,39 @@ Page({
     const savedAnswers = wx.getStorageSync('answers');
     const answers = savedAnswers || [];
 
+    const safeAnsweredCount = Math.min(answers.length, questions.length - 1);
+    if (answers.length >= questions.length) {
+      wx.redirectTo({ url: '/pages/result/result' });
+      return;
+    }
     this.setData({
       answers: answers,
-      currentQuestion: answers.length,
-      question: questions[answers.length] || questions[0],
-      progressPercent: (answers.length / questions.length) * 100,
-      questionStartAt: Date.now()
+      currentQuestion: safeAnsweredCount,
+      question: questions[safeAnsweredCount] || questions[0],
+      progressPercent: (safeAnsweredCount / questions.length) * 100,
+      questionStartAt: Date.now(),
+      selectedIndex: answers[safeAnsweredCount] !== undefined ? answers[safeAnsweredCount] : -1
     });
+
+    if (answers.length > 0 && answers.length < questions.length) {
+      trackEvent('quiz_resume', {
+        answeredCount: answers.length,
+        totalQuestions: questions.length
+      });
+    }
 
     // 隐藏分享按钮
     wx.hideShareMenu();
+  },
+
+  onUnload() {
+    if (this.data.hasCompleted) return;
+    const answers = wx.getStorageSync('answers') || [];
+    trackEvent('quiz_drop_at_question', {
+      currentQuestion: this.data.currentQuestion,
+      answeredCount: Array.isArray(answers) ? answers.length : 0,
+      totalQuestions: this.data.totalQuestions
+    });
   },
 
   onShareAppMessage() {
@@ -81,12 +105,22 @@ Page({
       elapsedMs
     });
 
-    // 保存答案
-    const newAnswers = [...answers, selectedIndex];
+    // 保存答案。若是返回修改题目，则覆盖当前答案并截断后续，避免脏状态。
+    const newAnswers = answers.slice(0, currentQuestion);
+    if (answers[currentQuestion] !== undefined && answers[currentQuestion] !== selectedIndex) {
+      trackEvent('answer_change', {
+        questionIndex: currentQuestion,
+        fromOption: answers[currentQuestion],
+        toOption: selectedIndex
+      });
+    }
+    newAnswers[currentQuestion] = selectedIndex;
     wx.setStorageSync('answers', newAnswers);
+    this.setData({ answers: newAnswers });
 
     // 判断是否完成
     if (currentQuestion >= totalQuestions - 1) {
+      this.setData({ hasCompleted: true });
       trackEvent('test_complete', {
         questionCount: totalQuestions
       });
@@ -105,8 +139,8 @@ Page({
       this.setData({
         currentQuestion: nextQ,
         question: questions[nextQ],
-        progressPercent: ((nextQ + 1) / totalQuestions) * 100,
-        selectedIndex: -1,
+        progressPercent: (nextQ / totalQuestions) * 100,
+        selectedIndex: newAnswers[nextQ] !== undefined ? newAnswers[nextQ] : -1,
         slideDirection: 'slide-in',
         questionStartAt: Date.now()
       });
@@ -116,6 +150,20 @@ Page({
         this.setData({ slideDirection: '', animating: false });
       }, 300);
     }, 300);
+  },
+
+  prevQuestion() {
+    if (this.data.animating || this.data.currentQuestion <= 0) return;
+    const prevQ = this.data.currentQuestion - 1;
+    const answers = wx.getStorageSync('answers') || this.data.answers || [];
+    this.setData({
+      currentQuestion: prevQ,
+      question: questions[prevQ],
+      progressPercent: (prevQ / this.data.totalQuestions) * 100,
+      selectedIndex: answers[prevQ] !== undefined ? answers[prevQ] : -1,
+      questionStartAt: Date.now()
+    });
+    trackEvent('quiz_prev_question', { currentQuestion: prevQ });
   },
 
   showEncouragement(questionIndex, optionIndex) {
