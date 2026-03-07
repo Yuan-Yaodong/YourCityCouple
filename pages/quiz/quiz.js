@@ -195,8 +195,7 @@ Page({
 
   showEncouragement(questionIndex, optionIndex) {
     const row = encouragementMap[questionIndex] || [];
-    const text = row[optionIndex];
-    if (!text) return;
+    const text = row[optionIndex] || '已记录你的选择，继续探索你的缘分城市';
     wx.showToast({
       title: text,
       icon: 'none',

@@ -120,6 +120,70 @@ const questions = [
       { text: "🐟 水气养心（疗愈充电）", weights: { "三亚": 5, "北海": 5, "普吉岛": 5, "阳朔": 4, "厦门": 2, "大理": 2, "桂林": 3 }, fiveElement: "水" },
       { text: "🧱 土气安家（稳定长线）", weights: { "洛阳": 5, "南京": 5, "苏州": 4, "周庄": 4, "乌镇": 3, "哈尔滨": 3, "北京": 2 }, fiveElement: "土" }
     ]
+  },
+  {
+    id: 11,
+    question: "如果你知道自己的MBTI，请选择你的类型（不知道可选最接近）",
+    options: [
+      { text: "INTJ（建筑师）", weights: { "北京": 4, "南京": 4, "杭州": 3, "西安": 3 }, fiveElement: "金" },
+      { text: "INTP（逻辑学家）", weights: { "杭州": 4, "苏州": 3, "北京": 3, "洛阳": 2 }, fiveElement: "金" },
+      { text: "ENTJ（指挥官）", weights: { "北京": 4, "广州": 4, "南京": 3, "西安": 2 }, fiveElement: "土" },
+      { text: "ENTP（辩论家）", weights: { "杭州": 4, "厦门": 3, "广州": 3, "重庆": 2 }, fiveElement: "金" },
+      { text: "INFJ（提倡者）", weights: { "大理": 4, "丽江": 4, "乌镇": 3, "苏州": 2 }, fiveElement: "木" },
+      { text: "INFP（调停者）", weights: { "大理": 4, "阳朔": 4, "桂林": 4, "周庄": 2 }, fiveElement: "木" },
+      { text: "ENFJ（主人公）", weights: { "广州": 4, "厦门": 3, "成都": 3, "三亚": 2 }, fiveElement: "火" },
+      { text: "ENFP（竞选者）", weights: { "丽江": 4, "厦门": 4, "成都": 3, "重庆": 2 }, fiveElement: "木" },
+      { text: "ISTJ（物流师）", weights: { "南京": 4, "洛阳": 4, "北京": 3, "苏州": 3 }, fiveElement: "土" },
+      { text: "ISFJ（守卫者）", weights: { "苏州": 4, "周庄": 4, "乌镇": 4, "洛阳": 2 }, fiveElement: "土" },
+      { text: "ESTJ（总经理）", weights: { "广州": 4, "北京": 4, "南京": 3, "长沙": 2 }, fiveElement: "土" },
+      { text: "ESFJ（执政官）", weights: { "广州": 4, "成都": 3, "长沙": 3, "厦门": 2 }, fiveElement: "火" },
+      { text: "ISTP（鉴赏家）", weights: { "长白山": 4, "哈尔滨": 4, "雪乡": 4, "阳朔": 2, "重庆": 3, "桂林": 3 }, fiveElement: "金" },
+      { text: "ISFP（探险家）", weights: { "大理": 4, "阳朔": 4, "桂林": 3, "北海": 2 }, fiveElement: "水" },
+      { text: "ESTP（企业家）", weights: { "重庆": 4, "长沙": 4, "长白山": 3, "厦门": 2 }, fiveElement: "火" },
+      { text: "ESFP（表演者）", weights: { "三亚": 4, "厦门": 4, "普吉岛": 3, "长沙": 2 }, fiveElement: "火" }
+    ]
+  },
+  {
+    id: 12,
+    question: "你的生肖是？",
+    options: [
+      { text: "鼠", weights: { "杭州": 4, "广州": 4, "北京": 3, "南京": 2 }, fiveElement: "水" },
+      { text: "牛", weights: { "洛阳": 4, "南京": 4, "苏州": 3, "周庄": 2 }, fiveElement: "土" },
+      { text: "虎", weights: { "重庆": 4, "长沙": 4, "长白山": 4, "哈尔滨": 2 }, fiveElement: "火" },
+      { text: "兔", weights: { "厦门": 4, "丽江": 4, "乌镇": 3, "周庄": 2 }, fiveElement: "木" },
+      { text: "龙", weights: { "北京": 4, "西安": 4, "洛阳": 4, "南京": 2 }, fiveElement: "土" },
+      { text: "蛇", weights: { "杭州": 4, "苏州": 4, "南京": 3, "广州": 2 }, fiveElement: "金" },
+      { text: "马", weights: { "成都": 4, "重庆": 4, "大理": 3, "阳朔": 2 }, fiveElement: "火" },
+      { text: "羊", weights: { "大理": 4, "阳朔": 4, "桂林": 4, "周庄": 2 }, fiveElement: "木" },
+      { text: "猴", weights: { "长沙": 4, "广州": 4, "重庆": 3, "厦门": 2 }, fiveElement: "金" },
+      { text: "鸡", weights: { "西安": 4, "洛阳": 4, "北京": 3, "南京": 3 }, fiveElement: "土" },
+      { text: "狗", weights: { "哈尔滨": 4, "长白山": 4, "雪乡": 4, "洛阳": 2, "北京": 3, "西安": 3 }, fiveElement: "土" },
+      { text: "猪", weights: { "三亚": 4, "北海": 4, "普吉岛": 4, "厦门": 2, "大理": 3, "阳朔": 2 }, fiveElement: "水" }
+    ]
+  },
+  {
+    id: 13,
+    question: "你更相信哪种“缘分信号”？",
+    options: [
+      { text: "🔢 连续数字（111/888）", weights: { "杭州": 4, "广州": 3, "南京": 3, "洛阳": 3 }, fiveElement: "金" },
+      { text: "🕯️ 重复梦境提示", weights: { "丽江": 4, "大理": 4, "阳朔": 3, "桂林": 3 }, fiveElement: "木" },
+      { text: "🧭 突然的直觉方向感", weights: { "重庆": 4, "长沙": 3, "成都": 3, "厦门": 2 }, fiveElement: "火" },
+      { text: "🌊 情绪同步与共振", weights: { "厦门": 4, "三亚": 3, "北海": 3, "普吉岛": 3 }, fiveElement: "水" },
+      { text: "🏮 古寺祈福后的巧合", weights: { "西安": 4, "洛阳": 4, "南京": 3, "北京": 3 }, fiveElement: "土" },
+      { text: "📿 随机抽签刚好命中", weights: { "乌镇": 4, "周庄": 4, "苏州": 3, "杭州": 2 }, fiveElement: "水" }
+    ]
+  },
+  {
+    id: 14,
+    question: "拿到好运签后，你最常做的开运动作是？",
+    options: [
+      { text: "📅 立刻规划并执行", weights: { "北京": 4, "南京": 4, "杭州": 3, "西安": 2 }, fiveElement: "土" },
+      { text: "💬 先分享给最在乎的人", weights: { "厦门": 4, "广州": 3, "周庄": 3, "乌镇": 3 }, fiveElement: "木" },
+      { text: "🧳 说走就走短途出发", weights: { "重庆": 4, "长沙": 3, "成都": 3, "丽江": 2 }, fiveElement: "火" },
+      { text: "🧘 冥想/散步沉淀情绪", weights: { "大理": 4, "阳朔": 4, "桂林": 3, "北海": 2 }, fiveElement: "水" },
+      { text: "🧧 去祈福地打卡还愿", weights: { "西安": 4, "洛阳": 4, "南京": 3, "苏州": 2 }, fiveElement: "土" },
+      { text: "📝 记在手账持续跟进", weights: { "杭州": 4, "苏州": 3, "乌镇": 3, "周庄": 3 }, fiveElement: "木" }
+    ]
   }
 ];
 

@@ -212,7 +212,11 @@ function generateWhyFit(userAnswers, resultCity, analysisPoints) {
     "赛博签文命中",
     "同路人偏好命中",
     "人格镜像命中",
-    "生肖八字偏好命中"
+    "生肖八字偏好命中",
+    "MBTI自选命中",
+    "生肖自选命中",
+    "缘分信号命中",
+    "开运动作命中"
   ];
 
   const evidence = [];

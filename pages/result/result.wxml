@@ -66,6 +66,7 @@
               <text class="mbti-name">{{mbti.name}}</text>
             </view>
           </view>
+          <text class="mbti-desc">来源：{{mbti.source === 'self_reported' ? '你的自选MBTI' : '系统推断MBTI'}}</text>
           <text class="mbti-desc">{{mbti.description}}</text>
           <view class="mbti-travel">
             <text class="mbti-travel-label">旅行风格</text>
@@ -86,7 +87,7 @@
               <text class="five-element-value">{{fiveElementLuckyColorsText}}</text>
             </view>
             <view class="five-element-item">
-              <text class="five-element-label">幸运数字</text>
+              <text class="five-element-label">幸运数字范围</text>
               <text class="five-element-value">{{fiveElementLuckyNumbersText}}</text>
             </view>
             <view class="five-element-item">
@@ -111,6 +112,10 @@
             <view class="five-element-item">
               <text class="five-element-label">签文共振</text>
               <text class="five-element-value">{{zodiacProfile.signAxisLabel}}</text>
+            </view>
+            <view class="five-element-item">
+              <text class="five-element-label">开运动作轴</text>
+              <text class="five-element-value">{{zodiacProfile.ritualAxisLabel}}</text>
             </view>
           </view>
         </view>
@@ -155,7 +160,7 @@
               <text class="lucky-value">{{luckyPlan.color}}</text>
             </view>
             <view class="lucky-item">
-              <text class="lucky-label">幸运数字</text>
+              <text class="lucky-label">主幸运数字</text>
               <text class="lucky-value">{{luckyPlan.number}}</text>
             </view>
             <view class="lucky-item">
