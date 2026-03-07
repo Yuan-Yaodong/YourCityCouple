@@ -1,63 +1,123 @@
-// 问题数据 - 24个城市6道题版本
+// 问题数据 - 24个城市10道题版本
 const questions = [
   {
     id: 1,
     question: "新年第一顿想吃啥？",
     options: [
-      { text: "🔥 火锅", weights: { "成都": 3, "重庆": 3, "长沙": 3 }, fiveElement: "火" },
-      { text: "🦐 海鲜", weights: { "三亚": 3, "厦门": 3, "北海": 3, "普吉岛": 2 }, fiveElement: "水" },
-      { text: "🥘 粤菜", weights: { "广州": 3 }, fiveElement: "土" },
-      { text: "🥟 东北菜", weights: { "哈尔滨": 3, "雪乡": 3, "长白山": 3 }, fiveElement: "土" }
+      { text: "🔥 火锅局开场", weights: { "成都": 4, "重庆": 3, "长沙": 3 }, fiveElement: "火" },
+      { text: "🦐 海鲜自由", weights: { "三亚": 4, "厦门": 4, "北海": 4, "普吉岛": 3 }, fiveElement: "水" },
+      { text: "🥘 粤菜早茶慢慢吃", weights: { "广州": 4, "苏州": 1, "杭州": 1 }, fiveElement: "土" },
+      { text: "🥟 东北硬菜热乎乎", weights: { "哈尔滨": 4, "雪乡": 4, "长白山": 3 }, fiveElement: "土" },
+      { text: "🍣 清爽日料/轻食", weights: { "杭州": 3, "苏州": 3, "厦门": 2, "乌镇": 2 }, fiveElement: "木" },
+      { text: "🥗 素食养生锅", weights: { "大理": 3, "丽江": 2, "桂林": 2, "阳朔": 2 }, fiveElement: "木" }
     ]
   },
   {
     id: 2,
     question: "偏好哪种旅行方式？",
     options: [
-      { text: "📸 打卡网红地", weights: { "重庆": 3, "西安": 3, "厦门": 3, "长沙": 2 }, fiveElement: "火" },
-      { text: "🏖️ 度假放松", weights: { "三亚": 3, "厦门": 3, "北海": 3, "普吉岛": 3 }, fiveElement: "水" },
-      { text: "⛷️ 冰雪冒险", weights: { "哈尔滨": 3, "雪乡": 3, "长白山": 3 }, fiveElement: "金" },
-      { text: "🚶 随意漫步", weights: { "大理": 3, "丽江": 3, "桂林": 2, "阳朔": 2, "杭州": 3, "苏州": 2, "乌镇": 2, "周庄": 2 }, fiveElement: "木" }
+      { text: "📸 打卡网红地", weights: { "重庆": 3, "西安": 4, "厦门": 3, "长沙": 3 }, fiveElement: "火" },
+      { text: "🏖️ 度假放松", weights: { "三亚": 4, "厦门": 3, "北海": 4, "普吉岛": 4 }, fiveElement: "水" },
+      { text: "⛷️ 冰雪冒险", weights: { "哈尔滨": 4, "雪乡": 4, "长白山": 4 }, fiveElement: "金" },
+      { text: "🚶 随意漫步", weights: { "大理": 4, "丽江": 4, "杭州": 3, "苏州": 3, "乌镇": 3, "周庄": 3 }, fiveElement: "木" },
+      { text: "👨‍👩‍👧 亲友轻松游", weights: { "广州": 3, "北京": 3, "南京": 3, "洛阳": 3, "杭州": 2 }, fiveElement: "土" },
+      { text: "🌃 夜生活社交局", weights: { "长沙": 4, "重庆": 2, "成都": 3, "广州": 3, "丽江": 2 }, fiveElement: "火" }
     ]
   },
   {
     id: 3,
     question: "喜欢什么天气？",
     options: [
-      { text: "❄️ 越冷越好", weights: { "哈尔滨": 3, "雪乡": 3, "长白山": 3 }, fiveElement: "水" },
-      { text: "☀️ 阳光温暖", weights: { "三亚": 3, "厦门": 3, "北海": 3, "普吉岛": 3, "广州": 2 }, fiveElement: "火" },
-      { text: "🌸 不冷不热", weights: { "杭州": 3, "苏州": 3, "大理": 2, "成都": 2, "桂林": 2, "阳朔": 2 }, fiveElement: "木" },
-      { text: "🌧️ 下雨也行", weights: { "杭州": 3, "大理": 2, "厦门": 2, "丽江": 2, "桂林": 2, "阳朔": 2 }, fiveElement: "水" }
+      { text: "❄️ 越冷越好", weights: { "哈尔滨": 4, "雪乡": 4, "长白山": 4 }, fiveElement: "水" },
+      { text: "☀️ 阳光温暖", weights: { "三亚": 4, "厦门": 2, "北海": 4, "普吉岛": 4, "广州": 2 }, fiveElement: "火" },
+      { text: "🌸 不冷不热", weights: { "杭州": 4, "苏州": 4, "大理": 3, "成都": 2, "桂林": 2, "阳朔": 2 }, fiveElement: "木" },
+      { text: "🌧️ 下雨也行", weights: { "杭州": 3, "大理": 2, "厦门": 2, "丽江": 2, "乌镇": 2, "周庄": 2 }, fiveElement: "水" },
+      { text: "🌬️ 海风微咸", weights: { "北海": 3, "厦门": 3, "三亚": 3, "普吉岛": 3 }, fiveElement: "水" },
+      { text: "🏔️ 高原晴空", weights: { "丽江": 3, "大理": 3, "桂林": 4, "阳朔": 4, "长白山": 2 }, fiveElement: "木" }
     ]
   },
   {
     id: 4,
     question: "旅行中最在意什么？",
     options: [
-      { text: "📷 拍照出片", weights: { "厦门": 3, "雪乡": 3, "三亚": 2, "杭州": 2, "阳朔": 2, "乌镇": 2 }, fiveElement: "火" },
-      { text: "🍜 美食吃爽", weights: { "成都": 3, "重庆": 3, "广州": 3, "长沙": 3 }, fiveElement: "土" },
-      { text: "🧘 放松疗愈", weights: { "大理": 3, "丽江": 3, "三亚": 2, "普吉岛": 2 }, fiveElement: "木" },
-      { text: "🏛️ 文化历史", weights: { "西安": 3, "北京": 3, "南京": 3, "洛阳": 3, "杭州": 2, "苏州": 2 }, fiveElement: "土" }
+      { text: "📷 拍照出片", weights: { "厦门": 3, "雪乡": 4, "三亚": 3, "杭州": 3, "阳朔": 4, "乌镇": 4 }, fiveElement: "火" },
+      { text: "🍜 美食吃爽", weights: { "成都": 4, "重庆": 3, "广州": 4, "长沙": 4 }, fiveElement: "土" },
+      { text: "🧘 放松疗愈", weights: { "大理": 4, "丽江": 4, "三亚": 3, "普吉岛": 3, "北海": 2 }, fiveElement: "木" },
+      { text: "🏛️ 文化历史", weights: { "西安": 4, "北京": 4, "南京": 4, "洛阳": 4, "苏州": 2 }, fiveElement: "土" },
+      { text: "💸 预算友好", weights: { "长沙": 2, "成都": 2, "重庆": 2, "洛阳": 2, "桂林": 4 }, fiveElement: "土" },
+      { text: "💞 缘分社交", weights: { "丽江": 3, "厦门": 2, "重庆": 2, "乌镇": 3, "周庄": 3 }, fiveElement: "火" }
     ]
   },
   {
     id: 5,
     question: "用哪个词形容你的新年？",
     options: [
-      { text: "🎆 热闹", weights: { "重庆": 3, "广州": 3, "西安": 2, "长沙": 3, "北京": 2 }, fiveElement: "火" },
-      { text: "✨ 浪漫", weights: { "三亚": 3, "厦门": 3, "丽江": 2, "普吉岛": 2, "乌镇": 2 }, fiveElement: "木" },
-      { text: "😌 悠闲", weights: { "大理": 3, "丽江": 3, "桂林": 2, "阳朔": 2, "杭州": 2, "苏州": 2, "乌镇": 2, "周庄": 2 }, fiveElement: "木" },
-      { text: "🧨 刺激", weights: { "哈尔滨": 3, "雪乡": 3, "长白山": 2, "重庆": 2 }, fiveElement: "金" }
+      { text: "🎆 热闹", weights: { "重庆": 4, "广州": 4, "西安": 3, "长沙": 4, "北京": 3 }, fiveElement: "火" },
+      { text: "✨ 浪漫", weights: { "三亚": 4, "厦门": 3, "丽江": 3, "普吉岛": 3, "乌镇": 2 }, fiveElement: "木" },
+      { text: "😌 悠闲", weights: { "大理": 3, "丽江": 2, "桂林": 4, "阳朔": 4, "杭州": 3, "苏州": 3, "周庄": 4 }, fiveElement: "木" },
+      { text: "🧨 刺激", weights: { "哈尔滨": 4, "雪乡": 4, "长白山": 3, "重庆": 3 }, fiveElement: "金" },
+      { text: "🪷 疗愈", weights: { "大理": 3, "北海": 2, "苏州": 2, "乌镇": 4, "周庄": 4 }, fiveElement: "水" },
+      { text: "🔮 开运", weights: { "洛阳": 3, "西安": 3, "北京": 2, "杭州": 2, "南京": 2 }, fiveElement: "金" }
     ]
   },
   {
     id: 6,
     question: "新年最想实现什么愿望？",
     options: [
-      { text: "💕 收获爱情", weights: { "厦门": 3, "丽江": 3, "三亚": 2, "大理": 2, "普吉岛": 2 } },
-      { text: "💰 暴富搞钱", weights: { "广州": 3, "杭州": 3, "重庆": 2, "北京": 2, "长沙": 2 } },
-      { text: "💪 身体健康", weights: { "大理": 3, "丽江": 3, "三亚": 2, "杭州": 2, "阳朔": 2 } },
-      { text: "✨ 转运开挂", weights: { "哈尔滨": 3, "雪乡": 3, "长白山": 2, "西安": 2, "北京": 2, "洛阳": 2 } }
+      { text: "💕 收获爱情", weights: { "厦门": 3, "丽江": 3, "三亚": 3, "大理": 3, "普吉岛": 3 }, fiveElement: "火" },
+      { text: "💰 暴富搞钱", weights: { "广州": 4, "杭州": 4, "重庆": 2, "北京": 3, "长沙": 3 }, fiveElement: "金" },
+      { text: "💪 身体健康", weights: { "大理": 4, "丽江": 3, "三亚": 3, "杭州": 2, "阳朔": 2 }, fiveElement: "木" },
+      { text: "✨ 转运开挂", weights: { "哈尔滨": 4, "雪乡": 4, "长白山": 3, "西安": 3, "北京": 2, "洛阳": 2 }, fiveElement: "金" },
+      { text: "🚀 职业成长", weights: { "北京": 4, "杭州": 3, "广州": 3, "南京": 3, "西安": 2 }, fiveElement: "土" },
+      { text: "🏠 家庭团圆", weights: { "洛阳": 3, "南京": 3, "苏州": 3, "周庄": 4, "乌镇": 4 }, fiveElement: "土" }
+    ]
+  },
+  {
+    id: 7,
+    question: "赛博算命过程完成：你收到哪条算法签文？",
+    options: [
+      { text: "🪙 财神协议签（财运增强）", weights: { "杭州": 4, "广州": 4, "北京": 3, "南京": 5, "洛阳": 5 }, fiveElement: "金" },
+      { text: "💘 桃花共振签（缘分上升）", weights: { "丽江": 4, "厦门": 4, "大理": 4, "乌镇": 3, "周庄": 3 }, fiveElement: "木" },
+      { text: "🧭 冒险开挂签（探索加速）", weights: { "长白山": 4, "哈尔滨": 3, "雪乡": 3, "重庆": 3, "桂林": 3, "阳朔": 3 }, fiveElement: "火" },
+      { text: "🌐 云端疗愈签（身心重启）", weights: { "三亚": 4, "北海": 5, "普吉岛": 5, "苏州": 3, "成都": 3 }, fiveElement: "水" },
+      { text: "🏮 古运文脉签（文化加成）", weights: { "西安": 4, "北京": 3, "南京": 3, "洛阳": 4, "苏州": 2 }, fiveElement: "土" },
+      { text: "🍜 人间烟火签（生活充电）", weights: { "成都": 4, "长沙": 4, "重庆": 3, "广州": 3, "杭州": 2 }, fiveElement: "火" }
+    ]
+  },
+  {
+    id: 8,
+    question: "旅途默契题：你更想遇到哪类同路人？",
+    options: [
+      { text: "🍜 一起钻小巷找神店的烟火搭子", weights: { "成都": 4, "重庆": 4, "长沙": 5, "广州": 3 }, fiveElement: "火" },
+      { text: "🌊 沿海散步听风聊天的治愈搭子", weights: { "三亚": 3, "北海": 3, "普吉岛": 3, "桂林": 5, "阳朔": 5, "大理": 2 }, fiveElement: "水" },
+      { text: "🏮 在古镇慢慢逛到天黑的慢游搭子", weights: { "苏州": 4, "乌镇": 5, "周庄": 6, "杭州": 3, "丽江": 2 }, fiveElement: "木" },
+      { text: "🏛️ 边走边聊历史故事的文化搭子", weights: { "西安": 5, "北京": 4, "南京": 5, "洛阳": 5, "哈尔滨": 2 }, fiveElement: "土" },
+      { text: "📷 会互拍互夸、一起出片的内容搭子", weights: { "厦门": 3, "杭州": 3, "重庆": 2, "丽江": 2, "乌镇": 2 }, fiveElement: "木" },
+      { text: "🎿 说冲就冲、挑战拉满的热血搭子", weights: { "长白山": 6, "哈尔滨": 5, "雪乡": 5, "重庆": 4, "阳朔": 4 }, fiveElement: "金" }
+    ]
+  },
+  {
+    id: 9,
+    question: "人格镜像题：你在陌生城市最像哪种角色？",
+    options: [
+      { text: "🧭 规划指挥官（路线先行）", weights: { "北京": 4, "西安": 4, "杭州": 3, "南京": 3 }, fiveElement: "土" },
+      { text: "🎨 氛围感艺术家（感受优先）", weights: { "丽江": 4, "大理": 4, "厦门": 3, "乌镇": 3 }, fiveElement: "木" },
+      { text: "⚡ 即兴冒险者（说走就走）", weights: { "重庆": 4, "长沙": 4, "长白山": 3, "哈尔滨": 3 }, fiveElement: "火" },
+      { text: "🤝 连接型社交家（搭子雷达）", weights: { "广州": 4, "厦门": 3, "重庆": 2, "三亚": 2, "周庄": 2 }, fiveElement: "火" },
+      { text: "🌿 疗愈观察者（慢节奏沉浸）", weights: { "大理": 3, "阳朔": 5, "桂林": 5, "苏州": 3, "北海": 2 }, fiveElement: "水" },
+      { text: "🏯 文化探索者（故事收藏）", weights: { "洛阳": 5, "西安": 5, "南京": 5, "北京": 4, "苏州": 4 }, fiveElement: "土" }
+    ]
+  },
+  {
+    id: 10,
+    question: "生肖/八字偏好题：你更相信哪类新年运势锚点？",
+    options: [
+      { text: "🐲 龙系开运（抬头见喜）", weights: { "北京": 4, "西安": 3, "重庆": 3, "洛阳": 3 }, fiveElement: "土" },
+      { text: "🐯 木火生发（行动转运）", weights: { "长沙": 4, "成都": 4, "重庆": 3, "丽江": 2 }, fiveElement: "火" },
+      { text: "🐍 金水守财（稳中求进）", weights: { "杭州": 4, "广州": 4, "南京": 3, "苏州": 3 }, fiveElement: "金" },
+      { text: "🐰 桃花和合（缘分优先）", weights: { "丽江": 3, "厦门": 3, "大理": 3, "乌镇": 3, "周庄": 2 }, fiveElement: "木" },
+      { text: "🐟 水气养心（疗愈充电）", weights: { "三亚": 5, "北海": 5, "普吉岛": 5, "阳朔": 4, "厦门": 2, "大理": 2, "桂林": 3 }, fiveElement: "水" },
+      { text: "🧱 土气安家（稳定长线）", weights: { "洛阳": 5, "南京": 5, "苏州": 4, "周庄": 4, "乌镇": 3, "哈尔滨": 3, "北京": 2 }, fiveElement: "土" }
     ]
   }
 ];
@@ -132,12 +192,16 @@ let showExtendedDetails = false;
 let shareVariant = 'warm';
 
 const ENCOURAGEMENT_MAP = [
-  ['火力全开，状态拉满！', '品味在线，生活感知力很强！', '精致感拉满，审美很稳！', '爽快直接，气场很足！'],
-  ['会玩会逛，镜头感超强！', '很会享受，松弛感拿捏了！', '冒险值爆表，勇气满分！', '节奏舒服，你很会生活！'],
-  ['你有自己的舒适区，很棒！', '阳光心态，能量很正！', '平衡能力很强，稳稳的！', '诗意感知力上线，超会感受！'],
-  ['你很会捕捉美好瞬间！', '人间烟火鉴赏家就是你！', '你很懂得照顾自己！', '你的精神世界很丰富！'],
-  ['你自带节日氛围感！', '浪漫雷达已开启！', '松弛感天花板！', '挑战精神满分！'],
-  ['幸福感优先，很会爱自己！', '目标感很强，执行力在线！', '健康意识拉满，超赞！', '逆风翻盘气质，冲就对了！']
+  ['火力全开，状态拉满！', '品味在线，生活感知力很强！', '精致感拉满，审美很稳！', '爽快直接，气场很足！', '清爽克制，节奏很高级！', '自律温柔，你很会照顾自己！'],
+  ['会玩会逛，镜头感超强！', '很会享受，松弛感拿捏了！', '冒险值爆表，勇气满分！', '节奏舒服，你很会生活！', '照顾型人格上线，超靠谱！', '社交电量满格，气氛王！'],
+  ['你有自己的舒适区，很棒！', '阳光心态，能量很正！', '平衡能力很强，稳稳的！', '诗意感知力上线，超会感受！', '海风体质，心态很通透！', '高原晴空感，灵魂很自由！'],
+  ['你很会捕捉美好瞬间！', '人间烟火鉴赏家就是你！', '你很懂得照顾自己！', '你的精神世界很丰富！', '理性又务实，生活掌控感在线！', '缘分感知力很强，链接能力优秀！'],
+  ['你自带节日氛围感！', '浪漫雷达已开启！', '松弛感天花板！', '挑战精神满分！', '治愈力很强，和你相处很舒服！', '开运磁场启动，今天会有惊喜！'],
+  ['幸福感优先，很会爱自己！', '目标感很强，执行力在线！', '健康意识拉满，超赞！', '逆风翻盘气质，冲就对了！', '成长心态在线，潜力很强！', '重视家人与关系，稳定感满分！'],
+  ['财运频道已连接，气场很稳！', '缘分磁场拉满，今天会有惊喜！', '探索模式激活，勇气值在线！', '疗愈系统启动，心态很高级！', '文脉能量加成，灵感稳定输出！', '人间烟火值上升，生活会更有滋味！'],
+  ['你很会找搭子，社交雷达灵敏！', '你和温柔世界双向奔赴！', '慢生活审美在线，超级会选！', '文化浓度拉满，灵魂很有厚度！', '共创力很强，表达欲和行动力都在线！', '挑战默契拉满，跟你组队很爽！'],
+  ['结构感很强，做事很稳！', '审美和感受力都很在线！', '行动派气质拉满，冲劲十足！', '社交张力很强，容易被喜欢！', '观察力细腻，情绪管理优秀！', '文化理解力很深，格局感很强！'],
+  ['开运信号很强，状态向上！', '执行力+转运力双加成！', '稳健搞钱思维，长期主义选手！', '缘分运势在线，磁场很柔和！', '疗愈频段打开，心态非常稳！', '安定能量充足，抗压性很强！']
 ];
 
 const LUCKY_SIGNS = [
@@ -146,6 +210,35 @@ const LUCKY_SIGNS = [
   '好运签：一个主动的问候，会带来不错的缘分。',
   '好运签：今天的你，适合开始一件想了很久的小事。'
 ];
+
+function buildCityBalanceContext() {
+  const exposure = {};
+  cityList.forEach((city) => { exposure[city] = 0; });
+  questions.forEach((question) => {
+    const options = Array.isArray(question && question.options) ? question.options : [];
+    options.forEach((option) => {
+      const weights = option && option.weights ? option.weights : {};
+      Object.keys(weights).forEach((city) => {
+        if (exposure[city] !== undefined) {
+          exposure[city] += Number(weights[city] || 0);
+        }
+      });
+    });
+  });
+  const exposureValues = Object.values(exposure).filter((v) => v > 0);
+  const avgExposure = exposureValues.length
+    ? exposureValues.reduce((sum, v) => sum + v, 0) / exposureValues.length
+    : 1;
+  const factors = {};
+  cityList.forEach((city) => {
+    const cityExposure = exposure[city] > 0 ? exposure[city] : avgExposure;
+    const rawFactor = Math.pow(avgExposure / cityExposure, 0.32);
+    factors[city] = Number(Math.min(1.18, Math.max(0.88, rawFactor)).toFixed(3));
+  });
+  return { exposure, avgExposure, factors };
+}
+
+const CITY_BALANCE_CONTEXT = buildCityBalanceContext();
 
 function startTest() {
   userAnswers = [];
@@ -180,6 +273,12 @@ function renderQuiz() {
   const question = questions[currentQuestion];
   document.getElementById('question-num').textContent = `第${currentQuestion + 1}题`;
   document.getElementById('question-text').textContent = question.question;
+  const sourceEl = document.getElementById('question-source');
+  const sourceText = buildQuestionSourceText(currentQuestion, userAnswers);
+  if (sourceEl) {
+    sourceEl.textContent = sourceText;
+    sourceEl.style.display = sourceText ? 'block' : 'none';
+  }
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
   document.getElementById('progress-inner').style.width = progress + '%';
@@ -195,6 +294,25 @@ function renderQuiz() {
     btn.onclick = () => selectOption(index);
     optionsList.appendChild(btn);
   });
+}
+
+function buildQuestionSourceText(questionIndex, answers) {
+  if (questionIndex !== 6) return '';
+  const history = Array.isArray(answers) ? answers : [];
+  const baseAnswers = history.slice(0, 6);
+  const base = `yc_${questionIndex}_${baseAnswers.join('-')}`;
+  let hash = 0;
+  for (let i = 0; i < base.length; i++) {
+    hash = (hash << 5) - hash + base.charCodeAt(i);
+    hash |= 0;
+  }
+  const seq = Math.abs(hash);
+  if (questionIndex === 6) {
+    const signLabels = ['财神协议签', '桃花共振签', '冒险开挂签', '云端疗愈签', '古运文脉签', '人间烟火签'];
+    const sign = signLabels[seq % signLabels.length];
+    const energy = 60 + (seq % 40);
+    return `赛博算命来源：系统仅基于你前6题的本地偏好向量计算，主签建议「${sign}」，当前能量值 ${energy}（同样答案下固定不变）。`;
+  }
 }
 
 function selectOption(optionIndex) {
@@ -249,26 +367,148 @@ function closeLuckyModal() {
 
 function calculateResult(answers) {
   const scores = {};
+  const hitCounts = {};
+  const tieFineScores = {};
+  const affinityBonusScores = {};
   cityList.forEach(city => { scores[city] = 0; });
+  cityList.forEach(city => { hitCounts[city] = 0; });
+  cityList.forEach(city => { tieFineScores[city] = 0; });
+  cityList.forEach(city => { affinityBonusScores[city] = { mbtiBonus: 0, zodiacBonus: 0, total: 0 }; });
+
+  const hashValue = (input) => {
+    let hash = 0;
+    const str = String(input || '');
+    for (let i = 0; i < str.length; i++) {
+      hash = (hash << 5) - hash + str.charCodeAt(i);
+      hash |= 0;
+    }
+    return Math.abs(hash);
+  };
 
   answers.forEach((answer, qIndex) => {
     const question = questions[qIndex];
     const option = question && question.options ? question.options[answer] : null;
     if (!option || !option.weights) return;
     Object.keys(option.weights).forEach(city => {
-      if (scores[city] !== undefined) scores[city] += option.weights[city];
+      if (scores[city] !== undefined) {
+        scores[city] += option.weights[city];
+        hitCounts[city] += 1;
+        tieFineScores[city] += (hashValue(`${city}_${qIndex}_${answer}`) % 7) / 1000;
+      }
     });
   });
 
+  const mbti = calculateMBTI(answers || []);
+  const zodiacProfile = calculateZodiacProfile(answers || []);
+  cityList.forEach((city) => {
+    const affinity = calculateCityAffinityBonus(city, mbti, zodiacProfile);
+    affinityBonusScores[city] = affinity;
+    scores[city] += affinity.total;
+  });
+
+  const answerSeed = Array.isArray(answers) ? answers.join('-') : '';
+
   const sortedCities = Object.keys(scores)
-    .map(city => ({ city, score: scores[city] }))
-    .sort((a, b) => b.score - a.score);
+    .map(city => ({
+      city,
+      score: Number(scores[city].toFixed(3)),
+      balanceFactor: CITY_BALANCE_CONTEXT.factors[city] || 1,
+      balancedScore: Number((scores[city] * (CITY_BALANCE_CONTEXT.factors[city] || 1)).toFixed(3)),
+      effectiveScore: Number(((scores[city] * (CITY_BALANCE_CONTEXT.factors[city] || 1)) + tieFineScores[city]).toFixed(3)),
+      hitCount: hitCounts[city],
+      tieBreaker: hashValue(`${answerSeed}_${city}`)
+    }))
+    .sort((a, b) => {
+      if (b.effectiveScore !== a.effectiveScore) return b.effectiveScore - a.effectiveScore;
+      if (b.hitCount !== a.hitCount) return b.hitCount - a.hitCount;
+      return b.tieBreaker - a.tieBreaker;
+    });
 
   return {
     city: sortedCities[0] ? sortedCities[0].city : cityList[0],
-    score: sortedCities[0] ? sortedCities[0].score : 0,
+    score: sortedCities[0] ? sortedCities[0].effectiveScore : 0,
     allScores: scores,
+    balanceFactors: CITY_BALANCE_CONTEXT.factors,
+    tieFineScores,
+    hitCounts,
+    affinityBonusScores,
+    zodiacProfile,
+    mbtiType: mbti && mbti.type ? mbti.type : '',
     runnerUp: sortedCities[1] || null
+  };
+}
+
+function calculateZodiacProfile(answers) {
+  const q10 = Number(answers[9] || 0);
+  const q7 = Number(answers[6] || 0);
+  const zodiacConfigs = [
+    { animal: '龙', label: '龙系开运', focusAxis: 'rise', favoredElements: ['土', '火'], favoredCategories: ['历史文化', '火热美食'], compatibleSignAxes: ['culture', 'lifestyle'] },
+    { animal: '虎', label: '木火生发', focusAxis: 'action', favoredElements: ['木', '火'], favoredCategories: ['火热美食', '西南秘境'], compatibleSignAxes: ['adventure', 'lifestyle'] },
+    { animal: '蛇', label: '金水守财', focusAxis: 'wealth', favoredElements: ['金', '水'], favoredCategories: ['江南诗意', '历史文化', '海岛度假'], compatibleSignAxes: ['wealth', 'culture'] },
+    { animal: '兔', label: '桃花和合', focusAxis: 'relation', favoredElements: ['木', '水', '火'], favoredCategories: ['江南诗意', '西南秘境', '海岛度假'], compatibleSignAxes: ['relation', 'healing'] },
+    { animal: '鱼', label: '水气养心', focusAxis: 'healing', favoredElements: ['水', '木'], favoredCategories: ['海岛度假', '西南秘境', '江南诗意'], compatibleSignAxes: ['healing', 'relation'] },
+    { animal: '牛', label: '土气安家', focusAxis: 'stability', favoredElements: ['土', '金'], favoredCategories: ['历史文化', '江南诗意'], compatibleSignAxes: ['culture', 'lifestyle'] }
+  ];
+  const signAxes = ['wealth', 'relation', 'adventure', 'healing', 'culture', 'lifestyle'];
+  const axisLabels = {
+    rise: '开运上扬',
+    action: '行动突破',
+    wealth: '财运守成',
+    relation: '缘分和合',
+    healing: '疗愈养心',
+    stability: '安稳长线',
+    culture: '文化积累',
+    lifestyle: '生活充电',
+    adventure: '探索冒险'
+  };
+  const base = zodiacConfigs[q10] || zodiacConfigs[0];
+  const signAxis = signAxes[q7] || signAxes[0];
+  return {
+    ...base,
+    q10Index: q10,
+    signAxis,
+    focusAxisLabel: axisLabels[base.focusAxis] || base.focusAxis,
+    signAxisLabel: axisLabels[signAxis] || signAxis
+  };
+}
+
+function calculateCityAffinityBonus(cityName, mbti, zodiacProfile) {
+  const detail = cities[cityName] || {};
+  const category = detail.category || '';
+  const wuxing = detail.wuxing || '';
+  const tags = Array.isArray(detail.tags) ? detail.tags : [];
+  const mbtiType = mbti && mbti.type ? mbti.type : 'ENFP';
+  let mbtiBonus = 0;
+  let zodiacBonus = 0;
+
+  if (mbtiType[0] === 'E' && (category === '火热美食' || tags.includes('夜生活') || tags.includes('美食'))) mbtiBonus += 0.4;
+  if (mbtiType[0] === 'I' && ['江南诗意', '西南秘境', '海岛度假'].includes(category)) mbtiBonus += 0.4;
+  if (mbtiType[1] === 'N' && ['西南秘境', '江南诗意', '历史文化'].includes(category)) mbtiBonus += 0.3;
+  if (mbtiType[1] === 'S' && ['火热美食', '海岛度假', '冰雪奇缘'].includes(category)) mbtiBonus += 0.3;
+  if (mbtiType[2] === 'T' && (['金', '土'].includes(wuxing) || category === '历史文化')) mbtiBonus += 0.3;
+  if (mbtiType[2] === 'F' && (['木', '水'].includes(wuxing) || category === '西南秘境')) mbtiBonus += 0.3;
+  if (mbtiType[3] === 'J' && (category === '历史文化' || ['北京', '南京', '洛阳', '西安'].includes(cityName))) mbtiBonus += 0.3;
+  if (mbtiType[3] === 'P' && ['海岛度假', '西南秘境', '江南诗意'].includes(category)) mbtiBonus += 0.3;
+
+  if (zodiacProfile && Array.isArray(zodiacProfile.favoredElements) && zodiacProfile.favoredElements.includes(wuxing)) zodiacBonus += 0.8;
+  if (zodiacProfile && Array.isArray(zodiacProfile.favoredCategories) && zodiacProfile.favoredCategories.includes(category)) zodiacBonus += 0.6;
+
+  const cityAxesByCategory = {
+    '火热美食': ['lifestyle', 'action'],
+    '海岛度假': ['healing', 'relation'],
+    '冰雪奇缘': ['adventure', 'action'],
+    '西南秘境': ['healing', 'relation'],
+    '历史文化': ['culture', 'stability'],
+    '江南诗意': ['relation', 'healing']
+  };
+  const cityAxes = cityAxesByCategory[category] || [];
+  if (zodiacProfile && zodiacProfile.focusAxis && cityAxes.includes(zodiacProfile.focusAxis)) zodiacBonus += 0.25;
+  if (zodiacProfile && Array.isArray(zodiacProfile.compatibleSignAxes) && zodiacProfile.compatibleSignAxes.includes(zodiacProfile.signAxis)) zodiacBonus += 0.25;
+
+  return {
+    mbtiBonus: Number(mbtiBonus.toFixed(2)),
+    zodiacBonus: Number(zodiacBonus.toFixed(2)),
+    total: Number((mbtiBonus + zodiacBonus).toFixed(2))
   };
 }
 
@@ -305,17 +545,24 @@ function calculateMBTI(answers) {
   else if (answers[1] === 1) iScore += 1;
   else if (answers[1] === 2) eScore += 2;
   else if (answers[1] === 3) iScore += 2;
+  else if (answers[1] === 4) iScore += 2;
+  else if (answers[1] === 5) eScore += 2;
   if (answers[5] === 0) eScore += 1;
   else if (answers[5] === 1) iScore += 1;
   else if (answers[5] === 2) iScore += 1;
   else if (answers[5] === 3) eScore += 1;
+  else if (answers[5] === 4) eScore += 1;
+  else if (answers[5] === 5) iScore += 1;
   const EI = eScore >= iScore ? 'E' : 'I';
 
   let sScore = 0; let nScore = 0;
   if (answers[0] === 0 || answers[0] === 1 || answers[0] === 3) sScore += 1;
   else if (answers[0] === 2) nScore += 1;
+  else if (answers[0] === 4 || answers[0] === 5) nScore += 1;
   if (answers[2] === 0 || answers[2] === 1) sScore += 1;
   else if (answers[2] === 2 || answers[2] === 3) nScore += 1;
+  else if (answers[2] === 4) sScore += 1;
+  else if (answers[2] === 5) nScore += 1;
   const SN = sScore >= nScore ? 'S' : 'N';
 
   let tScore = 0; let fScore = 0;
@@ -323,19 +570,26 @@ function calculateMBTI(answers) {
   else if (answers[3] === 1) tScore += 2;
   else if (answers[3] === 2) fScore += 2;
   else if (answers[3] === 3) fScore += 1;
+  else if (answers[3] === 4) tScore += 2;
+  else if (answers[3] === 5) fScore += 2;
   if (answers[5] === 0) fScore += 2;
   else if (answers[5] === 1) tScore += 2;
   else if (answers[5] === 2) fScore += 2;
   else if (answers[5] === 3) tScore += 1;
+  else if (answers[5] === 4) tScore += 1;
+  else if (answers[5] === 5) fScore += 1;
   const TF = tScore >= fScore ? 'T' : 'F';
 
   let jScore = 0; let pScore = 0;
   if (answers[2] === 0 || answers[2] === 1) jScore += 1;
   else if (answers[2] === 2 || answers[2] === 3) pScore += 1;
+  else if (answers[2] === 4 || answers[2] === 5) pScore += 1;
   if (answers[4] === 0) jScore += 2;
   else if (answers[4] === 1) jScore += 1;
   else if (answers[4] === 2) pScore += 2;
   else if (answers[4] === 3) pScore += 2;
+  else if (answers[4] === 4) pScore += 1;
+  else if (answers[4] === 5) jScore += 1;
   const JP = jScore >= pScore ? 'J' : 'P';
 
   const type = EI + SN + TF + JP;
@@ -366,40 +620,69 @@ function analyzeUserPreferences(answers, resultCity) {
     { text: "热情似火", desc: "喜欢火锅的你，性格热烈直接，爱憎分明" },
     { text: "追求品质", desc: "热爱海鲜的你，注重生活品质，懂得享受" },
     { text: "精致生活", desc: "偏爱粤菜的你，追求精致与格调" },
-    { text: "豪爽大气", desc: "喜欢东北菜的你，为人豪爽，不拘小节" }
+    { text: "豪爽大气", desc: "喜欢东北菜的你，为人豪爽，不拘小节" },
+    { text: "清爽理性", desc: "偏爱清爽饮食的你，重视平衡与秩序感" },
+    { text: "温和自律", desc: "偏好养生风格的你，重视长期稳定与身心状态" }
   ][answers[0] || 0];
   const travel = [
     { text: "打卡达人", desc: "你热爱探索网红地点，喜欢分享精彩瞬间" },
     { text: "度假玩家", desc: "你懂得放松自己，追求舒适的旅行体验" },
     { text: "冒险勇者", desc: "你喜欢挑战未知，追求刺激与新鲜感" },
-    { text: "漫步诗人", desc: "你喜欢随性自由，享受旅途中的慢时光" }
+    { text: "漫步诗人", desc: "你喜欢随性自由，享受旅途中的慢时光" },
+    { text: "关系连接者", desc: "你重视陪伴和关系质量，偏好轻松而有温度的旅程" },
+    { text: "夜色社交家", desc: "你在人群和烟火中快速充电，社交感知力很强" }
   ][answers[1] || 0];
   const priority = [
     { text: "影像记录", desc: "你热爱用镜头捕捉旅途中的美好" },
     { text: "美食探索", desc: "你把品尝美食作为旅行的重中之重" },
     { text: "心灵疗愈", desc: "你追求身心的放松与平静" },
-    { text: "文化探寻", desc: "你热爱历史与文化的深度探索" }
+    { text: "文化探寻", desc: "你热爱历史与文化的深度探索" },
+    { text: "效率掌控", desc: "你在意预算和节奏控制，追求务实高效的体验" },
+    { text: "缘分连接", desc: "你重视人与人的化学反应，偏好有故事的相遇" }
   ][answers[3] || 0];
   const vibe = [
     { text: "热闹欢腾", desc: "你喜欢热闹非凡的新年氛围" },
     { text: "浪漫温馨", desc: "你向往浪漫的新年时光" },
     { text: "悠闲自在", desc: "你喜欢轻松悠闲的节日节奏" },
-    { text: "刺激精彩", desc: "你追求精彩刺激的新年体验" }
+    { text: "刺激精彩", desc: "你追求精彩刺激的新年体验" },
+    { text: "安稳疗愈", desc: "你需要可持续的舒适感，偏好稳定而温柔的节日状态" },
+    { text: "开运感知", desc: "你对运势与信号很敏感，愿意主动创造好状态" }
   ][answers[4] || 0];
   const wish = [
     { text: "收获爱情", desc: "你渴望在新的一年里收获甜蜜的爱情" },
     { text: "暴富搞钱", desc: "你期待财源滚滚在新的一年里实现财务自由" },
     { text: "身体健康", desc: "你希望新的一年里身体棒棒，健康平安" },
-    { text: "转运开挂", desc: "你渴望在新的一年里转运逆袭，走上人生巅峰" }
+    { text: "转运开挂", desc: "你渴望在新的一年里转运逆袭，走上人生巅峰" },
+    { text: "职业成长", desc: "你重视长期成长路径，希望在事业上实现突破升级" },
+    { text: "家庭团圆", desc: "你把关系稳定与亲密连接放在重要位置" }
   ][answers[5] || 0];
 
-  const whyFit = [
-    { text: "性格契合", desc: food.desc },
-    { text: "旅行方式契合", desc: travel.desc },
-    { text: "核心追求契合", desc: priority.desc },
-    { text: "节日氛围契合", desc: vibe.desc },
-    { text: `与${resultCity}气质契合`, desc: wish.desc }
+  const dimensionTitles = [
+    "饮食偏好命中",
+    "旅行方式命中",
+    "气候偏好命中",
+    "核心追求命中",
+    "节日氛围命中",
+    "新年愿望命中",
+    "赛博签文命中",
+    "同路人偏好命中",
+    "人格镜像命中",
+    "生肖八字偏好命中"
   ];
+  const whyFit = [];
+  answers.forEach((answerIndex, qIndex) => {
+    const question = questions[qIndex];
+    const option = question && question.options ? question.options[answerIndex] : null;
+    if (!option || !option.weights) return;
+    const cityWeight = Number(option.weights[resultCity] || 0);
+    if (cityWeight <= 0) return;
+    whyFit.push({
+      text: dimensionTitles[qIndex] || `题目${qIndex + 1}命中`,
+      weight: cityWeight,
+      desc: `你在「${question.question}」选择了「${option.text}」，为${resultCity}增加${cityWeight}分。`
+    });
+  });
+  whyFit.sort((a, b) => b.weight - a.weight);
 
   const actionTips = [
     `今天做一件和${resultCity}有关的小事：查一张机票或收藏一条攻略`,
@@ -408,7 +691,7 @@ function analyzeUserPreferences(answers, resultCity) {
   ];
 
   return {
-    whyFit,
+    whyFit: whyFit.slice(0, 5),
     actionTips,
     summary: `${food.text}的${travel.text}，追求${priority.text}，想要${vibe.text}的新年，期待${wish.text}`
   };
@@ -447,6 +730,7 @@ function showResult() {
 
 function renderResult(payload) {
   const { result, city, fiveElement, mbti, analysis, compareText, dailyQuote, ritual } = payload;
+  const zodiac = result && result.zodiacProfile ? result.zodiacProfile : null;
 
   document.getElementById('result-emoji').textContent = city.emoji;
   document.getElementById('result-city').textContent = result.city;
@@ -538,6 +822,7 @@ function renderResult(payload) {
       <span>贵人方位：${fe.direction}</span>
     </div>
     <div class="fe-fortune">${fe.fortune}</div>
+    ${zodiac ? `<div class="fe-fortune">🧿 生肖运势：${zodiac.animal}系·${zodiac.label}｜主运势轴：${zodiac.focusAxisLabel}｜签文共振：${zodiac.signAxisLabel}</div>` : ''}
   `;
 
   document.getElementById('title-display').innerHTML = `
@@ -561,15 +846,17 @@ function renderResult(payload) {
 }
 
 function buildLuckyPlan(city, fiveElementDetail) {
-  const feColor = (fiveElementDetail.luckyColors && fiveElementDetail.luckyColors[0]) || city.luckyColor;
-  const feNumber = (fiveElementDetail.luckyNumbers && fiveElementDetail.luckyNumbers[0]) || city.luckyNumber;
-  const color = `${feColor}（五行主色） / ${city.luckyColor}（城市场景）`;
-  const number = `${feNumber}（五行） / ${city.luckyNumber}（城市）`;
+  const feColors = Array.isArray(fiveElementDetail.luckyColors) ? fiveElementDetail.luckyColors : [];
+  const feNumbers = Array.isArray(fiveElementDetail.luckyNumbers) ? fiveElementDetail.luckyNumbers.map(n => String(n)) : [];
+  const cityColor = city.luckyColor || '';
+  const cityNumber = String(city.luckyNumber || '');
+  const color = feColors.includes(cityColor) ? cityColor : (feColors[0] || cityColor || '红色');
+  const number = feNumbers.includes(cityNumber) ? cityNumber : (feNumbers[0] || cityNumber || '8');
   return {
     color,
     number,
-    thing: `${city.luckyThing}（城市幸运物）`,
-    note: '说明：五行属性反映你的个人状态，城市幸运元素反映本次目的地场景，两个维度可以同时使用。'
+    thing: city.luckyThing || '旅行手账',
+    note: `规则：幸运色和幸运数字以你的五行为主，结合${city.emoji}${city.description}场景做微调。`
   };
 }
 
@@ -600,7 +887,7 @@ function shareResult() {
   const { result, city } = currentComputedResult;
   let shareText = `我测到的开年旺城是${result.city}${city.emoji}，你也来测测看！`;
   if (shareVariant === 'direct') {
-    shareText = `6题测出开年旺城，我是${result.city}${city.emoji}，你也来测一个！`;
+    shareText = `${questions.length}题测出开年旺城，我是${result.city}${city.emoji}，你也来测一个！`;
   } else if (shareVariant === 'relation') {
     shareText = `我测到${result.city}${city.emoji}，你也测测看我们是不是同路人？`;
   }
@@ -658,9 +945,10 @@ function copyResult() {
   if (!currentComputedResult) return;
   const { result, city, fiveElement, mbti, analysis } = currentComputedResult;
   const fe = fiveElement.detail;
+  const zodiac = result && result.zodiacProfile ? result.zodiacProfile : null;
 
   const opening = shareVariant === 'direct'
-    ? '6题测出我的开年旺城，你也来测测！'
+    ? `${questions.length}题测出我的开年旺城，你也来测测！`
     : shareVariant === 'relation'
       ? '我先测到了我的开年旺城，你也测一下我们是不是同路人！'
       : '🎉 2026新年旺城测试 🎉';
@@ -684,6 +972,8 @@ ${mbti.description}
 贵人方位：${fe.direction}
 
 💡 ${analysis.summary}
+
+${zodiac ? `🧿 生肖运势：${zodiac.animal}系·${zodiac.label}（主运势轴：${zodiac.focusAxisLabel}，签文共振：${zodiac.signAxisLabel}）\n` : ''}
 
 🧧 新年行大运，快来测测你的！`;
 

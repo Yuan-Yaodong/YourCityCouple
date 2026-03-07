@@ -2,7 +2,7 @@
 const { calculateResult, getCityDetail, calculateFiveElement } = require('../../utils/calculator.js');
 const { analyzeUserPreferences } = require('../../utils/analyzer.js');
 const { calculateMBTI } = require('../../utils/mbti.js');
-const { healingQuotes } = require('../../utils/data.js');
+const { healingQuotes, questions } = require('../../utils/data.js');
 const { trackEvent, assignVariant } = require('../../utils/analytics.js');
 
 Page({
@@ -14,6 +14,7 @@ Page({
     runnerUpCity: null,
     compareText: '',
     coreSummaryText: '',
+    questionCount: 0,
     shareVariant: 'warm',
     actionOrder: 'share_first',
     dailyQuote: '',
@@ -23,8 +24,10 @@ Page({
     showExtendedDetails: false,
     fiveElementLuckyColorsText: '',
     fiveElementLuckyNumbersText: '',
+    luckyPlan: null,
     mbti: null,
     fiveElement: null,
+    zodiacProfile: null,
     showResult: false,
     showAnimations: false,
     posterGenerated: false,
@@ -70,6 +73,8 @@ Page({
     const dailyRitualDone = ritualRecord[ritualKey] === result.city;
     const ritualStreakDays = this.getRitualStreakDays(ritualRecord);
 
+    const luckyPlan = this.buildLuckyPlan(cityDetail, fiveElement);
+
     this.setData({
       result: result,
       cityDetail: cityDetail,
@@ -80,6 +85,7 @@ Page({
       coreSummaryText: analysis && analysis.summary
         ? analysis.summary
         : `${result.city}很适合你当前的节奏，先分享给朋友看看吧。`,
+      questionCount: Array.isArray(questions) ? questions.length : 6,
       shareVariant: shareVariant,
       actionOrder,
       dailyQuote: dailyQuote,
@@ -95,8 +101,10 @@ Page({
       fiveElementLuckyNumbersText: fiveElement && fiveElement.detail && Array.isArray(fiveElement.detail.luckyNumbers)
         ? fiveElement.detail.luckyNumbers.join('、')
         : '',
+      luckyPlan,
       mbti: mbti,
       fiveElement: fiveElement,
+      zodiacProfile: result.zodiacProfile || null,
       showResult: true
     });
 
@@ -129,6 +137,7 @@ Page({
       runnerUpCity: null,
       compareText: '这是你上次保存的结果，重新测试可获得最新分析。',
       coreSummaryText: latest.summary || `${latest.city}很适合你当前的状态，重新测试可获得完整解析。`,
+      questionCount: Array.isArray(questions) ? questions.length : 6,
       shareVariant,
       actionOrder,
       dailyQuote: this.getDailyQuote(latest.city),
@@ -137,8 +146,10 @@ Page({
       showExtendedDetails: false,
       fiveElementLuckyColorsText: '',
       fiveElementLuckyNumbersText: '',
+      luckyPlan: null,
       mbti: null,
       fiveElement: null,
+      zodiacProfile: null,
       showResult: true
     });
     trackEvent('result_view_from_cache', { city: latest.city, actionOrder });
@@ -160,7 +171,7 @@ Page({
     const { cityDetail, result, shareVariant } = this.data;
     let title = `我测到的新年旺城是${cityDetail ? cityDetail.description : '杭州'}，快来测测你的！`;
     if (shareVariant === 'direct') {
-      title = `6题测出开年旺城，我是${result ? result.city : '杭州'}，你来试试？`;
+      title = `${this.data.questionCount || 10}题测出开年旺城，我是${result ? result.city : '杭州'}，你来试试？`;
     } else if (shareVariant === 'relation') {
       title = `我测到了${result ? result.city : '杭州'}，你也测测看我们是不是同路人？`;
     }
@@ -186,7 +197,7 @@ Page({
         ? `我的开年旺城是${result ? result.city : '杭州'}，你也来测一个`
         : shareVariant === 'relation'
           ? `我测到${result ? result.city : '杭州'}，你看看我们是不是同一挂`
-          : '新年运势小测试：6题测出你的开年旺城'
+          : `新年运势小测试：${this.data.questionCount || 10}题测出你的开年旺城`
     };
   },
 
@@ -405,7 +416,7 @@ Page({
       actionOrder: this.data.actionOrder,
       variant: this.data.shareVariant
     });
-    const { result, cityDetail, analysis, mbti, fiveElement, shareVariant } = this.data;
+    const { result, cityDetail, analysis, mbti, fiveElement, zodiacProfile, shareVariant } = this.data;
 
     let whyFitText = '';
     const reasonList = this.getDisplayWhyFit(analysis ? analysis.whyFit : []);
@@ -427,6 +438,11 @@ Page({
       fiveElementText = `\n\n🧭 我的五行属性：${fe.emoji} ${fe.name}\n幸运色：${fe.luckyColors.join('、')}\n幸运数字：${fe.luckyNumbers.join('、')}\n贵人方位：${fe.direction}\n${fe.fortune}`;
     }
 
+    let zodiacText = '';
+    if (zodiacProfile && zodiacProfile.label) {
+      zodiacText = `\n\n🧿 生肖运势倾向：${zodiacProfile.animal}系 · ${zodiacProfile.label}\n主运势轴：${zodiacProfile.focusAxisLabel || zodiacProfile.focusAxis}\n签文共振：${zodiacProfile.signAxisLabel || zodiacProfile.signAxis}`;
+    }
+
     let actionTipsText = '';
     if (analysis && Array.isArray(analysis.actionTips) && analysis.actionTips.length > 0) {
       actionTipsText = '\n\n✅ 今日行动建议：\n' + analysis.actionTips.map((tip) => '• ' + tip).join('\n');
@@ -434,11 +450,11 @@ Page({
 
     let opening = '🎉 2026新年旺城测试 🎉';
     if (shareVariant === 'direct') {
-      opening = '6题测出我的开年旺城，你也来测测！';
+      opening = `${this.data.questionCount || 10}题测出我的开年旺城，你也来测测！`;
     } else if (shareVariant === 'relation') {
       opening = '我先测到了我的开年旺城，你也测一下我们是不是同路人！';
     }
-    const text = `${opening}\n\n我的开年旅游地是：【${result.city}】\n${cityDetail.description}\n\n${cityDetail.detail}\n${whyFitText}\n${mbtiText}\n${fiveElementText}\n${actionTipsText}\n\n${analysis ? '💡 ' + analysis.summary + '\n' : ''}\n🧧 新年行大运，快来测测你的！`;
+    const text = `${opening}\n\n我的开年旅游地是：【${result.city}】\n${cityDetail.description}\n\n${cityDetail.detail}\n${whyFitText}\n${mbtiText}\n${fiveElementText}\n${zodiacText}\n${actionTipsText}\n\n${analysis ? '💡 ' + analysis.summary + '\n' : ''}\n🧧 新年行大运，快来测测你的！`;
 
     wx.setClipboardData({
       data: text,
@@ -449,6 +465,25 @@ Page({
         });
       }
     });
+  },
+
+  buildLuckyPlan(cityDetail, fiveElement) {
+    if (!cityDetail || !fiveElement || !fiveElement.detail) return null;
+    const fe = fiveElement.detail;
+    const cityColor = cityDetail.luckyColor || '';
+    const cityNumber = cityDetail.luckyNumber || '';
+    const feColors = Array.isArray(fe.luckyColors) ? fe.luckyColors : [];
+    const feNumbers = Array.isArray(fe.luckyNumbers) ? fe.luckyNumbers.map((n) => String(n)) : [];
+
+    const finalColor = feColors.includes(cityColor) ? cityColor : (feColors[0] || cityColor || '红色');
+    const finalNumber = feNumbers.includes(String(cityNumber)) ? String(cityNumber) : (feNumbers[0] || String(cityNumber || '8'));
+
+    return {
+      color: finalColor,
+      number: finalNumber,
+      thing: cityDetail.luckyThing || '旅行手账',
+      note: `规则：幸运色和幸运数字以你的五行为主，结合${cityDetail.emoji}${cityDetail.description}场景做微调。`
+    };
   },
 
   getDisplayWhyFit(whyFit) {

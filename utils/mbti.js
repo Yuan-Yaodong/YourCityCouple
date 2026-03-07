@@ -147,12 +147,16 @@ function calculateMBTI(userAnswers) {
   else if (userAnswers[1] === 1) iScore += 1;  // 度假放松 → I
   else if (userAnswers[1] === 2) eScore += 2;  // 冰雪冒险 → E
   else if (userAnswers[1] === 3) iScore += 2;  // 随意漫步 → I
+  else if (userAnswers[1] === 4) iScore += 2;  // 亲友轻松游 → I
+  else if (userAnswers[1] === 5) eScore += 2;  // 夜生活社交局 → E
 
   // 问题6: 愿望
   if (userAnswers[5] === 0) eScore += 1;  // 收获爱情 → E
   else if (userAnswers[5] === 1) iScore += 1;  // 暴富搞钱 → I
   else if (userAnswers[5] === 2) iScore += 1;  // 身体健康 → I
   else if (userAnswers[5] === 3) eScore += 1;  // 转运开挂 → E
+  else if (userAnswers[5] === 4) eScore += 1;  // 职业成长 → E
+  else if (userAnswers[5] === 5) iScore += 1;  // 家庭团圆 → I
 
   const EI = eScore >= iScore ? 'E' : 'I';
 
@@ -167,12 +171,16 @@ function calculateMBTI(userAnswers) {
   else if (userAnswers[0] === 1) sScore += 1;  // 海鲜 → S
   else if (userAnswers[0] === 2) nScore += 1;  // 粤菜 → N
   else if (userAnswers[0] === 3) sScore += 1;  // 东北菜 → S
+  else if (userAnswers[0] === 4) nScore += 1;  // 清爽轻食 → N
+  else if (userAnswers[0] === 5) nScore += 1;  // 素食养生锅 → N
 
   // 问题3: 天气偏好
   if (userAnswers[2] === 0) sScore += 1;  // 越冷越好 → S
   else if (userAnswers[2] === 1) sScore += 1;  // 阳光温暖 → S
   else if (userAnswers[2] === 2) nScore += 1;  // 不冷不热 → N
   else if (userAnswers[2] === 3) nScore += 1;  // 下雨也行 → N
+  else if (userAnswers[2] === 4) sScore += 1;  // 海风微咸 → S
+  else if (userAnswers[2] === 5) nScore += 1;  // 高原晴空 → N
 
   const SN = sScore >= nScore ? 'S' : 'N';
 
@@ -187,12 +195,16 @@ function calculateMBTI(userAnswers) {
   else if (userAnswers[3] === 1) tScore += 2;  // 美食吃爽 → T
   else if (userAnswers[3] === 2) fScore += 2;  // 放松疗愈 → F
   else if (userAnswers[3] === 3) fScore += 1;  // 文化历史 → F
+  else if (userAnswers[3] === 4) tScore += 2;  // 预算友好 → T
+  else if (userAnswers[3] === 5) fScore += 2;  // 缘分社交 → F
 
   // 问题6: 愿望
   if (userAnswers[5] === 0) fScore += 2;  // 收获爱情 → F
   else if (userAnswers[5] === 1) tScore += 2;  // 暴富搞钱 → T
   else if (userAnswers[5] === 2) fScore += 2;  // 身体健康 → F
   else if (userAnswers[5] === 3) tScore += 1;  // 转运开挂 → T
+  else if (userAnswers[5] === 4) tScore += 1;  // 职业成长 → T
+  else if (userAnswers[5] === 5) fScore += 1;  // 家庭团圆 → F
 
   const TF = tScore >= fScore ? 'T' : 'F';
 
@@ -207,12 +219,16 @@ function calculateMBTI(userAnswers) {
   else if (userAnswers[2] === 1) jScore += 1;  // 阳光温暖 → J
   else if (userAnswers[2] === 2) pScore += 1;  // 不冷不热 → P
   else if (userAnswers[2] === 3) pScore += 1;  // 下雨也行 → P
+  else if (userAnswers[2] === 4) pScore += 1;  // 海风微咸 → P
+  else if (userAnswers[2] === 5) pScore += 1;  // 高原晴空 → P
 
   // 问题5: 新年关键词
   if (userAnswers[4] === 0) jScore += 2;  // 热闹 → J
   else if (userAnswers[4] === 1) jScore += 1;  // 浪漫 → J
   else if (userAnswers[4] === 2) pScore += 2;  // 悠闲 → P
   else if (userAnswers[4] === 3) pScore += 2;  // 刺激 → P
+  else if (userAnswers[4] === 4) pScore += 1;  // 疗愈 → P
+  else if (userAnswers[4] === 5) jScore += 1;  // 开运 → J
 
   const JP = jScore >= pScore ? 'J' : 'P';
 

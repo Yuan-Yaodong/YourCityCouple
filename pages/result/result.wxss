@@ -748,3 +748,14 @@
   color: #E62E2E;
   font-weight: bold;
 }
+
+.lucky-note {
+  display: block;
+  margin-top: 14rpx;
+  padding: 12rpx;
+  font-size: 22rpx;
+  color: #475569;
+  line-height: 1.6;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 12rpx;
+}

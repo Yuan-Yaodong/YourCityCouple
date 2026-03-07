@@ -645,6 +645,16 @@ body {
   line-height: 1.5;
 }
 
+.question-source {
+  margin: -6px 0 20px;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  background: #fff6db;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
 /* 选项网格 */
 .options-grid {
   display: flex;

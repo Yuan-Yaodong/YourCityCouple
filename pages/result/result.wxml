@@ -97,6 +97,24 @@
           <text class="five-element-fortune">{{fiveElement.detail.fortune}}</text>
         </view>
 
+        <view wx:if="{{zodiacProfile}}" class="five-element-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.85 + (cityDetail.tags.length + 1) * 0.15}}s">
+          <view class="five-element-header">
+            <text class="five-element-emoji">🧿</text>
+            <text class="five-element-title">生肖运势关联</text>
+          </view>
+          <view class="five-element-name">{{zodiacProfile.animal}}系 · {{zodiacProfile.label}}</view>
+          <view class="five-element-info">
+            <view class="five-element-item">
+              <text class="five-element-label">主运势轴</text>
+              <text class="five-element-value">{{zodiacProfile.focusAxisLabel}}</text>
+            </view>
+            <view class="five-element-item">
+              <text class="five-element-label">签文共振</text>
+              <text class="five-element-value">{{zodiacProfile.signAxisLabel}}</text>
+            </view>
+          </view>
+        </view>
+
         <view wx:if="{{analysis && analysis.actionTips && analysis.actionTips.length}}" class="action-tips-card {{showAnimations ? 'fade-in' : ''}}">
           <view class="action-tips-title">今日好运行动建议</view>
           <view class="action-tip" wx:for="{{analysis.actionTips}}" wx:key="index">✅ {{item}}</view>
@@ -128,23 +146,24 @@
           <text class="healing-text">{{cityDetail.healing}}</text>
         </view>
 
-        <!-- 幸运元素 -->
-        <view wx:if="{{cityDetail.luckyColor || cityDetail.luckyNumber || cityDetail.luckyThing}}" class="lucky-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{1.1 + (cityDetail.tags.length + 1) * 0.15}}s">
-          <view class="lucky-title">新年幸运元素</view>
+        <!-- 综合幸运建议（统一口径） -->
+        <view wx:if="{{luckyPlan}}" class="lucky-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{1.1 + (cityDetail.tags.length + 1) * 0.15}}s">
+          <view class="lucky-title">综合幸运建议</view>
           <view class="lucky-items">
-            <view wx:if="{{cityDetail.luckyColor}}" class="lucky-item">
+            <view class="lucky-item">
               <text class="lucky-label">幸运色</text>
-              <text class="lucky-value">{{cityDetail.luckyColor}}</text>
+              <text class="lucky-value">{{luckyPlan.color}}</text>
             </view>
-            <view wx:if="{{cityDetail.luckyNumber}}" class="lucky-item">
+            <view class="lucky-item">
               <text class="lucky-label">幸运数字</text>
-              <text class="lucky-value">{{cityDetail.luckyNumber}}</text>
+              <text class="lucky-value">{{luckyPlan.number}}</text>
             </view>
-            <view wx:if="{{cityDetail.luckyThing}}" class="lucky-item">
+            <view class="lucky-item">
               <text class="lucky-label">幸运物</text>
-              <text class="lucky-value">{{cityDetail.luckyThing}}</text>
+              <text class="lucky-value">{{luckyPlan.thing}}</text>
             </view>
           </view>
+          <text class="lucky-note">{{luckyPlan.note}}</text>
         </view>
       </view>
     </view>

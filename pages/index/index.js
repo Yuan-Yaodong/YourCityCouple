@@ -9,6 +9,7 @@ Page({
     historyCity: '',
     hasUnfinishedQuiz: false,
     unfinishedProgressText: '',
+    totalQuestions: Array.isArray(questions) ? questions.length : 6,
     dailyQuote: '',
     dailyMission: '',
     recentHistory: [],

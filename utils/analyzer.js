@@ -1,3 +1,4 @@
+const { questions } = require('./data.js');
 // utils/analyzer.js - 分析用户答案，生成个性化分析文案
 
 /**
@@ -39,7 +40,7 @@ function analyzeUserPreferences(userAnswers, resultCity) {
   ];
 
   // 生成为什么适合这个城市
-  const whyFit = generateWhyFit(analysisPoints, resultCity);
+  const whyFit = generateWhyFit(userAnswers, resultCity, analysisPoints);
   const actionTips = generateActionTips(resultCity, analysisPoints);
 
   return {
@@ -64,7 +65,9 @@ function analyzeFoodPreference(answerIndex) {
     { text: "热情似火", desc: "喜欢火锅的你，性格热烈直接，爱憎分明" },
     { text: "追求品质", desc: "热爱海鲜的你，注重生活品质，懂得享受" },
     { text: "精致生活", desc: "偏爱粤菜的你，追求精致与格调" },
-    { text: "豪爽大气", desc: "喜欢东北菜的你，为人豪爽，不拘小节" }
+    { text: "豪爽大气", desc: "喜欢东北菜的你，为人豪爽，不拘小节" },
+    { text: "清爽理性", desc: "偏爱清爽饮食的你，重视平衡与秩序感" },
+    { text: "温和自律", desc: "偏好养生风格的你，重视长期稳定与身心状态" }
   ];
   return analyses[answerIndex] || analyses[0];
 }
@@ -77,7 +80,9 @@ function analyzeTravelStyle(answerIndex) {
     { text: "打卡达人", desc: "你热爱探索网红地点，喜欢分享精彩瞬间" },
     { text: "度假玩家", desc: "你懂得放松自己，追求舒适的旅行体验" },
     { text: "冒险勇者", desc: "你喜欢挑战未知，追求刺激与新鲜感" },
-    { text: "漫步诗人", desc: "你喜欢随性自由，享受旅途中的慢时光" }
+    { text: "漫步诗人", desc: "你喜欢随性自由，享受旅途中的慢时光" },
+    { text: "关系连接者", desc: "你重视陪伴和关系质量，偏好轻松而有温度的旅程" },
+    { text: "夜色社交家", desc: "你在人群和烟火中快速充电，社交感知力很强" }
   ];
   return analyses[answerIndex] || analyses[0];
 }
@@ -90,7 +95,9 @@ function analyzeWeatherPreference(answerIndex) {
     { text: "冰雪情缘", desc: "你钟爱银装素裹的冰雪世界" },
     { text: "阳光行者", desc: "你向往温暖阳光，追逐春日的温度" },
     { text: "舒适宜人", desc: "你喜欢不冷不热的舒适气候" },
-    { text: "烟雨诗意", desc: "你欣赏烟雨朦胧的诗意美景" }
+    { text: "烟雨诗意", desc: "你欣赏烟雨朦胧的诗意美景" },
+    { text: "海风松弛", desc: "你需要流动感与呼吸感，偏爱海风带来的松弛节奏" },
+    { text: "高原自由", desc: "你向往开阔和通透，更容易在远方重启状态" }
   ];
   return analyses[answerIndex] || analyses[0];
 }
@@ -103,7 +110,9 @@ function analyzePriority(answerIndex) {
     { text: "影像记录", desc: "你热爱用镜头捕捉旅途中的美好" },
     { text: "美食探索", desc: "你把品尝美食作为旅行的重中之重" },
     { text: "心灵疗愈", desc: "你追求身心的放松与平静" },
-    { text: "文化探寻", desc: "你热爱历史与文化的深度探索" }
+    { text: "文化探寻", desc: "你热爱历史与文化的深度探索" },
+    { text: "效率掌控", desc: "你在意预算和节奏控制，追求务实高效的体验" },
+    { text: "缘分连接", desc: "你重视人与人的化学反应，偏好有故事的相遇" }
   ];
   return analyses[answerIndex] || analyses[0];
 }
@@ -116,7 +125,9 @@ function analyzeVibe(answerIndex) {
     { text: "热闹欢腾", desc: "你喜欢热闘非凡的新年氛围" },
     { text: "浪漫温馨", desc: "你向往浪漫的新年时光" },
     { text: "悠闲自在", desc: "你喜欢轻松悠闲的节日节奏" },
-    { text: "刺激精彩", desc: "你追求精彩刺激的新年体验" }
+    { text: "刺激精彩", desc: "你追求精彩刺激的新年体验" },
+    { text: "安稳疗愈", desc: "你需要可持续的舒适感，偏好稳定而温柔的节日状态" },
+    { text: "开运感知", desc: "你对运势与信号很敏感，愿意主动创造好状态" }
   ];
   return analyses[answerIndex] || analyses[0];
 }
@@ -129,7 +140,9 @@ function analyzeNewYearWish(answerIndex) {
     { text: "收获爱情", desc: "你渴望在新的一年里收获甜蜜的爱情" },
     { text: "暴富搞钱", desc: "你期待财源滚滚在新的一年里实现财务自由" },
     { text: "身体健康", desc: "你希望新的一年里身体棒棒，健康平安" },
-    { text: "转运开挂", desc: "你渴望在新的一年里转运逆袭，走上人生巅峰" }
+    { text: "转运开挂", desc: "你渴望在新的一年里转运逆袭，走上人生巅峰" },
+    { text: "职业成长", desc: "你重视长期成长路径，希望在事业上实现突破升级" },
+    { text: "家庭团圆", desc: "你把关系稳定与亲密连接放在重要位置" }
   ];
   return analyses[answerIndex] || analyses[0];
 }
@@ -188,7 +201,45 @@ function analyzeMBTI(userAnswers) {
 /**
  * 生成为什么适合该城市
  */
-function generateWhyFit(analysisPoints, resultCity) {
+function generateWhyFit(userAnswers, resultCity, analysisPoints) {
+  const dimensionTitles = [
+    "饮食偏好命中",
+    "旅行方式命中",
+    "气候偏好命中",
+    "核心追求命中",
+    "节日氛围命中",
+    "新年愿望命中",
+    "赛博签文命中",
+    "同路人偏好命中",
+    "人格镜像命中",
+    "生肖八字偏好命中"
+  ];
+
+  const evidence = [];
+  (userAnswers || []).forEach((answerIndex, qIndex) => {
+    const question = questions[qIndex];
+    if (!question || !Array.isArray(question.options)) return;
+    const option = question.options[answerIndex];
+    if (!option || !option.weights) return;
+    const cityWeight = Number(option.weights[resultCity] || 0);
+    if (cityWeight <= 0) return;
+    evidence.push({
+      text: dimensionTitles[qIndex] || `题目${qIndex + 1}命中`,
+      weight: cityWeight,
+      desc: `你在「${question.question}」选择了「${option.text}」，为${resultCity}增加${cityWeight}分。`
+    });
+  });
+
+  evidence.sort((a, b) => b.weight - a.weight);
+  const topEvidence = evidence.slice(0, 5).map((item) => ({
+    text: item.text,
+    desc: item.desc
+  }));
+
+  if (topEvidence.length > 0) {
+    return topEvidence;
+  }
+
   return [
     { text: "性格契合", desc: analysisPoints[0].desc },
     { text: "旅行方式契合", desc: analysisPoints[1].desc },
@@ -225,7 +276,7 @@ function generateActionTips(resultCity, analysisPoints) {
 
 /**
  * 分析用户答案（符合要求接口）
- * @param {Array} userAnswers - 用户答案数组 [0, 1, 2, 3, 4] 对应各题选项索引
+ * @param {Array} userAnswers - 用户答案数组 [0, 1, ...] 对应各题选项索引
  * @returns {Object} 分析结果
  */
 function analyzeUser(userAnswers) {

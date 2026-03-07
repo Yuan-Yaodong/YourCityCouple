@@ -58,6 +58,6 @@
   </view>
 
   <!-- 底部说明 -->
-  <text class="tips">6道题 · 测出你的福气城市</text>
+  <text class="tips">{{totalQuestions}}道题 · 测出你的福气城市</text>
   <text class="insights-link" bindtap="openInsights">体验数据看板（内测）</text>
 </view>
