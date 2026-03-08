@@ -72,6 +72,25 @@
     </view>
   </view>
 
+  <!-- 城市偏置监控面板 -->
+  <view class="ab-card" wx:if="{{behaviorSummary.totalHits > 0}}">
+    <view class="ab-title">城市命中分布</view>
+    <view class="bias-warning {{behaviorSummary.biasWarning}}" wx:if="{{behaviorSummary.biasWarning !== 'none'}}">
+      <text wx:if="{{behaviorSummary.biasWarning === 'red'}}">⚠️ 红色预警：城市分布严重不均</text>
+      <text wx:elif="{{behaviorSummary.biasWarning === 'yellow'}}">⚡ 黄色预警：城市分布偏斜</text>
+    </view>
+    <view class="city-stats">
+      <view class="city-row" wx:for="{{behaviorSummary.cityStats}}" wx:key="city">
+        <text class="city-name">{{item.city}}</text>
+        <view class="city-bar-container">
+          <view class="city-bar" style="width: {{item.percentage}}%"></view>
+        </view>
+        <text class="city-count">{{item.count}}次 ({{item.percentage}}%)</text>
+      </view>
+    </view>
+    <view class="ab-hint">Top1 > 30% 红色预警，> 20% 黄色预警</view>
+  </view>
+
   <view class="ops-row">
     <button class="btn danger" bindtap="clearLogs">清空事件日志</button>
     <button class="btn" bindtap="clearHistory">清空测试历史</button>

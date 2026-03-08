@@ -173,3 +173,60 @@
   color: #475569;
   line-height: 1.5;
 }
+
+/* 城市偏置监控样式 */
+.bias-warning {
+  margin-top: 12rpx;
+  padding: 12rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.bias-warning.red {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.bias-warning.yellow {
+  background: #fefce8;
+  color: #ca8a04;
+}
+
+.city-stats {
+  margin-top: 12rpx;
+}
+
+.city-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10rpx;
+  font-size: 24rpx;
+}
+
+.city-name {
+  width: 120rpx;
+  color: #334155;
+}
+
+.city-bar-container {
+  flex: 1;
+  height: 16rpx;
+  background: #e2e8f0;
+  border-radius: 8rpx;
+  margin: 0 12rpx;
+  overflow: hidden;
+}
+
+.city-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  border-radius: 8rpx;
+}
+
+.city-count {
+  width: 180rpx;
+  text-align: right;
+  color: #64748b;
+  font-size: 22rpx;
+}

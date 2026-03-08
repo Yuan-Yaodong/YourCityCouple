@@ -44,7 +44,9 @@ Page({
     },
     behaviorSummary: {
       activeDays7: 0,
-      topCities: []
+      topCities: [],
+      cityStats: [],
+      biasWarning: 'none'  // none, yellow, red
     }
   },
 
@@ -160,7 +162,12 @@ Page({
       `按钮顺序 restart_first: 曝光 ${experimentSummary.orderRestartFirstViews}, 再测 ${experimentSummary.orderRestartFirstRestart}`,
       '---',
       `近7天活跃天数：${behaviorSummary.activeDays7}`,
-      `热门城市Top3：${behaviorSummary.topCities.join(' / ') || '暂无'}`
+      `热门城市Top3：${behaviorSummary.topCities.join(' / ') || '暂无'}`,
+      `城市命中总数：${behaviorSummary.totalHits || 0}`,
+      `偏置预警：${behaviorSummary.biasWarning === 'red' ? '红色预警 - 分布严重不均' : behaviorSummary.biasWarning === 'yellow' ? '黄色预警 - 分布偏斜' : '正常'}`,
+      `---`,
+      `城市命中分布：`,
+      ...(behaviorSummary.cityStats || []).slice(0, 5).map(s => `  ${s.city}: ${s.count}次 (${s.percentage}%)`)
     ].join('\n');
 
     wx.setClipboardData({
@@ -244,9 +251,35 @@ Page({
       .slice(0, 3)
       .map((city) => `${city}(${cityCount[city]})`);
 
+    // 城市命中统计（Top 10 + Bottom 5）
+    const totalHits = Object.values(cityCount).reduce((sum, count) => sum + count, 0);
+    const sortedCities = Object.keys(cityCount)
+      .sort((a, b) => cityCount[b] - cityCount[a])
+      .map((city, index) => ({
+        city,
+        count: cityCount[city],
+        percentage: totalHits > 0 ? ((cityCount[city] / totalHits) * 100).toFixed(1) : '0.0'
+      }));
+
+    const cityStats = sortedCities.slice(0, 10).concat(sortedCities.slice(-5));
+
+    // 偏置预警计算
+    let biasWarning = 'none';
+    if (sortedCities.length > 0 && totalHits > 0) {
+      const top1Percentage = (sortedCities[0].count / totalHits) * 100;
+      if (top1Percentage > 30) {
+        biasWarning = 'red';  // 红色预警
+      } else if (top1Percentage > 20) {
+        biasWarning = 'yellow';  // 黄色预警
+      }
+    }
+
     return {
       activeDays7: dayKeys.size,
-      topCities
+      topCities,
+      cityStats,
+      biasWarning,
+      totalHits
     };
   }
 });
