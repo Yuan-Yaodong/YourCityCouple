@@ -28,6 +28,40 @@
       <text wx:if="{{compareText}}" class="core-summary-sub">和上次相比：{{compareText}}</text>
     </view>
 
+    <!-- 历史摘要卡片 -->
+    <view wx:if="{{historySummary.hasHistory}}" class="history-card {{showAnimations ? 'fade-in' : ''}}" style="animation-delay: 0.3s">
+      <view class="history-header">
+        <text class="history-title">测试足迹</text>
+        <view wx:if="{{historySummary.streakBadge}}" class="streak-badge badge-{{historySummary.streakBadge.level}}">
+          <text class="streak-emoji">{{historySummary.streakBadge.emoji}}</text>
+          <text class="streak-label">{{historySummary.streakBadge.label}}</text>
+        </view>
+      </view>
+      <view class="history-stats">
+        <view class="history-stat">
+          <text class="history-stat-value">{{historySummary.totalTests}}</text>
+          <text class="history-stat-label">累计测试</text>
+        </view>
+        <view class="history-stat">
+          <text class="history-stat-value">{{historySummary.uniqueCities}}</text>
+          <text class="history-stat-label">探索城市</text>
+        </view>
+      </view>
+      <view class="history-recent">
+        <text class="history-recent-label">最近测试：</text>
+        <view class="history-cities">
+          <text wx:for="{{historySummary.recentCities}}" wx:key="index" class="history-city-tag">
+            {{item.city}} · {{item.time}}
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 首次测试提示 -->
+    <view wx:if="{{!historySummary.hasHistory}}" class="history-card history-first {{showAnimations ? 'fade-in' : ''}}" style="animation-delay: 0.3s">
+      <text class="history-first-text">🎯 开启你的好运探索之旅！</text>
+    </view>
+
     <!-- 城市描述 -->
     <view class="city-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: 0.4s">
       <text class="city-desc">{{cityDetail.description}}</text>
@@ -71,6 +105,32 @@
           <view class="mbti-travel">
             <text class="mbti-travel-label">旅行风格</text>
             <text class="mbti-travel-text">{{mbti.travelStyle}}</text>
+          </view>
+        </view>
+
+        <!-- MBTI+生肖人格解读卡片 -->
+        <view wx:if="{{personalityInsight}}" class="personality-card {{showAnimations ? 'slide-up' : ''}}" style="animation-delay: {{0.75 + (cityDetail.tags.length + 1) * 0.15}}s">
+          <view class="personality-header">
+            <text class="personality-emoji">🔮</text>
+            <text class="personality-title">人格深度解读</text>
+          </view>
+          <view class="personality-section" wx:if="{{personalityInsight.mbtiAnalysis}}">
+            <view class="personality-dimension" wx:for="{{personalityInsight.mbtiAnalysis}}" wx:key="dimension">
+              <text class="personality-dim-label">{{item.dimension}}</text>
+              <text class="personality-dim-value">{{item.tendency}}</text>
+              <text class="personality-dim-desc">{{item.description}}</text>
+            </view>
+          </view>
+          <view class="personality-section" wx:if="{{personalityInsight.zodiacAxis}}">
+            <view class="personality-zodiac">
+              <text class="personality-zodiac-label">生肖轴解读</text>
+              <text class="personality-zodiac-value">{{personalityInsight.zodiacAxis.label}}</text>
+              <text class="personality-zodiac-desc">{{personalityInsight.zodiacAxis.description}}</text>
+            </view>
+          </view>
+          <view class="personality-combo" wx:if="{{personalityInsight.combinedInsight}}">
+            <text class="personality-combo-title">组合洞察</text>
+            <text class="personality-combo-text">{{personalityInsight.combinedInsight}}</text>
           </view>
         </view>
 

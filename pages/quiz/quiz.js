@@ -67,6 +67,19 @@ Page({
     wx.hideShareMenu();
   },
 
+  onShow() {
+    // 跟踪答题中断情况
+    const { currentQuestion, totalQuestions, answers } = this.data;
+    if (answers && answers.length > 0 && answers.length < totalQuestions) {
+      trackEvent('quiz_progress_report', {
+        currentQuestion: currentQuestion,
+        answeredCount: answers.length,
+        totalQuestions: totalQuestions,
+        progressPercent: Math.round((answers.length / totalQuestions) * 100)
+      });
+    }
+  },
+
   onUnload() {
     if (this.data.hasCompleted) return;
     const answers = wx.getStorageSync('answers') || [];

@@ -5,6 +5,53 @@ const { calculateMBTI } = require('../../utils/mbti.js');
 const { healingQuotes, questions } = require('../../utils/data.js');
 const { trackEvent, assignVariant } = require('../../utils/analytics.js');
 
+// 海报模板配置
+const posterTemplates = [
+  {
+    id: 'classic',
+    name: '经典中国风',
+    bgColors: ['#FFE4B5', '#F5DEB3', '#FFEFD5'],
+    accentColor: '#FFD700',
+    textColor: '#8B0000',
+    emoji: '🧧'
+  },
+  {
+    id: 'festive',
+    name: '喜庆红',
+    bgColors: ['#FFF0F5', '#FFE4E1', '#FFDAB9'],
+    accentColor: '#DC143C',
+    textColor: '#8B0000',
+    emoji: '🎊'
+  },
+  {
+    id: 'elegant',
+    name: '雅致金',
+    bgColors: ['#FDF5E6', '#FAF0E6', '#FFFAFA'],
+    accentColor: '#DAA520',
+    textColor: '#2F4F4F',
+    emoji: '🏮'
+  }
+];
+
+// 城市分类专属配色
+const cityCategoryColors = {
+  '火热美食': { bg: '#FFF5EE', accent: '#FF6347', text: '#8B4513', emoji: '🍜' },
+  '海岛度假': { bg: '#E0FFFF', accent: '#00CED1', text: '#008B8B', emoji: '🏝️' },
+  '冰雪奇缘': { bg: '#F0F8FF', accent: '#87CEEB', text: '#4682B4', emoji: '❄️' },
+  '西南秘境': { bg: '#F5F5DC', accent: '#9ACD32', text: '#556B2F', emoji: '🏔️' },
+  '历史文化': { bg: '#FAF0E6', accent: '#D2691E', text: '#8B4513', emoji: '🏯' },
+  '江南诗意': { bg: '#F0FFF0', accent: '#3CB371', text: '#2E8B57', emoji: '🌿' }
+};
+
+function getPosterTemplate() {
+  return posterTemplates[Math.floor(Math.random() * posterTemplates.length)];
+}
+
+function getCityCategoryColor(cityDetail) {
+  const category = cityDetail && cityDetail.category ? cityDetail.category : '';
+  return cityCategoryColors[category] || cityCategoryColors['火热美食'];
+}
+
 Page({
   data: {
     result: null,
@@ -65,6 +112,7 @@ Page({
     const displayWhyFit = this.getDisplayWhyFit(analysis.whyFit);
     const runnerUpCity = result.runnerUp ? getCityDetail(result.runnerUp.city) : null;
     const compareText = this.getCompareText(result.city);
+    const historySummary = this.getHistorySummary(result.city);
     const shareVariant = assignVariant('share_copy_v2', ['warm', 'direct', 'relation']) || 'warm';
     const actionOrder = assignVariant('result_button_order_v1', ['share_first', 'restart_first']) || 'share_first';
     const dailyQuote = this.getDailyQuote(result.city);
@@ -89,6 +137,7 @@ Page({
       displayWhyFit: displayWhyFit,
       runnerUpCity: runnerUpCity,
       compareText: compareText,
+      historySummary: historySummary,
       coreSummaryText: analysis && analysis.summary
         ? analysis.summary
         : `${result.city}很适合你当前的节奏，先分享给朋友看看吧。`,
@@ -110,6 +159,7 @@ Page({
       mbti: mbti,
       fiveElement: fiveElement,
       zodiacProfile: result.zodiacProfile || null,
+      personalityInsight: analysis && analysis.personalityInsight ? analysis.personalityInsight : null,
       showResult: true
     });
 
@@ -134,6 +184,7 @@ Page({
 
     const shareVariant = assignVariant('share_copy_v2', ['warm', 'direct', 'relation']) || 'warm';
     const actionOrder = assignVariant('result_button_order_v1', ['share_first', 'restart_first']) || 'share_first';
+    const historySummary = this.getHistorySummary(latest.city);
     this.setData({
       result: { city: latest.city, score: 0, runnerUp: null },
       cityDetail,
@@ -141,6 +192,7 @@ Page({
       displayWhyFit: [],
       runnerUpCity: null,
       compareText: '这是你上次保存的结果，重新测试可获得最新分析。',
+      historySummary: historySummary,
       coreSummaryText: latest.summary || `${latest.city}很适合你当前的状态，重新测试可获得完整解析。`,
       questionCount: Array.isArray(questions) ? questions.length : 14,
       shareVariant,
@@ -155,6 +207,7 @@ Page({
       mbti: null,
       fiveElement: null,
       zodiacProfile: null,
+      personalityInsight: null,
       showResult: true
     });
     trackEvent('result_view_from_cache', { city: latest.city, actionOrder });
@@ -240,10 +293,14 @@ Page({
 
   // 生成海报
   generatePoster() {
+    const template = getPosterTemplate();
+    const cityColor = getCityCategoryColor(this.data.cityDetail);
     trackEvent('click_generate_poster', {
       city: this.data.result ? this.data.result.city : '',
       actionOrder: this.data.actionOrder,
-      variant: this.data.shareVariant
+      variant: this.data.shareVariant,
+      templateId: template.id,
+      cityCategory: this.data.cityDetail ? this.data.cityDetail.category : ''
     });
     this.savePoster();
   },
@@ -298,35 +355,42 @@ Page({
 
     wx.showLoading({ title: '生成中...' });
 
+    // 获取模板和城市配色
+    const template = getPosterTemplate();
+    const cityColor = getCityCategoryColor(cityDetail);
+
+    // 随机选择背景色
+    const bgColor = template.bgColors[Math.floor(Math.random() * template.bgColors.length)];
+
     // 创建 canvas 上下文
     const ctx = wx.createCanvasContext('posterCanvas', this);
 
     // 设置背景
-    ctx.setFillStyle('#FFE4B5');
+    ctx.setFillStyle(bgColor);
     ctx.fillRect(0, 0, 600, 900);
 
-    // 添加装饰
-    ctx.setFillStyle('#FFD700');
+    // 添加装饰元素
+    ctx.setFillStyle(cityColor.accent);
     ctx.setFontSize(30);
     ctx.setTextAlign('center');
-    ctx.fillText('🧧 2026新年旺城 🧧', 300, 50);
+    ctx.fillText(`${template.emoji} 2026新年旺城 ${template.emoji}`, 300, 50);
 
     // 城市 emoji 和名称
     ctx.setFontSize(80);
     ctx.fillText(cityDetail.emoji, 300, 140);
 
-    ctx.setFillStyle('#E62E2E');
+    ctx.setFillStyle(cityColor.text);
     ctx.setFontSize(50);
     ctx.setTextAlign('center');
     ctx.fillText(result.city, 300, 200);
 
     // 城市描述
-    ctx.setFillStyle('#8B0000');
+    ctx.setFillStyle(cityColor.accent);
     ctx.setFontSize(28);
     ctx.fillText(cityDetail.description, 300, 240);
 
     // 分割线
-    ctx.setStrokeStyle('#FFD700');
+    ctx.setStrokeStyle(template.accentColor);
     ctx.setLineWidth(2);
     ctx.moveTo(100, 270);
     ctx.lineTo(500, 270);
@@ -350,7 +414,7 @@ Page({
 
     // 简短总结
     if (analysis && analysis.summary) {
-      ctx.setFillStyle('#E62E2E');
+      ctx.setFillStyle(cityColor.text);
       ctx.setFontSize(24);
       ctx.setTextAlign('center');
       // 自动换行处理
@@ -361,7 +425,7 @@ Page({
 
     // 小程序码占位区域 - 使用兼容方式绘制圆角矩形
     ctx.setFillStyle('#FFF');
-    ctx.setStrokeStyle('#FFD700');
+    ctx.setStrokeStyle(template.accentColor);
     ctx.setLineWidth(3);
     this.drawRoundedRect(ctx, 225, 500, 150, 150, 15);
 
@@ -574,6 +638,80 @@ Page({
       return `连续命中${currentCity}，你的旅行偏好非常稳定。`;
     }
     return `上一次是${previous.city}，这次切换到${currentCity}，你的状态正在变化。`;
+  },
+
+  // 获取历史摘要数据
+  getHistorySummary(currentCity) {
+    const history = wx.getStorageSync('historyResults') || [];
+    if (!Array.isArray(history) || history.length === 0) {
+      return {
+        hasHistory: false,
+        totalTests: 0,
+        uniqueCities: 0,
+        streakBadge: null,
+        recentCities: []
+      };
+    }
+
+    const totalTests = history.length;
+    const uniqueCities = new Set(history.map(h => h && h.city).filter(Boolean)).size;
+
+    // 计算连续测试天数（基于时间戳）
+    let streakDays = 0;
+    let lastDate = null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    history.forEach(item => {
+      if (!item || !item.ts) return;
+      const itemDate = new Date(item.ts);
+      itemDate.setHours(0, 0, 0, 0);
+      const diffDays = Math.floor((today - itemDate) / (24 * 60 * 60 * 1000));
+
+      if (diffDays === streakDays || (diffDays === streakDays + 1 && streakDays === 0)) {
+        if (!lastDate || itemDate.getTime() === lastDate.getTime() - 86400000) {
+          streakDays = diffDays;
+          lastDate = itemDate;
+        }
+      }
+    });
+
+    // 生成徽章
+    let streakBadge = null;
+    if (totalTests >= 7) {
+      streakBadge = { level: 'legendary', label: '连续测试大师', emoji: '🏆' };
+    } else if (totalTests >= 5) {
+      streakBadge = { level: 'gold', label: '好运达人', emoji: '🥇' };
+    } else if (totalTests >= 3) {
+      streakBadge = { level: 'silver', label: '初测学者', emoji: '🥈' };
+    }
+
+    // 最近测试的城市列表
+    const recentCities = history.slice(0, 5).map(item => ({
+      city: item.city,
+      time: this.formatHistoryTime(item.ts)
+    }));
+
+    return {
+      hasHistory: true,
+      totalTests,
+      uniqueCities,
+      streakBadge,
+      recentCities,
+      isSameCity: history[0] && history[0].city === currentCity
+    };
+  },
+
+  formatHistoryTime(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    const now = new Date();
+    const diffDays = Math.floor((now - d) / (24 * 60 * 60 * 1000));
+
+    if (diffDays === 0) return '今天';
+    if (diffDays === 1) return '昨天';
+    if (diffDays < 7) return `${diffDays}天前`;
+    return `${Math.floor(diffDays / 7)}周前`;
   },
 
   getDailyQuote(seedCity) {

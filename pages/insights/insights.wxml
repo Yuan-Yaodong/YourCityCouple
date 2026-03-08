@@ -97,6 +97,8 @@
   </view>
   <view class="ops-row">
     <button class="btn primary" bindtap="exportSummary">复制摘要</button>
+    <button class="btn" bindtap="exportData">导出JSON</button>
+    <button class="btn" bindtap="importData">导入JSON</button>
   </view>
 
   <view class="filter-row">

@@ -71,6 +71,115 @@
   background: linear-gradient(135deg, #fff7ed 0%, #fff1c2 100%);
 }
 
+/* 历史摘要卡片 */
+.history-card {
+  margin-bottom: 24rpx;
+  padding: 22rpx;
+  border-radius: 18rpx;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.history-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #0369a1;
+}
+
+.streak-badge {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.streak-badge.legendary {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.streak-badge.gold {
+  background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+}
+
+.streak-badge.silver {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+}
+
+.streak-emoji {
+  font-size: 24rpx;
+  margin-right: 6rpx;
+}
+
+.streak-label {
+  font-size: 22rpx;
+  color: #fff;
+  font-weight: bold;
+}
+
+.history-stats {
+  display: flex;
+  gap: 40rpx;
+  margin-bottom: 16rpx;
+}
+
+.history-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-stat-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #0369a1;
+}
+
+.history-stat-label {
+  font-size: 22rpx;
+  color: #64748b;
+}
+
+.history-recent {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-recent-label {
+  font-size: 22rpx;
+  color: #64748b;
+  margin-bottom: 8rpx;
+}
+
+.history-cities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.history-city-tag {
+  font-size: 20rpx;
+  color: #0369a1;
+  background: rgba(3, 105, 161, 0.1);
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+}
+
+.history-first {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.history-first-text {
+  font-size: 26rpx;
+  color: #15803d;
+  display: block;
+  text-align: center;
+}
+
 .core-summary-title {
   text-align: center;
   font-size: 24rpx;
@@ -591,6 +700,115 @@
   font-size: 24rpx;
   color: #FFF;
   line-height: 1.5;
+}
+
+/* 人格深度解读卡片 */
+.personality-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 24rpx;
+  padding: 30rpx;
+  margin-top: 30rpx;
+  box-shadow: 0 10rpx 30rpx rgba(102, 126, 234, 0.4);
+}
+
+.personality-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.personality-emoji {
+  font-size: 50rpx;
+  margin-right: 15rpx;
+}
+
+.personality-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #FFF;
+}
+
+.personality-section {
+  margin-bottom: 20rpx;
+}
+
+.personality-dimension {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 15rpx;
+}
+
+.personality-dim-label {
+  display: block;
+  font-size: 26rpx;
+  color: #FFD700;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.personality-dim-value {
+  display: block;
+  font-size: 28rpx;
+  color: #FFF;
+  margin-bottom: 6rpx;
+}
+
+.personality-dim-desc {
+  display: block;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+}
+
+.personality-zodiac {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16rpx;
+  padding: 20rpx;
+}
+
+.personality-zodiac-label {
+  display: block;
+  font-size: 26rpx;
+  color: #FFD700;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.personality-zodiac-value {
+  display: block;
+  font-size: 28rpx;
+  color: #FFF;
+  margin-bottom: 6rpx;
+}
+
+.personality-zodiac-desc {
+  display: block;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+}
+
+.personality-combo {
+  background: rgba(255, 215, 0, 0.2);
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-top: 10rpx;
+}
+
+.personality-combo-title {
+  display: block;
+  font-size: 26rpx;
+  color: #FFD700;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.personality-combo-text {
+  display: block;
+  font-size: 24rpx;
+  color: #FFF;
+  line-height: 1.6;
 }
 
 /* 五行属性卡片 */

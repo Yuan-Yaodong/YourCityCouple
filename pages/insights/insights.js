@@ -188,6 +188,82 @@ Page({
     return `${hh}:${mm}:${ss}`;
   },
 
+  // 导出数据为JSON
+  exportData() {
+    const logs = getEventLogs();
+    const historyResults = wx.getStorageSync('historyResults') || [];
+    const testResult = wx.getStorageSync('testResult');
+    const dailyRitual = wx.getStorageSync('dailyRitual') || {};
+
+    const exportData = {
+      version: '1.0',
+      exportTime: new Date().toISOString(),
+      eventLogs: logs,
+      historyResults: historyResults,
+      testResult: testResult,
+      dailyRitual: dailyRitual
+    };
+
+    const jsonStr = JSON.stringify(exportData, null, 2);
+    wx.setClipboardData({
+      data: jsonStr,
+      success: () => {
+        trackEvent('insights_export_data');
+        wx.showToast({ title: '数据已复制到剪贴板', icon: 'success' });
+      },
+      fail: () => {
+        wx.showToast({ title: '复制失败', icon: 'none' });
+      }
+    });
+  },
+
+  // 导入JSON数据
+  importData() {
+    wx.showModal({
+      title: '导入数据',
+      content: '请先在文本框中粘贴JSON数据',
+      confirmText: '去粘贴',
+      success: (res) => {
+        if (res.confirm) {
+          wx.getClipboardData({
+            success: (clipRes) => {
+              try {
+                const data = JSON.parse(clipRes.data);
+                if (!data.version || !data.historyResults) {
+                  wx.showToast({ title: '数据格式无效', icon: 'none' });
+                  return;
+                }
+
+                wx.showModal({
+                  title: '确认导入',
+                  content: `将导入 ${data.historyResults.length} 条历史记录，是否继续？`,
+                  success: (confirmRes) => {
+                    if (confirmRes.confirm) {
+                      if (data.historyResults) {
+                        wx.setStorageSync('historyResults', data.historyResults);
+                      }
+                      if (data.testResult) {
+                        wx.setStorageSync('testResult', data.testResult);
+                      }
+                      if (data.dailyRitual) {
+                        wx.setStorageSync('dailyRitual', data.dailyRitual);
+                      }
+                      trackEvent('insights_import_data');
+                      this.refreshData();
+                      wx.showToast({ title: '导入成功', icon: 'success' });
+                    }
+                  }
+                });
+              } catch (e) {
+                wx.showToast({ title: '解析失败，请检查格式', icon: 'none' });
+              }
+            }
+          });
+        }
+      }
+    });
+  },
+
   buildExperimentSummary(logs) {
     const summary = {
       shareWarmViews: 0,
