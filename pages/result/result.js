@@ -240,7 +240,7 @@ Page({
     return {
       title,
       path: '/pages/index/index',
-      imageUrl: '/images/share-bg.png' // 可以配置分享图片
+      imageUrl: '/images/share-page.png' // 用户截图的分享封面
     };
   },
 
@@ -255,7 +255,8 @@ Page({
         ? `我的开年旺城是${result ? result.city : '杭州'}，你也来测一个`
         : shareVariant === 'relation'
           ? `我测到${result ? result.city : '杭州'}，你看看我们是不是同一挂`
-          : `新年运势小测试：${this.data.questionCount || 14}题测出你的开年旺城`
+          : `新年运势小测试：${this.data.questionCount || 14}题测出你的开年旺城`,
+      imageUrl: '/images/share-page.png'
     };
   },
 

@@ -3,6 +3,7 @@
   min-height: 100vh;
   padding: 30rpx;
   box-sizing: border-box;
+  background: linear-gradient(180deg, #FFF8F0 0%, #FFF0E6 100%);
 }
 
 .loading {
@@ -10,6 +11,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  background: linear-gradient(180deg, #FFF8F0 0%, #FFF0E6 100%);
 }
 
 .loading text {

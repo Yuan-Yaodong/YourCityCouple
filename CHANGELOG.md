@@ -2,6 +2,20 @@
 
 所有关键迭代将记录在本文件（按时间倒序）。
 
+## [2026-03-08] - 微信小程序提交前优化
+
+### Added
+- 分享封面优化：用户自定义截图 `images/share-page.png` (1200x630)，配置到小程序分享和 Web 端 Open Graph。
+
+### Changed
+- 小程序端分享配置：更新 `onShareAppMessage` 和 `onShareTimeline` 使用用户截图封面。
+- Web 端分享封面：更新 `docs/index.html` 的 Open Graph meta 标签。
+
+### Fixed
+- 修复 result.wxss 背景色问题：添加页面背景色覆盖 app.wxss 的红色渐变。
+- 修复 utils/analyzer.js 中文引号语法错误：替换为英文引号。
+- 修复 utils/analyzer.js 中 generateMBTIActionTip 等函数的引号问题。
+
 ## [2026-03-08]
 
 ### Changed
