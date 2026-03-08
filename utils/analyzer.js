@@ -47,9 +47,22 @@ function analyzeUserPreferences(userAnswers, resultCity) {
     wishAnalysis
   ];
 
+  // 获取MBTI类型
+  const mbtiType = mbtiAnalysis?.type || 'ENFP';
+
+  // 从答案中计算五行属性
+  const fiveElement = calculateFiveElementFromAnswers(userAnswers);
+
+  // 获取生肖索引（第12题）
+  const zodiacIndex = Number(userAnswers[11] || 0);
+
   // 生成为什么适合这个城市
   const whyFit = generateWhyFit(userAnswers, resultCity, analysisPoints);
-  const actionTips = generateActionTips(resultCity, analysisPoints);
+  const actionTips = generateActionTips(resultCity, analysisPoints, {
+    mbtiType,
+    fiveElement,
+    zodiacIndex
+  });
 
   return {
     personality: foodAnalysis,       // 性格特点
@@ -277,14 +290,187 @@ function generateSummary(analysisPoints) {
 
 /**
  * 生成今日行动建议（用于情绪价值增强）
+ * 增强版：整合 MBTI + 五行 + 生肖的差异化建议
+ * @param {string} resultCity - 结果城市
+ * @param {Array} analysisPoints - 分析点数组
+ * @param {Object} options - 额外选项
+ * @param {string} options.mbtiType - MBTI类型
+ * @param {string} options.fiveElement - 五行属性
+ * @param {number} options.zodiacIndex - 生肖索引
+ * @returns {Array} 今日行动建议数组
  */
-function generateActionTips(resultCity, analysisPoints) {
-  const tips = [
-    `今天做一件和${resultCity}有关的小事：查一张机票或收藏一条攻略`,
-    `给自己安排30分钟轻旅行时刻，按照“${analysisPoints[1].text}”的方式放松`,
-    `把“${analysisPoints[5].text}”写成一句新年承诺，今晚睡前读一遍`
-  ];
+function generateActionTips(resultCity, analysisPoints, options = {}) {
+  const { mbtiType, fiveElement, zodiacIndex } = options;
+
+  // 构建个性化建议
+  const tips = [];
+
+  // 建议1：结合MBTI类型 + 城市
+  const mbtiTip = generateMBTIActionTip(mbtiType, resultCity);
+  tips.push(mbtiTip);
+
+  // 建议2：结合五行 + 生肖属性
+  const elementTip = generateFiveElementActionTip(fiveElement, zodiacIndex, analysisPoints);
+  tips.push(elementTip);
+
+  // 建议3：结合用户的核心追求和愿望
+  const pursuitTip = generatePursuitActionTip(analysisPoints);
+  tips.push(pursuitTip);
+
   return tips;
+}
+
+/**
+ * 根据MBTI类型生成行动建议
+ */
+function generateMBTIActionTip(mbtiType, resultCity) {
+  const mbtiTips = {
+    // 理性者 (NT)
+    “INTJ”: `作为战略家，今天可以花15分钟规划一下去${resultCity}的路线，制定一个详细的旅行清单`,
+    “INTP”: `作为探险家，今天可以搜索${resultCity}的冷门景点，发现一些独特的旅行灵感`,
+    “INFJ”: `作为提倡者，今天可以想象在${resultCity}的某个安静角落，感受这座城市的内在气质`,
+    “INFP”: `作为治愈者，今天可以找一首关于${resultCity}的歌，让心灵先出发`,
+
+    // 守卫者 (SJ)
+    “ISTJ”: `作为执行者，今天可以列一个去${resultCity}的必备物品清单，让旅行更有掌控感`,
+    “ISFJ”: `作为守护者，今天可以给重要的人分享${resultCity}的攻略，传递温暖`,
+    “ISTP”: `作为冒险家，今天可以查一下${resultCity}有哪些刺激的户外体验`,
+    “ISFP”: `作为艺术家，今天可以用镜头记录一下身边的美好，为${resultCity}之旅预热`,
+
+    // 外交者 (NF)
+    “ENFJ”: `作为领袖，今天可以邀请朋友一起讨论${resultCity}的旅行计划`,
+    “ENTP”: `作为创新者，今天可以脑洞${resultCity}的创意玩法，突破常规旅行思路`,
+    “ENTJ”: `作为指挥官，今天可以直接订一个去${resultCity}的出行日期，行动力拉满`,
+    “ENFP”: `作为自由者，今天可以随意浏览${resultCity}的美图，感受即兴旅行的快乐`,
+
+    // 活泼者 (SP)
+    “ESTJ”: `作为管理者，今天可以整理一下去${resultCity}的预算，做一个高效的出行计划`,
+    “ESFJ”: `作为美食家，今天可以搜索${resultCity}的特色美食，提前做好美食攻略`,
+    “ESTP”: `作为挑战者，今天可以看看${resultCity}有什么极限运动或刺激体验`,
+    “ESFP”: `作为表演者，今天可以发一条关于${resultCity}的朋友圈，让大家一起感受你的期待`
+  };
+
+  return mbtiTips[mbtiType] || `今天做一件和${resultCity}有关的小事：查一张机票或收藏一条攻略`;
+}
+
+/**
+ * 根据五行和生肖生成行动建议
+ */
+function generateFiveElementActionTip(fiveElement, zodiacIndex, analysisPoints) {
+  // 五行建议映射
+  const fiveElementTips = {
+    “金”: {
+      INTRO: “金属性代表收获与成就”,
+      TIP: “今天适合制定一个明确的旅行目标，列出去${resultCity}要达成的3件事”
+    },
+    “木”: {
+      INTRO: “木属性代表成长与希望”,
+      TIP: “今天适合给${resultCity}之旅制定一个成长类目标，如学习当地文化或认识新朋友”
+    },
+    “水”: {
+      INTRO: “水属性代表流动与智慧”,
+      TIP: “今天适合放空一下，让思绪流动，想象在${resultCity}的放松时刻”
+    },
+    “火”: {
+      INTRO: “火属性代表热情与行动”,
+      TIP: “今天适合立刻行动，给${resultCity}的酒店或机票下单，锁定行程”
+    },
+    “土”: {
+      INTRO: “土属性代表稳定与积累”,
+      TIP: “今天适合回顾过去的旅行经历，为${resultCity}之旅积累经验”
+    }
+  };
+
+  // 生肖建议映射
+  const zodiacTips = [
+    { animal: '鼠', tip: “财运达人属性拉满，今天可以看看去${resultCity}的性价比路线” },
+    { animal: '牛', tip: “稳健行者属性觉醒，今天适合研究${resultCity}的历史文化背景” },
+    { animal: '虎', tip: “行动派火力全开，今天可以查${resultCity}有哪些刺激项目” },
+    { animal: '兔', tip: “缘分派上线，今天可以搜索${resultCity}适合情侣或社交的热门地点” },
+    { animal: '龙', tip: “事业型格局打开，今天可以规划在${resultCity}的成就清单” },
+    { animal: '蛇', tip: “智慧型深度思考，今天可以研究${resultCity}的小众玩法” },
+    { animal: '马', tip: “奔放族想要自由，今天可以想象在${resultCity}纵马奔腾的画面” },
+    { animal: '羊', tip: “疗愈派需要充电，今天可以找一个${resultCity}的宁静角落作为目标” },
+    { animal: '猴', tip: “活力派追求品质，今天可以搜索${resultCity}的高品质体验” },
+    { animal: '鸡', tip: “文化人属性启动，今天可以了解${resultCity}的文化底蕴” },
+    { animal: '狗', tip: “忠义派重视信任，今天可以找一个靠谱的${resultCity}旅行伙伴” },
+    { animal: '猪', tip: “享乐派懂得享受，今天可以想象在${resultCity}的惬意时光” }
+  ];
+
+  const elementConfig = fiveElementTips[fiveElement] || fiveElementTips[“土”];
+  const zodiacConfig = zodiacTips[zodiacIndex] || zodiacTips[0];
+
+  // 组合建议：结合五行和生肖
+  const combinedTip = `${elementConfig.INTRO}，${zodiacConfig.tip.replace('${resultCity}', analysisPoints[1]?.text ? '目标城市' : '旅行城市')}`;
+
+  return combinedTip;
+}
+
+/**
+ * 根据用户的核心追求和愿望生成行动建议
+ */
+function generatePursuitActionTip(analysisPoints) {
+  const priority = analysisPoints[3]?.text || '探索';
+  const wish = analysisPoints[5]?.text || '收获美好';
+
+  // 根据核心追求生成具体建议
+  const priorityActionMap = {
+    “影像记录”: “今天可以用手机拍摄一组关于旅行主题的照片，记录当下的期待”,
+    “美食探索”: “今天可以搜索目的地的必吃美食列表，提前做一份美食地图”,
+    “心灵疗愈”: “今天可以找一个安静的地方，进行15分钟的冥想放松”,
+    “文化探寻”: “今天可以阅读一篇关于目的地历史文化的文章或纪录片”,
+    “效率掌控”: “今天可以做一个详细的预算表和行程规划，掌控全局”,
+    “缘分连接”: “今天可以邀请一位朋友一起规划旅行，或者在社交平台寻找同好”
+  };
+
+  const wishActionMap = {
+    “收获爱情”: “今天可以想象在目的地遇到那个对的人的情景，这是吸引力法则的第一步”,
+    “暴富搞钱”: “今天可以研究目的地的特色产品或伴手礼，为财运动起来”,
+    “身体健康”: “今天可以进行一次户外运动或瑜伽，为旅行储备好体能”,
+    “转运开挂”: “今天可以换一个转运头像或桌面，为新旅程开启新气象”,
+    “职业成长”: “今天可以把旅行计划写进年度目标，展示你的规划力”,
+    “家庭团圆”: “今天可以给家人发一条消息，分享你的旅行计划”
+  };
+
+  const priorityAction = priorityActionMap[priority] || priorityActionMap[“文化探寻”];
+  const wishAction = wishActionMap[wish] || wishActionMap[“收获美好”];
+
+  return `${priorityAction}。同时，${wishAction}`;
+}
+
+/**
+ * 从用户答案中计算主要五行属性
+ * @param {Array} userAnswers - 用户答案数组
+ * @returns {string} 五行属性（金木水火土）
+ */
+function calculateFiveElementFromAnswers(userAnswers) {
+  const { questions } = require('./data.js');
+  const elementScores = { "金": 0, "木": 0, "水": 0, "火": 0, "土": 0 };
+
+  userAnswers.forEach((answer, qIndex) => {
+    if (qIndex < questions.length) {
+      const question = questions[qIndex];
+      if (question && question.options && answer < question.options.length) {
+        const option = question.options[answer];
+        if (option.fiveElement && elementScores[option.fiveElement] !== undefined) {
+          elementScores[option.fiveElement] += 1;
+        }
+      }
+    }
+  });
+
+  // 找出得分最高的五行
+  let maxScore = -1;
+  let resultElement = "土";
+
+  Object.keys(elementScores).forEach(element => {
+    if (elementScores[element] > maxScore) {
+      maxScore = elementScores[element];
+      resultElement = element;
+    }
+  });
+
+  return resultElement;
 }
 
 /**

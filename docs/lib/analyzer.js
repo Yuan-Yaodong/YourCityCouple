@@ -47,9 +47,22 @@ function analyzeUserPreferences(userAnswers, resultCity) {
     wishAnalysis
   ];
 
+  // 获取MBTI类型
+  const mbtiType = mbtiAnalysis?.type || 'ENFP';
+
+  // 计算五行属性
+  const fiveElement = calculateFiveElementFromAnswers(userAnswers);
+
+  // 获取生肖索引（第12题）
+  const zodiacIndex = Number(userAnswers[11] || 0);
+
   // 生成为什么适合这个城市
   const whyFit = generateWhyFit(userAnswers, resultCity, analysisPoints);
-  const actionTips = generateActionTips(resultCity, analysisPoints);
+  const actionTips = generateActionTips(resultCity, analysisPoints, {
+    mbtiType,
+    fiveElement,
+    zodiacIndex
+  });
 
   return {
     personality: foodAnalysis,       // 性格特点
@@ -154,6 +167,40 @@ function analyzeNewYearWish(answerIndex) {
     { text: "家庭团圆", desc: "你把关系稳定与亲密连接放在重要位置" }
   ];
   return analyses[answerIndex] || analyses[0];
+}
+
+/**
+ * 计算五行属性
+ * 根据用户答案计算得分最高的五行
+ */
+function calculateFiveElementFromAnswers(userAnswers) {
+  const { questions } = require('./data.js');
+  const elementScores = { "金": 0, "木": 0, "水": 0, "火": 0, "土": 0 };
+
+  userAnswers.forEach((answer, qIndex) => {
+    if (qIndex < questions.length) {
+      const question = questions[qIndex];
+      if (question && question.options && answer < question.options.length) {
+        const option = question.options[answer];
+        if (option.fiveElement && elementScores[option.fiveElement] !== undefined) {
+          elementScores[option.fiveElement] += 1;
+        }
+      }
+    }
+  });
+
+  // 找出得分最高的五行
+  let maxScore = -1;
+  let resultElement = "土";
+
+  Object.keys(elementScores).forEach(element => {
+    if (elementScores[element] > maxScore) {
+      maxScore = elementScores[element];
+      resultElement = element;
+    }
+  });
+
+  return resultElement;
 }
 
 /**
