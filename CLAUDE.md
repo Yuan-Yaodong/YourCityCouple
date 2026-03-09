@@ -4,9 +4,23 @@
 
 ---
 
+## 📍 文档位置说明
+
+**所有项目核心文档统一存放在 `docs/documents/` 文件夹:**
+- `docs/documents/PRD.md` - 产品需求文档
+- `docs/documents/CHANGELOG.md` - 版本更新日志
+- `docs/documents/TEAM_ITERATION_BOARD.md` - 团队迭代看板
+- `docs/documents/project-backlog.md` - 待办事项清单
+- `docs/documents/city-bias-heatmap.md` - 城市偏置热力图
+- `docs/documents/llm-handoff-memory.md` - 项目交接文档
+
+**文档索引**: [docs/README.md](docs/README.md)
+
+---
+
 ## 项目技术栈
 
-- 微信小程序 + Web双端（GitHub Pages）
+- 微信小程序 + Web 双端（GitHub Pages）
 - 原生开发
 
 ## 项目结构
@@ -22,10 +36,17 @@ YourCityCouple/
 │   ├── analyzer.js # 分析逻辑（MBTI/五行/生肖）
 │   ├── data.js     # 题目数据
 │   └── analytics.js# 埋点追踪
-├── docs/           # Web端代码
-│   ├── app.js      # Web主逻辑
-│   ├── index.html  # Web首页
-│   └── lib/        # 共享代码副本
+├── docs/            # 📚 项目文档 + Web 端代码
+│   ├── README.md    # 📖 文档索引
+│   ├── documents/   # 📚 项目文档
+│   │   ├── PRD.md
+│   │   ├── CHANGELOG.md
+│   │   └── TEAM_ITERATION_BOARD.md
+│   ├── web/         # 🌐 Web 端代码
+│   │   ├── index.html
+│   │   ├── app.js
+│   │   └── lib/     # 共享代码库
+│   └── archive/     # 🗂️ 归档文档
 └── images/         # 静态资源
 ```
 

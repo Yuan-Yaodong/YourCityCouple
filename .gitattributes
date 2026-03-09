@@ -1,2 +1,30 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# 统一使用 LF 换行符
+* text=auto eol=lf
+
+# 图片文件使用二进制模式
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
+
+# Web 文件使用 LF
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+
+# 小程序文件
+*.wxml text eol=lf
+*.wxss text eol=lf
+*.json text eol=lf
+
+# 文档文件
+*.md text eol=lf
+*.txt text eol=lf
+
+# 配置文件
+.gitignore text eol=lf
+.gitattributes text eol=lf
+*.xml text eol=lf

@@ -1,1 +1,27 @@
-/.claude
+# IDE 配置文件夹
+/.claude/
+/.qoder/
+/.vscode/
+/.idea/
+
+# 编译产物
+/dist/
+/build/
+*.wxss.map
+*.js.map
+
+# 私有配置 (不应提交到 Git)
+project.private.config.json
+*.local.json
+
+# 系统临时文件
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# node_modules (如果有前端构建)
+node_modules/
+
+# 小程序上传产物
+uploadComponents/

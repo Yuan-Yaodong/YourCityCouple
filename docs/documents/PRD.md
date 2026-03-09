@@ -1,7 +1,10 @@
 # YourCityCouple PRD（当前版本）
 
-> 更新日期：2026-03-08  
-> 适用范围：微信小程序 + Web（GitHub Pages）
+> 更新日期：2026-03-09  
+> 适用范围：微信小程序 + Web（GitHub Pages）  
+> 存放位置：docs/documents/PRD.md
+
+---
 
 ## 1. 产品定位
 
@@ -87,8 +90,8 @@
 - 城市分布已从“极端头重脚轻”收敛到可接受区间，但仍有优化空间。
 
 质量产物：
-- 城市偏置热力图（抽样）：`docs/city-bias-heatmap.md`
-- 项目待办与未来优化展望：`docs/project-backlog.md`
+- 城市偏置热力图（抽样）:`docs/documents/city-bias-heatmap.md`
+- 项目待办与未来优化展望：`docs/documents/project-backlog.md`
 
 ## 9. 验收标准（本阶段）
 - [ ] 用户可完成 14 题并稳定出结果。
